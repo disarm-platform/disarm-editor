@@ -11,7 +11,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {InstanceConfig} from '@/types'
+  import {InstanceConfig} from '@/types';
 
   export default Vue.extend({
     props: {

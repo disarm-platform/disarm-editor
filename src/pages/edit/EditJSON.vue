@@ -7,7 +7,7 @@
 <script lang='ts'>
   import Vue from 'vue';
 
-  import {InstanceConfig} from '@/types'
+  import {InstanceConfig} from '@/types';
   const schema = require('@locational/config-validation/build/module/config_schema.json');
 
   export default Vue.extend({
@@ -20,7 +20,7 @@
     data() {
       return {};
     },
-    methods: {}
+    methods: {},
   });
 </script>
 

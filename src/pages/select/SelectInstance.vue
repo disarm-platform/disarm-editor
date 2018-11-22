@@ -9,7 +9,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {Instance} from '@/types'
+  import {Instance} from '@/types';
 
 
   export default Vue.extend({
@@ -17,7 +17,7 @@
       instance_list: Array as () => Instance[],
     },
     methods: {
-      select(index: number) {this.$emit('select', this.instance_list[index])},
+      select(index: number) {this.$emit('select', this.instance_list[index]); },
       deselect() { this.$emit('deselect'); },
     },
   });
