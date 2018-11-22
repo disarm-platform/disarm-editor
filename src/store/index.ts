@@ -47,9 +47,13 @@ const store = new Vuex.Store({
   mutations: {
     [MUTATIONS.SET_USER](state, logged_in_user: LoggedInUser) { state.logged_in_user = logged_in_user; },
     [MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
-    [MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance: Instance) { state.selected_instance = selected_instance; },
+    [MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance: Instance) {
+      return state.selected_instance = selected_instance;
+    },
     [MUTATIONS.RESET_SELECTED_INSTANCE](state) { state.selected_instance = null; },
-    [MUTATIONS.SET_SELECTED_CONFIG](state, selected_config: InstanceConfig) { state.live_instance_config = selected_config; },
+    [MUTATIONS.SET_SELECTED_CONFIG](state, selected_config: InstanceConfig) {
+      return state.live_instance_config = selected_config;
+    },
     [MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
     [MUTATIONS.SET_USERS](state, users) { state.users_with_permissions = users; },
     [MUTATIONS.RESET_USERS](state) { state.users_with_permissions = []; },
