@@ -1,31 +1,43 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <el-container>
+    <el-header>
+      <h2 style="float:left">DiSARM registry-client</h2>
+
+      <span v-if="user" style="float:right">
+        {{user.username}} |
+        <el-button type="text" @click="logout">Logout</el-button>
+      </span>
+
+    </el-header>
+
+    <el-main>
+      <router-view/>
+    </el-main>
+
+  </el-container>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
+<script lang="ts">
+  import Vue from 'vue';
+  import {mapState} from 'vuex'
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  export default Vue.extend({
+    methods: {
+      computed: {
+        ...mapState({
+          user: state => state.user,
+        })
+      },
+      logout() {
+        this.$store.commit(META_RESET_USER);
+        this.$router.push('/');
+      },
+    }
+  })
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style lang="scss">
+  html, body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
 </style>

@@ -1,25 +1,63 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-
 Vue.use(Router);
 
-export default new Router({
+import store from '@/store';
+import Login from '@/pages/Login.vue';
+
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: 'root',
+      redirect: '/select',
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      path: '/select',
+      name: 'select',
+      component: Select,
+    },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: Edit,
+      children: [
+        {
+          path: 'users',
+          name: 'users',
+          component: EditUsers,
+        },
+        {
+          path: 'json',
+          name: 'json',
+          component: EditJSON,
+        },
+        {
+          path: 'geodata',
+          name: 'geodata',
+          component: EditGeodata,
+        },
+      ],
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  // check for logged-in user
+  if (!store.user && to.name !== 'login') { next('/login'); };
+  next();
+});
+
+export default router;
