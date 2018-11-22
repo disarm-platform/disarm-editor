@@ -33,7 +33,7 @@
     data() {
       return {
         error: '',
-        username: '',
+        username: 'a_user',
         password: '',
       } as Data;
     },

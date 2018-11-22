@@ -58,7 +58,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // check for logged-in user
-  if (!store.state.logged_in_user && to.name !== 'login') { next({name: 'login'}); }
+  if (!store.state.logged_in_user && (to.name !== 'login')) { next({name: 'login'}); }
   next();
 });
 
