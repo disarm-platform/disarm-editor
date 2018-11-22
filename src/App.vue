@@ -19,24 +19,27 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {mapState} from 'vuex'
+  import {mapGetters, mapState} from 'vuex';
+
+  import {MUTATIONS} from '@/store/meta/mutations';
+  import {GETTERS} from '@/store/meta/getters';
 
   export default Vue.extend({
+    computed: {
+      ...mapGetters({
+        user: GETTERS.META_USER,
+      }),
+    },
     methods: {
-      computed: {
-        ...mapState({
-          user: state => state.user,
-        })
-      },
       logout() {
-        this.$store.commit(META_RESET_USER);
+        this.$store.commit(MUTATIONS.APP_RESET_USER);
         this.$router.push('/');
       },
-    }
-  })
+    },
+  });
 </script>
 
-<style lang="scss">
+<style>
   html, body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }

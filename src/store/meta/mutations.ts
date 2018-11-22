@@ -1,16 +1,16 @@
 import { MutationTree } from 'vuex';
-import {MetaState} from '@/store/meta/types';
+import {MetaState, MetaUser} from '@/store/meta/types';
 
 export const MUTATIONS = {
-  META_SET_USER: 'meta_set_user',
-  META_RESET_USER: 'meta_reset_user',
+  APP_SET_USER: 'app_set_user',
+  APP_RESET_USER: 'app_reset_user',
 };
 
 export const mutations: MutationTree<MetaState> = {
-  [MUTATIONS.META_SET_USER](state, user) {
+  [MUTATIONS.APP_SET_USER](state, user: MetaUser) {
     state.user = user;
   },
-  [MUTATIONS.META_RESET_USER](state) {
+  [MUTATIONS.APP_RESET_USER](state) {
     state.user = null;
   },
 };

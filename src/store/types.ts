@@ -1,3 +1,5 @@
+import {MetaUser} from '@/store/meta/types';
+
 export interface RootState {
-  version: string;
+  user: MetaUser | null;
 }

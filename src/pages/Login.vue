@@ -2,17 +2,17 @@
   <div>
     <el-alert v-if="error.length" :title="error"></el-alert>
 
-    <el-form label-width="120px" @submit="login">
+    <el-form label-width="120px" @submit="do_login">
       <el-form-item label="Username">
-        <el-input v-model="meta_user.username"></el-input>
+        <el-input v-model="username"></el-input>
       </el-form-item>
 
       <el-form-item label="Password">
-        <el-input type="password" v-model="meta_user.password"></el-input>
+        <el-input type="password" v-model="password"></el-input>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="login" @keyup.enter="login">Login</el-button>
+        <el-button type="primary" @click="do_login" @keyup.enter="do_login">Login</el-button>
       </el-form-item>
     </el-form>
 
@@ -21,22 +21,20 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {ACTIONS} from '@/store/meta/actions'
-  import {MetaUser} from '@/store/meta/types'
+  import {ACTIONS} from '@/store/meta/actions';
 
   interface Data {
-    error: string,
-    meta_user: MetaUser,
+    error: string;
+    username: string;
+    password: string;
   }
 
   export default Vue.extend({
     data() {
       return {
         error: '',
-        meta_user: {
-          username: '',
-          password: '',
-        },
+        username: '',
+        password: '',
       } as Data;
     },
     methods: {
@@ -44,18 +42,21 @@
         this.error = '';
         try {
           await this.$store.dispatch(
-            ACTIONS.META_DO_LOGIN,
-            this.meta_user,
+            ACTIONS.META_LOGIN,
+            {
+              username: this.username,
+              password: this.password,
+            },
           );
           this.$router.push('/');
         } catch (e) {
           this.error = e.message;
         }
-      }
-    }
+      },
+    },
   });
 </script>
 
-<style lang='scss' scoped>
+<style scoped>
 
 </style>
