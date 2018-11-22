@@ -17,7 +17,7 @@
 <script lang="ts">
   import Vue from 'vue';
 
-  import LoggedInStatus from '@/LoggedInStatus.vue';
+  import LoggedInStatus from '@/components/LoggedInStatus.vue';
 
   export default Vue.extend({
     components: {LoggedInStatus},

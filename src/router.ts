@@ -6,6 +6,7 @@ import store from '@/store';
 
 import Login from '@/pages/Login.vue';
 import Select from '@/pages/Select.vue';
+import Logout from '@/pages/Logout.vue';
 
 const router = new Router({
   mode: 'history',
@@ -48,11 +49,11 @@ const router = new Router({
       name: 'login',
       component: Login,
     },
-    // {
-    //   path: '/logout',
-    //   name: 'logout',
-    //   component: Logout,
-    // },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+    },
   ],
 });
 
