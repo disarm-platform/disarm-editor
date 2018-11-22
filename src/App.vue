@@ -32,8 +32,10 @@
     },
     methods: {
       logout() {
+        console.log('user before logout', this.user)
         this.$store.commit(MUTATIONS.APP_RESET_USER);
-        this.$router.push('/');
+        console.log('user after logout', this.user)
+        this.$router.push({name: 'home'});
       },
     },
   });

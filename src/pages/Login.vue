@@ -48,7 +48,7 @@
               password: this.password,
             },
           );
-          this.$router.push('/');
+          this.$router.push({name: 'home'});
         } catch (e) {
           this.error = e.message;
         }

@@ -8,9 +8,11 @@ export const MUTATIONS = {
 
 export const mutations: MutationTree<MetaState> = {
   [MUTATIONS.APP_SET_USER](state, user: MetaUser) {
+    console.log('APP_SET_USER')
     state.user = user;
   },
   [MUTATIONS.APP_RESET_USER](state) {
+    console.log('APP_RESET_USER')
     state.user = null;
   },
 };
