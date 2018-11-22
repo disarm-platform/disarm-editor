@@ -1,21 +1,21 @@
 <template>
   <div>
-    <JsonEditor :objData="live_instance_config" v-model="live_instance_config" ></JsonEditor>
+    <textarea name="editor" cols="50" rows="20">{{live_instance_config}}</textarea>
   </div>
 </template>
 
 <script lang='ts'>
   import Vue from 'vue';
-  import JsonEditor from 'vue-json-edit';
-  Vue.use(JsonEditor);
 
   import {InstanceConfig} from '@/types'
+  const schema = require('@locational/config-validation/build/module/config_schema.json');
 
   export default Vue.extend({
     props: {
       live_instance_config: Object as () => InstanceConfig,
     },
     mounted() {
+      console.log('schema', schema);
     },
     data() {
       return {};
