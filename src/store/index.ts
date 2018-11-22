@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import {set_api_key} from '@/lib/handler';
 import {login} from '@/lib/meta_controller';
+import {Instance} from '@/types';
 
 Vue.use(Vuex);
 
@@ -13,7 +14,7 @@ export interface LoggedInUser {
 
 export interface RootState {
   logged_in_user: LoggedInUser | null;
-  selected_instance: any; // Instance | null;
+  selected_instance: Instance | null;
   live_instance_config: any; // InstanceConfig | null;
   users_with_permissions: any; // UsersWithPermissions[];
 }
@@ -21,6 +22,7 @@ export interface RootState {
 export const MUTATIONS = {
   SET_USER: 'set_user',
   RESET_USER: 'reset_user',
+  SET_SELECTED_INSTANCE: 'set_selected_instance',
 };
 
 export const ACTIONS = {
@@ -39,6 +41,7 @@ const store = new Vuex.Store({
   mutations: {
     [MUTATIONS.SET_USER](state, logged_in_user) { state.logged_in_user = logged_in_user; },
     [MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
+    [MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance) { state.selected_instance = selected_instance; },
   },
   actions: {
     [ACTIONS.META_LOGIN](context, {username, password}) {

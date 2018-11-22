@@ -3,7 +3,7 @@
     <el-header>
       <h2 style="float:left">DiSARM registry-client</h2>
 
-      <LoggedInStatus></LoggedInStatus>
+      <logged-in-status></logged-in-status>
 
     </el-header>
 

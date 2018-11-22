@@ -5,7 +5,7 @@ Vue.use(Router);
 import store from '@/store';
 
 import Login from '@/pages/Login.vue';
-import Select from '@/pages/Select.vue';
+import Select from '@/pages/select/Select.vue';
 import Logout from '@/pages/Logout.vue';
 
 const router = new Router({
