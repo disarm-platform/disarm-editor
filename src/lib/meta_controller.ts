@@ -1,7 +1,7 @@
 import {standard_handler} from '@/lib/handler';
-import {MetaUser} from '@/store/meta/types';
+import {LoggedInUser} from '@/store';
 
-export async function login(username: string, password: string): Promise<MetaUser> {
+export async function login(username: string, password: string): Promise<LoggedInUser> {
   const options = {
     url: `/login`,
     method: 'post',

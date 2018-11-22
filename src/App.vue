@@ -19,22 +19,18 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {mapGetters, mapState} from 'vuex';
 
-  import {MUTATIONS} from '@/store/meta/mutations';
-  import {GETTERS} from '@/store/meta/getters';
+  import {LoggedInUser, MUTATIONS} from '@/store';
 
   export default Vue.extend({
     computed: {
-      ...mapGetters({
-        user: GETTERS.META_USER,
-      }),
+      user(): LoggedInUser { return this.$store.state.logged_in_user; },
     },
     methods: {
       logout() {
-        console.log('user before logout', this.user)
-        this.$store.commit(MUTATIONS.APP_RESET_USER);
-        console.log('user after logout', this.user)
+        console.log('user before logout', this.user);
+        this.$store.commit(MUTATIONS.RESET_USER);
+        console.log('user after logout', this.user);
         this.$router.push({name: 'home'});
       },
     },

@@ -21,7 +21,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {ACTIONS} from '@/store/meta/actions';
+  import {ACTIONS} from '@/store';
 
   interface Data {
     error: string;

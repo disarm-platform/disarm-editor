@@ -3,7 +3,6 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 import store from '@/store';
-import {GETTERS} from '@/store/meta/getters';
 
 import Login from '@/pages/Login.vue';
 import Select from '@/pages/Select.vue';
@@ -59,9 +58,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // check for logged-in user
-  const user = store.getters[GETTERS.META_USER]
-  console.log('naved', to.name, to, user ? user.username: 'no user')
-  if (!user && to.name !== 'login') { next({name: 'login'}); }
+  if (!store.state.logged_in_user && to.name !== 'login') { next({name: 'login'}); }
   next();
 });
 
