@@ -7,6 +7,10 @@ import store from '@/store';
 import Login from '@/pages/Login.vue';
 import Select from '@/pages/select/Select.vue';
 import Logout from '@/pages/Logout.vue';
+import Edit from '@/pages/edit/Edit.vue';
+import EditUsers from '@/pages/edit/EditUsers.vue';
+import EditJSON from '@/pages/edit/EditJSON.vue';
+import EditGeodata from '@/pages/edit/EditGeodata.vue';
 
 const router = new Router({
   mode: 'history',
@@ -22,28 +26,28 @@ const router = new Router({
       name: 'select',
       component: Select,
     },
-    // {
-    //   path: '/edit',
-    //   name: 'edit',
-    //   component: Edit,
-    //   children: [
-    //     {
-    //       path: 'users',
-    //       name: 'users',
-    //       component: EditUsers,
-    //     },
-    //     {
-    //       path: 'json',
-    //       name: 'json',
-    //       component: EditJSON,
-    //     },
-    //     {
-    //       path: 'geodata',
-    //       name: 'geodata',
-    //       component: EditGeodata,
-    //     },
-    //   ],
-    // },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: Edit,
+      children: [
+        {
+          path: 'users',
+          name: 'users',
+          component: EditUsers,
+        },
+        {
+          path: 'json',
+          name: 'json',
+          component: EditJSON,
+        },
+        {
+          path: 'geodata',
+          name: 'geodata',
+          component: EditGeodata,
+        },
+      ],
+    },
     {
       path: '/login',
       name: 'login',

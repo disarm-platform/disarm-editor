@@ -3,11 +3,11 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {MUTATIONS} from '@/store'
+  import {ACTIONS} from '@/store';
 
   export default Vue.extend({
-    mounted() {
-      this.$store.commit(MUTATIONS.RESET_USER);
+    async mounted() {
+      await this.$store.dispatch(ACTIONS.LOGOUT);
       this.$router.push({name: 'login'});
     },
   });

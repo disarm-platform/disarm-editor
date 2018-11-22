@@ -42,7 +42,7 @@
         this.error = '';
         try {
           await this.$store.dispatch(
-            ACTIONS.META_LOGIN,
+            ACTIONS.LOGIN,
             {
               username: this.username,
               password: this.password,
