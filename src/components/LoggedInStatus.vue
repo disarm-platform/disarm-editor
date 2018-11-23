@@ -1,7 +1,7 @@
 <template>
   <span v-if="user" style="float:right">
     {{user.username}} |
-    <el-button @click="$router.push({name: 'logout'})" type="text">Logout</el-button>
+    <router-link :to="{name: 'logout'}">Logout</router-link>
   </span>
 </template>
 
