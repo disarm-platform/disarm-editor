@@ -34,30 +34,33 @@
   import Vue from 'vue';
   import {Instance} from '@/types';
 
-  interface ScopeRow {
-    row: Instance;
-  }
-
   export default Vue.extend({
     props: {
       instance_list: Array as () => Instance[],
     },
+    data() {
+      return {
+        currentRow: null as null | Instance,
+      };
+    },
     computed: {
-      selected_instance() { return this.$store.state.selected_instance;},
+      selected_instance(): Instance { return this.$store.state.selected_instance; },
     },
     mounted() {
       // Highlight row if selected_instance
       if (this.selected_instance) {
         const selected_row = this.instance_list.find((i) => i._id === this.selected_instance._id);
+        // @ts-ignore
         this.$refs.instance_table.setCurrentRow(selected_row);
       }
     },
     methods: {
-      handleCurrentChange(val) {
+      handleCurrentChange(val: Instance) {
         this.currentRow = val;
         this.$emit('select', val);
       },
       deselect() {
+        // @ts-ignore
         this.$refs.instance_table.setCurrentRow();
         this.$emit('deselect');
       },

@@ -31,14 +31,20 @@
 <script lang='ts'>
   import Vue from 'vue';
   import {Instance, InstanceConfig} from '@/types';
+  import { TConfig } from '@locational/config-validation/build/module/lib/config_types/TConfig';
 
   export default Vue.extend({
     props: {
       selected_instance: Object as () => Instance,
       config_list: Array as () => InstanceConfig[],
     },
+    data() {
+      return {
+        currentRow: null as InstanceConfig | null,
+      };
+    },
     methods: {
-      handleCurrentChange(val) {
+      handleCurrentChange(val: InstanceConfig) {
         this.currentRow = val;
         this.$emit('select', val);
       },

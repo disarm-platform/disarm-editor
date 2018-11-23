@@ -6,8 +6,7 @@
     <p>It's a good idea to make sure the file is already named with the type of geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
     </p>
     <p>This will help you selecting the right file in the
-      <router-link to="/edit/json">config editor</router-link>
-      .
+      <router-link to="/edit/json">config editor</router-link>.
     </p>
 
     <el-button :disabled="files.length > 0">
@@ -45,30 +44,30 @@
     components: {FileUpload: VueUploadComponent},
     data() {
       return {
-        files: [] as Array,
+        files: [] as VUFile[],
       };
     },
     computed: {
-      progress() {
-        if (this.files.length === 0) return 0;
+      progress(): number {
+        if (this.files.length === 0) { return 0; }
         return parseFloat(this.files[0].progress);
       },
-      status() {
-        if (this.files.length === 0) return 'exception';
+      status(): string {
+        if (this.files.length === 0) { return 'exception'; }
         return this.files.every((file) => file.success) ? 'success' : 'text';
       },
-      all_uploaded() {
-        if (this.files.length === 0) return false;
+      all_uploaded(): boolean {
+        if (this.files.length === 0) { return false; }
         return this.files.filter((file) => file.success).length === this.files.length;
       },
-      all_file_names() {
-        if (this.files.length === 0) return []
-        return this.files.map((file) => file.name).join(", ");
-      }
+      all_file_names(): string {
+        if (this.files.length === 0) { return ''; }
+        return this.files.map((file) => file.name).join(',');
+      },
     },
     methods: {
       reset_upload() {
-        this.$router.go();
+        this.$router.go(0);
       },
     },
   });

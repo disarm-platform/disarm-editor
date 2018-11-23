@@ -38,7 +38,7 @@ export const ACTIONS = {
 };
 
 const persisted_options = {
-  paths: ['logged_in_user', 'selected_instance', 'live_instance_config',],
+  paths: ['logged_in_user', 'selected_instance', 'live_instance_config'],
 };
 
 const store = new Vuex.Store({
