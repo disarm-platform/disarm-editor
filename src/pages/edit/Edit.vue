@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>[EDIT]: Just a holder</h2>
     <el-button-group>
       <el-button @click="$router.push({name: 'users'})">users</el-button>
       <el-button @click="$router.push({name: 'json'})">json</el-button>
