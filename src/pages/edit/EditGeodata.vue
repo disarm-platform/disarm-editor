@@ -3,7 +3,7 @@
   <div>
     <h2>Select a geodata file to upload</h2>
     <p>Geodata should be a JSON file containing a GeoJSON FeatureCollection.</p>
-    <p>It's a good idea to make sure they are already named with the type of geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
+    <p>It's a good idea to make sure the file is already named with the type of geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
     </p>
     <p>This will help you selecting the right file in the
       <router-link to="/edit/json">config editor</router-link>

@@ -34,7 +34,7 @@ export const MUTATIONS = {
 export const ACTIONS = {
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',
-  RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
+  RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
 const persisted_options = {
@@ -77,7 +77,7 @@ const store = new Vuex.Store({
       context.commit(MUTATIONS.RESET_SELECTED_CONFIG);
       context.commit(MUTATIONS.RESET_USERS);
     },
-    [ACTIONS.RESET_SELECTED_CONFIG](context) {
+    [ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
       context.commit(MUTATIONS.RESET_SELECTED_INSTANCE);
       context.commit(MUTATIONS.RESET_SELECTED_CONFIG);
     },
