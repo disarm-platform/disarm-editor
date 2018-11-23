@@ -38,7 +38,7 @@ export const ACTIONS = {
 };
 
 const persisted_optons = {
-  paths: ['logged_in_user'],
+  paths: ['logged_in_user', 'selected_instance', 'live_instance_config',],
 };
 
 const store = new Vuex.Store({
