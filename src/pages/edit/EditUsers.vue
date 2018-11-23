@@ -21,10 +21,10 @@
         <template slot-scope="scope">
           <el-checkbox
             @change="handle_change(scope)"
-            :checked="checked(scope)"
+            v-model="check[`${scope.row._id}-scope.column.property`]"
           />
         </template>
-      </el-table-column>
+      </el-table-column>s
     </el-table>
   </div>
 </template>
@@ -32,6 +32,7 @@
 <script lang='ts'>
     import Vue from 'vue';
     import config_schema_json_1 from "@locational/config-validation/build/module/config_schema.json";
+    import {Permission, User} from "@/types";
 
     const users = [
         {
@@ -56,8 +57,8 @@
         },
         data() {
             return {
-                users: users as Uaser[],
-                permissions:[]
+                users: users as User[],
+                permissions:[] as Permission[]
             };
         },
         computed: {
@@ -69,6 +70,10 @@
                     .map(applet => `read:${applet}`)
                     .concat(this.applets.map(applet => `write:${applet}`))
             },
+            check(){
+                console.log("checking")
+                return this.permissions
+            }
 
         },
         methods: {
@@ -78,8 +83,12 @@
                     const index = this.permissions
                         .findIndex(p => p.user_id === row._id && p.value === column.property)
                     this.permissions.splice(index,1)
-                }else { //Add
+                }else { //Add and if its a write add the read as well
+
                     this.permissions.push({user_id:row._id,value:column.property})
+                    if(column.property.startsWith("write:")){
+                        this.permissions.push({user_id:row._id,value:column.property.replace("write","read")})
+                    }
                 }
             },
             checked(scope){
