@@ -6,8 +6,6 @@
   import Vue from 'vue';
 
   export default Vue.extend({
-    mounted() {
-    },
     data() {
       return {};
     },
@@ -16,5 +14,4 @@
 </script>
 
 <style lang='scss' scoped>
-
 </style>

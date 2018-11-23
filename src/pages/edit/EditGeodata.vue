@@ -14,8 +14,9 @@
         v-if="files.length === 0 || !all_uploaded"
         ref="upload"
         v-model="files"
-        post-action="http://httpbin.org/post"
+        :post-action="server_url"
         :multiple="false"
+        :headers="headers"
       >
         Select file
       </file-upload>
@@ -37,42 +38,57 @@
 </template>
 
 <script lang='ts'>
-  import Vue from 'vue';
-  import VueUploadComponent from 'vue-upload-component';
+import Vue from 'vue';
+import VueUploadComponent from 'vue-upload-component';
+import {LoggedInUser} from "@/store"
 
-  export default Vue.extend({
-    components: {FileUpload: VueUploadComponent},
-    data() {
-      return {
-        files: [] as VUFile[],
-      };
+export default Vue.extend({
+  components: { FileUpload: VueUploadComponent },
+  props: {
+    logged_in_user: null as null | LoggedInUser,
+  },
+  data() {
+    return {
+      files: [] as VUFile[],
+      server_url: '',
+      headers: {},
+    };
+  },
+  computed: {
+    progress(): number {
+      if (this.files.length === 0) {
+        return 0;
+      }
+      return parseFloat(this.files[0].progress);
     },
-    computed: {
-      progress(): number {
-        if (this.files.length === 0) { return 0; }
-        return parseFloat(this.files[0].progress);
-      },
-      status(): string {
-        if (this.files.length === 0) { return 'exception'; }
-        return this.files.every((file) => file.success) ? 'success' : 'text';
-      },
-      all_uploaded(): boolean {
-        if (this.files.length === 0) { return false; }
-        return this.files.filter((file) => file.success).length === this.files.length;
-      },
-      all_file_names(): string {
-        if (this.files.length === 0) { return ''; }
-        return this.files.map((file) => file.name).join(',');
-      },
+    status(): string {
+      if (this.files.length === 0) {
+        return 'exception';
+      }
+      return this.files.every((file) => file.success) ? 'success' : 'text';
     },
-    methods: {
-      reset_upload() {
-        this.$router.go(0);
-      },
+    all_uploaded(): boolean {
+      if (this.files.length === 0) {
+        return false;
+      }
+      return (
+        this.files.filter((file) => file.success).length === this.files.length
+      );
     },
-  });
+    all_file_names(): string {
+      if (this.files.length === 0) {
+        return '';
+      }
+      return this.files.map((file) => file.name).join(',');
+    },
+  },
+  methods: {
+    reset_upload() {
+      this.$router.go(0);
+    },
+  },
+});
 </script>
 
 <style lang='scss' scoped>
-
 </style>
