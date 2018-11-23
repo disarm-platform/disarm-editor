@@ -8,6 +8,7 @@
 
     <SelectInstanceConfig
       v-if="selected_instance"
+      :selected_instance="selected_instance"
       :config_list="config_list"
       @select="select_config"
     ></SelectInstanceConfig>
@@ -28,9 +29,9 @@
     config_version: '1',
     applets: {meta: {}},
     instance: {
-      title: 'Instance Title',
+      title: 'Demo Config',
       location_name: 'some location',
-      slug: 'my_slug',
+      slug: 'demo_config',
     },
   };
 
@@ -38,7 +39,7 @@
     components: {SelectInstance, SelectInstanceConfig},
     data() {
       return {
-        instance_list: [{_id: 'a1', name: 'first'}] as Instance[],
+        instance_list: [{_id: 'a1', name: 'Demo Config'}, {_id: 'b2', name: 'Different Demo Config'}] as Instance[],
         config_list: [sample_config, {...sample_config, config_version: '2'}],
       };
     },
@@ -47,7 +48,7 @@
     },
     methods: {
       select_instance(instance: Instance) {this.$store.commit(MUTATIONS.SET_SELECTED_INSTANCE, instance); },
-      deselect_instance() {this.$store.dispatch(ACTIONS.RESET_SELECTED_CONFIG); },
+      deselect_instance() {this.$store.dispatch(ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG); },
       select_config(instance_config: InstanceConfig) {
         this.$store.commit(MUTATIONS.SET_SELECTED_CONFIG, instance_config);
         this.$router.push({name: 'edit'});

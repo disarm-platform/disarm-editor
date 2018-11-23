@@ -127,5 +127,4 @@ window.applets = applets;
 </script>
 
 <style lang='scss' scoped>
-
 </style>

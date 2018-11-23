@@ -34,15 +34,15 @@ export const MUTATIONS = {
 export const ACTIONS = {
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',
-  RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
+  RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
-const persisted_optons = {
-  paths: ['logged_in_user'],
+const persisted_options = {
+  paths: ['logged_in_user', 'selected_instance', 'live_instance_config'],
 };
 
 const store = new Vuex.Store({
-  plugins: [createPersistedState(persisted_optons)],
+  plugins: [createPersistedState(persisted_options)],
   state: {
     logged_in_user: null,
     selected_instance: null,
@@ -77,7 +77,7 @@ const store = new Vuex.Store({
       context.commit(MUTATIONS.RESET_SELECTED_CONFIG);
       context.commit(MUTATIONS.RESET_USERS);
     },
-    [ACTIONS.RESET_SELECTED_CONFIG](context) {
+    [ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
       context.commit(MUTATIONS.RESET_SELECTED_INSTANCE);
       context.commit(MUTATIONS.RESET_SELECTED_CONFIG);
     },
