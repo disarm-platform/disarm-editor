@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
 import {set_api_key} from '@/lib/handler';
 import {login} from '@/lib/meta_controller';
@@ -36,7 +37,12 @@ export const ACTIONS = {
   RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
+const persisted_optons = {
+  paths: ['logged_in_user'],
+};
+
 const store = new Vuex.Store({
+  plugins: [createPersistedState(persisted_optons)],
   state: {
     logged_in_user: null,
     selected_instance: null,
