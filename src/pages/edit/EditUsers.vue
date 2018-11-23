@@ -2,7 +2,8 @@
   <div>
     <el-table
       ref="multipleTable"
-      :data="users"
+      :data="users_wp"
+       @select="onchange"
       style="width: 100%"
     >
       <el-table-column
@@ -20,8 +21,8 @@
       >
         <template slot-scope="scope">
           <el-checkbox
-            @change="handle_change(scope)"
-            v-model="check[`${scope.row._id}-scope.column.property`]"
+          v-model="scope.row[scope.column.label]"
+          @change="onchange(scope.row,scope.column)"
           />
         </template>
       </el-table-column>s
@@ -52,27 +53,46 @@
         }
     ]
 
+    const permissions = [{
+        _id:'0',
+        user_id:"3",
+        instance_id:"1",
+        value:"write:irs_monitor"
+    }] as Permission[];
+
+    window.u=users;
+    window.p=permissions;
+
+
+    const applets = ["irs_monitor","irs_plan"]
+
+window.applets = applets;
+
     export default Vue.extend({
         mounted() {
+            const perms = this.permission_strings
+            const result = users.map(u => {
+                const user_permissions = perms.forEach(p => {
+                    const exists_for_user = permissions.some(permission => permission.user_id === u._id && permission.value === p)
+                        u[p] = exists_for_user
+                });
+                return u;
+                })
+            this.users_wp = result;
         },
         data() {
             return {
                 users: users as User[],
-                permissions:[] as Permission[]
+                permissions:permissions as Permission[],
+                applets:applets,
+                users_wp:[]
             };
         },
         computed: {
-            applets() {
-                return Object.keys(config_schema_json_1.definitions.TApplets.properties);
-            },
             permission_strings() {
                 return this.applets
-                    .map(applet => `read:${applet}`)
-                    .concat(this.applets.map(applet => `write:${applet}`))
-            },
-            check(){
-                console.log("checking")
-                return this.permissions
+                    .map((applet:string) => `write:${applet}`)
+                    .concat(this.applets.map(applet => `read:${applet}`))
             }
 
         },
@@ -90,6 +110,11 @@
                         this.permissions.push({user_id:row._id,value:column.property.replace("write","read")})
                     }
                 }
+            },
+            onchange(a,b,c){
+                console.log(a,b,c)
+                const index = this.users_wp.findIndex(u => u._id === a._id)
+                this.$set(this.users_wp, index, a)
             },
             checked(scope){
                 const {row, column} = scope
