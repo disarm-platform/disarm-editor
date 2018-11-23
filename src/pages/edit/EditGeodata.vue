@@ -10,25 +10,29 @@
       .
     </p>
 
-    <ul>
-      <li v-for="file in files">{{file.name}} - Error: {{file.error}}, Success: {{file.success}}</li>
-    </ul>
-    <file-upload
+    <el-button :disabled="files.length > 0">
+      <file-upload
+        v-if="files.length === 0 || !all_uploaded"
         ref="upload"
         v-model="files"
-        post-action="/post.method"
-        put-action="/put.method"
-        @input-file="inputFile"
-        @input-filter="inputFilter"
-    >
-      Upload file
-    </file-upload>
-    <button v-show="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true" type="button">
-      Start upload
-    </button>
-    <button v-show="$refs.upload && $refs.upload.active" @click.prevent="$refs.upload.active = false" type="button">Stop
-      upload
-    </button>
+        post-action="http://httpbin.org/post"
+        :multiple="false"
+      >
+        Select file
+      </file-upload>
+      <span v-else>Select file</span>
+    </el-button>
+
+
+    <el-button :disabled="!(files.length > 0 && !all_uploaded && (!$refs.upload || !$refs.upload.active))" @click.prevent="$refs.upload.active = true" type="button">Start upload</el-button>
+    <el-button :disabled="!(files.length > 0 && ($refs.upload && $refs.upload.active))" @click.prevent="reset_upload" type="button">Stop upload</el-button>
+
+    <div>
+      <el-progress v-show='progress' :text-inside="true" :stroke-width="18" :percentage="progress"
+                   :status="status"></el-progress>
+    </div>
+
+    <div v-show="all_uploaded">Successful upload of: {{all_file_names}}</div>
   </div>
 
 </template>
@@ -37,20 +41,34 @@
   import Vue from 'vue';
   import VueUploadComponent from 'vue-upload-component';
 
-  Vue.component('file-upload', VueUploadComponent);
-
   export default Vue.extend({
+    components: {FileUpload: VueUploadComponent},
     data() {
       return {
-        files: null as Array,
+        files: [] as Array,
       };
     },
-    methods: {
-      handleFileUpload() {
-        console.log('ready to upload something');
+    computed: {
+      progress() {
+        if (this.files.length === 0) return 0;
+        return parseFloat(this.files[0].progress);
       },
-      submitFile() {
-        console.log('upload some files');
+      status() {
+        if (this.files.length === 0) return 'exception';
+        return this.files.every((file) => file.success) ? 'success' : 'text';
+      },
+      all_uploaded() {
+        if (this.files.length === 0) return false;
+        return this.files.filter((file) => file.success).length === this.files.length;
+      },
+      all_file_names() {
+        if (this.files.length === 0) return []
+        return this.files.map((file) => file.name).join(", ");
+      }
+    },
+    methods: {
+      reset_upload() {
+        this.$router.go();
       },
     },
   });
