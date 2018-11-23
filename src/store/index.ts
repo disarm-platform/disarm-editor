@@ -37,12 +37,12 @@ export const ACTIONS = {
   RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
-const persisted_optons = {
+const persisted_options = {
   paths: ['logged_in_user', 'selected_instance', 'live_instance_config',],
 };
 
 const store = new Vuex.Store({
-  plugins: [createPersistedState(persisted_optons)],
+  plugins: [createPersistedState(persisted_options)],
   state: {
     logged_in_user: null,
     selected_instance: null,
