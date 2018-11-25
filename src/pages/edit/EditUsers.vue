@@ -117,12 +117,16 @@
     },
     methods: {
       setup_sample_data() {
+        const result = this.users_and_permissions_for_table(sample_users, sample_permissions);
 
-        const result = sample_users.map((u: DevBasicUser): UserWithPermissions => {
+        this.users_with_permissions = result;
+      },
+      users_and_permissions_for_table(users: DevBasicUser[], permissions: Permission[]): UserWithPermissions[] {
+        const result = users.map((u: DevBasicUser): UserWithPermissions => {
           const user_with_perms: UserWithPermissions = {...u, permissions: []};
 
           const user_permissions = this.permission_options.reduce((acc, permission_string) => {
-            const exists_for_user = sample_permissions.some((permission) => {
+            const exists_for_user = permissions.some((permission) => {
               return permission.user_id === user_with_perms._id && permission.value === permission_string
             });
             acc[permission_string] = exists_for_user;
@@ -132,11 +136,7 @@
           user_with_perms.permissions = user_permissions;
           return user_with_perms;
         });
-        this.users_with_permissions = result;
-      },
-      matrix_users_and_permissions(users: DevBasicUser[], permissions: Permission[]): UserWithPermissions[] {
-
-        return null
+        return result;
       },
       toggle_permission(scope) {
         this.$set(scope.row.permissions, scope.column.label, !scope.row.permissions[scope.column.label]);
@@ -190,7 +190,6 @@
             };
           });
           acc = [...acc, ...rebuilt];
-          console.log('rebuilt, acc', rebuilt, acc);
           return acc;
         }, []);
         console.log(result);
