@@ -40,12 +40,12 @@
 <script lang='ts'>
 import Vue from 'vue';
 import VueUploadComponent from 'vue-upload-component';
-import {LoggedInUser} from "@/store"
+import { LoggedInUser } from '@/store';
 
 export default Vue.extend({
   components: { FileUpload: VueUploadComponent },
   props: {
-    logged_in_user: null as null | LoggedInUser,
+    logged_in_user: Object as () => null | LoggedInUser,
   },
   data() {
     return {
