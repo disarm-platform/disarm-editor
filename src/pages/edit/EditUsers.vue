@@ -159,11 +159,23 @@
         const index = scope.$index;
         this.set_for_user(index, false);
       },
+      set_for_permission(permission_string: string, permission_value: boolean) {
+        this.users_with_permissions.forEach((user, user_index) => {
+          const old_user = this.users_with_permissions[user_index];
+          const new_user = Object.assign({}, {...old_user}) as UserWithPermissions;
+          new_user.permissions[permission_string] = permission_value;
+          this.$set(this.users_with_permissions, user_index, new_user);
+        });
+      },
       set_all_for_permission(scope) {
-        
+        const permission_string = scope.column.label;
+        const value = true;
+        this.set_for_permission(permission_string, value)
       },
       set_none_for_permission(scope) {
-
+        const permission_string = scope.column.label;
+        const value = false;
+        this.set_for_permission(permission_string, value)
       },
       save() {
         // split up permissions
