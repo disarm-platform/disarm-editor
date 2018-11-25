@@ -141,7 +141,7 @@
       toggle_permission(scope) {
         this.$set(scope.row.permissions, scope.column.label, !scope.row.permissions[scope.column.label]);
       },
-      set_for_user(user_index: number, permission_value: boolean) {
+      bulk_set_for_user(user_index: number, permission_value: boolean) {
         const old_user = this.users_with_permissions[user_index];
         const new_user = Object.assign({}, {...old_user}) as UserWithPermissions;
         const new_permissions = this.permission_options.reduce((acc, option) => {
@@ -153,13 +153,13 @@
       },
       set_all_for_user(scope) {
         const index = scope.$index;
-        this.set_for_user(index, true);
+        this.bulk_set_for_user(index, true);
       },
       set_none_for_user(scope) {
         const index = scope.$index;
-        this.set_for_user(index, false);
+        this.bulk_set_for_user(index, false);
       },
-      set_for_permission(permission_string: string, permission_value: boolean) {
+      bulk_set_for_permission(permission_string: string, permission_value: boolean) {
         this.users_with_permissions.forEach((user, user_index) => {
           const old_user = this.users_with_permissions[user_index];
           const new_user = Object.assign({}, {...old_user}) as UserWithPermissions;
@@ -170,12 +170,12 @@
       set_all_for_permission(scope) {
         const permission_string = scope.column.label;
         const value = true;
-        this.set_for_permission(permission_string, value)
+        this.bulk_set_for_permission(permission_string, value)
       },
       set_none_for_permission(scope) {
         const permission_string = scope.column.label;
         const value = false;
-        this.set_for_permission(permission_string, value)
+        this.bulk_set_for_permission(permission_string, value)
       },
       save() {
         // split up permissions
