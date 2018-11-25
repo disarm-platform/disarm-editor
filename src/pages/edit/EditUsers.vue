@@ -14,9 +14,10 @@
           width="100">
       </el-table-column>
       <el-table-column
-        label="All | None">
+          label="All | None">
         <template slot-scope="scope">
-          <el-button type="text" @click="set_all_for_user(scope)">All</el-button> |
+          <el-button type="text" @click="set_all_for_user(scope)">All</el-button>
+          |
           <el-button type="text" @click="set_none_for_user(scope)">None</el-button>
         </template>
       </el-table-column>
@@ -29,13 +30,15 @@
       >
         <template slot="header" slot-scope="scope">
           <div>{{scope.column.label}}</div>
-          <el-button type="text" @click="set_all_for_permission(scope)">All</el-button> |
+          <el-button type="text" @click="set_all_for_permission(scope)">All</el-button>
+          |
           <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
         </template>
         <template slot-scope="scope">
 
           <el-checkbox
-            v-model="scope.row.permissions[scope.column.label]"
+            :checked="scope.row.permissions[scope.column.label]"
+            @change="toggle(scope)"
           />
         </template>
       </el-table-column>
@@ -45,197 +48,78 @@
 </template>
 
 <script lang='ts'>
-import Vue from 'vue';
-import { Applets, DoumaUser, Permission } from '@/types';
+  import Vue from 'vue';
+  import {DevBasicUser, InstanceConfig, Permission, DevUserWithPermissions} from '@/types';
 
-interface DevBasicUser {
-  // This is just for dev, need to use DoumaUser
-  _id?: string;
-  name: string;
-  username: string;
-}
+  // DEV/DEBUG ONLY
+  import {sample_users, sample_permissions, sample_applets} from './sampleUsers';
+  import {
+    bulk_set_for_permission,
+    bulk_set_for_user, toggle_permission,
+    users_and_permissions_for_table
+  } from "@/lib/users_with_permissions"
 
-interface UserWithPermissions extends DevBasicUser {
-  permissions: PermissionRow;
-}
 
-interface PermissionRow {
-  [index: string]: boolean;
-}
-
-const sample_users = [
-  {
-    _id: '1',
-    name: 'Sihle',
-    username: 'sm',
-  },
-  {
-    _id: '2',
-    name: 'Thokozani',
-    username: 'tn',
-  },
-  {
-    _id: '3',
-    name: 'Bob',
-    username: 'bob',
-  },
-];
-
-const sample_permissions = [
-  {
-    _id: '0',
-    user_id: '3',
-    instance_id: '1',
-    value: 'write:irs_monitor',
-  },
-] as Permission[];
-
-const sample_applets = { irs_monitor: {}, irs_plan: {} };
-
-export default Vue.extend({
-  data() {
-    return {
-      users: sample_users as DevBasicUser[],
-      permissions: sample_permissions as Permission[],
-      applets: sample_applets as Applets,
-      users_with_permissions: [] as UserWithPermissions[],
-    };
-  },
-  computed: {
-    permission_options(): string[] {
-      const output: string[] = [];
-
-      const types = ['write', 'read'];
-      const applet_names: string[] = Object.keys(this.applets);
-
-      applet_names.forEach((applet) => {
-        types.forEach((type) => {
-          output.push(`${type}:${applet}`);
-        });
-      });
-      return output;
+  export default Vue.extend({
+    props: {
+      live_instance_config: Object as () => InstanceConfig,
     },
-  },
-  mounted() {
-    this.setup_sample_data();
-  },
-  methods: {
-    setup_sample_data() {
-      const result = this.users_and_permissions_for_table(
-        sample_users,
-        sample_permissions
-      );
+    data() {
+      return {
+        users: sample_users as DevBasicUser[],
+        permissions: sample_permissions as Permission[],
+      };
+    },
+    computed: {
+      permission_options(): string[] {
+        const output = [];
 
-      this.users_with_permissions = result;
-    },
-    users_and_permissions_for_table(
-      users: DevBasicUser[],
-      permissions: Permission[]
-    ): UserWithPermissions[] {
-      const result = users.map(
-        (u: DevBasicUser): UserWithPermissions => {
-          const user_with_perms: UserWithPermissions = {
-            ...u,
-            permissions: [],
-          };
+        const types = ['write', 'read'];
+        // const applet_names: string[] = Object.keys(this.live_instance_config.applets);
+        const applet_names: string[] = Object.keys(sample_applets);
 
-          const user_permissions = this.permission_options.reduce(
-            (acc, permission_string) => {
-              const exists_for_user = permissions.some((permission) => {
-                return (
-                  permission.user_id === user_with_perms._id &&
-                  permission.value === permission_string
-                );
-              });
-              acc[permission_string] = exists_for_user;
-              return acc;
-            },
-            {} as PermissionRow
-          );
-
-          user_with_perms.permissions = user_permissions;
-          return user_with_perms;
-        }
-      );
-      return result;
-    },
-    toggle_permission(scope) {
-      this.$set(
-        scope.row.permissions,
-        scope.column.label,
-        !scope.row.permissions[scope.column.label]
-      );
-    },
-    bulk_set_for_user(user_index: number, permission_value: boolean) {
-      const old_user = this.users_with_permissions[user_index];
-      const new_user = Object.assign(
-        {},
-        { ...old_user }
-      ) as UserWithPermissions;
-      const new_permissions = this.permission_options.reduce(
-        (acc, option) => {
-          acc[option] = permission_value;
-          return acc;
-        },
-        {} as PermissionRow
-      );
-      new_user.permissions = new_permissions;
-      this.$set(this.users_with_permissions, user_index, new_user);
-    },
-    set_all_for_user(scope) {
-      const index = scope.$index;
-      this.bulk_set_for_user(index, true);
-    },
-    set_none_for_user(scope) {
-      const index = scope.$index;
-      this.bulk_set_for_user(index, false);
-    },
-    bulk_set_for_permission(
-      permission_string: string,
-      permission_value: boolean
-    ) {
-      this.users_with_permissions.forEach((user, user_index) => {
-        const old_user = this.users_with_permissions[user_index];
-        const new_user = Object.assign(
-          {},
-          { ...old_user }
-        ) as UserWithPermissions;
-        new_user.permissions[permission_string] = permission_value;
-        this.$set(this.users_with_permissions, user_index, new_user);
-      });
-    },
-    set_all_for_permission(scope) {
-      const permission_string = scope.column.label;
-      const value = true;
-      this.bulk_set_for_permission(permission_string, value);
-    },
-    set_none_for_permission(scope) {
-      const permission_string = scope.column.label;
-      const value = false;
-      this.bulk_set_for_permission(permission_string, value);
-    },
-    save() {
-      // split up permissions
-      const result = this.users_with_permissions.reduce(
-        (acc, u) => {
-          const got_there = Object.keys(u.permissions).filter(
-            (p) => u.permissions[p]
-          );
-          const rebuilt = got_there.map((p) => {
-            return {
-              user_id: u._id,
-              value: p,
-            };
+        applet_names.forEach((applet) => {
+          types.forEach((type) => {
+            output.push(`${type}:${applet}`);
           });
-          acc = [...acc, ...rebuilt];
-          return acc;
-        },
-        [] as Permission[]
-      );
-      console.log(result);
+        });
+        return output;
+      },
+      users_with_permissions(): DevUserWithPermissions[] {
+        return users_and_permissions_for_table(this.users, this.permissions, this.permission_options)
+      },
     },
-  },
-});
+    mounted() {
+    },
+    methods: {
+      toggle(scope: object) {
+        const user_id = scope.row._id;
+        const permission = scope.column.label;
+        toggle_permission(scope, this.permissions, user_id, permission);
+      },
+      set_all_for_user(scope: object) {
+        const user_id = scope.row._id;
+        bulk_set_for_user(this.permissions, user_id, true, this.permission_options);
+      },
+      set_none_for_user(scope: object) {
+        const user_id = scope.row._id;
+        bulk_set_for_user(this.permissions, user_id, false, this.permission_options);
+      },
+      set_all_for_permission(scope: object) {
+        const permission_string = scope.column.label;
+        const value = true;
+        bulk_set_for_permission(this.users_with_permissions, permission_string, value);
+      },
+      set_none_for_permission(scope: object) {
+        const permission_string = scope.column.label;
+        const value = false;
+        bulk_set_for_permission(this.users_with_permissions, permission_string, value);
+      },
+      save() {
+        console.log(this.permissions)
+      },
+    },
+  });
 </script>
 
 <style lang='scss' scoped>
