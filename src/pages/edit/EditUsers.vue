@@ -5,7 +5,6 @@
     <el-table
         ref="multipleTable"
         :data="users_with_permissions"
-        @select="onchange"
         style="width: 100%"
     >
       <el-table-column
@@ -15,16 +14,28 @@
           width="100">
       </el-table-column>
       <el-table-column
+        label="All | None">
+        <template slot-scope="scope">
+          <el-button type="text" @click="set_all_for_user(scope)">All</el-button> |
+          <el-button type="text" @click="set_none_for_user(scope)">None</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
           v-for="(permission) in permission_options"
           v-bind:key="permission"
           :property="permission"
           :label="permission"
           with="500"
       >
+        <template slot="header" slot-scope="scope">
+          <div>{{scope.column.label}}</div>
+          <el-button type="text" @click="set_all_for_permission(scope)">All</el-button> |
+          <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
+        </template>
         <template slot-scope="scope">
+
           <el-checkbox
-              v-model="scope.row.permissions[scope.column.label]"
-              @change="onchange(scope.row,scope.column)"
+            v-model="scope.row.permissions[scope.column.label]"
           />
         </template>
       </el-table-column>
@@ -45,7 +56,7 @@
   }
 
   interface UserWithPermissions extends DevBasicUser {
-    permissions: {}[];
+    permissions: {};
   }
 
   const sample_users = [
@@ -106,55 +117,53 @@
     },
     methods: {
       setup_sample_data() {
-        const perm_options = this.permission_options;
 
         const result = sample_users.map((u: DevBasicUser): UserWithPermissions => {
           const user_with_perms: UserWithPermissions = {...u, permissions: []};
-          const user_permissions = perm_options.forEach((p) => {
-            const exists_for_user = sample_permissions.some((permission) => {
-              return permission.user_id === user_with_perms._id && permission.value === p
-            });
-            user_with_perms.permissions[p] = exists_for_user;
-          });
 
+          const user_permissions = this.permission_options.reduce((acc, permission_string) => {
+            const exists_for_user = sample_permissions.some((permission) => {
+              return permission.user_id === user_with_perms._id && permission.value === permission_string
+            });
+            acc[permission_string] = exists_for_user;
+            return acc;
+          }, {});
+
+          user_with_perms.permissions = user_permissions;
           return user_with_perms;
         });
         this.users_with_permissions = result;
       },
-      combine_users_and_permissions(users: DevBasicUser[], permissions: Permission[]): UserWithPermissions[] {
+      matrix_users_and_permissions(users: DevBasicUser[], permissions: Permission[]): UserWithPermissions[] {
+
         return null
       },
-      handle_change(scope) {
-        const {row, column} = scope;
-        if (this.checked(scope)) {
-          //remove
-          const index = this.permissions.findIndex(
-            (p) => p.user_id === row._id && p.value === column.property
-          );
-          this.permissions.splice(index, 1);
-        } else {
-          //Add and if its a write add the read as well
-
-          this.permissions.push({user_id: row._id, value: column.property});
-          if (column.property.startsWith('write:')) {
-            this.permissions.push({
-              user_id: row._id,
-              value: column.property.replace('write', 'read'),
-            });
-          }
-        }
+      toggle_permission(scope) {
+        this.$set(scope.row.permissions, scope.column.label, !scope.row.permissions[scope.column.label]);
       },
-      onchange(a, b, c) {
-        console.log(a, b, c);
-        const index = this.users_with_permissions.findIndex((u) => u._id === a._id);
-        this.$set(this.users_with_permissions, index, a);
+      set_for_user(user_index: number, permission_value: boolean) {
+        const old_user = this.users_with_permissions[user_index];
+        const new_user = Object.assign({}, {...old_user}) as UserWithPermissions;
+        const new_permissions = this.permission_options.reduce((acc, option) => {
+          acc[option] = permission_value;
+          return acc
+        }, {});
+        new_user.permissions = new_permissions;
+        this.$set(this.users_with_permissions, user_index, new_user);
       },
-      checked(scope) {
-        const {row, column} = scope;
+      set_all_for_user(scope) {
+        const index = scope.$index;
+        this.set_for_user(index, true);
+      },
+      set_none_for_user(scope) {
+        const index = scope.$index;
+        this.set_for_user(index, false);
+      },
+      set_all_for_permission(scope) {
+        
+      },
+      set_none_for_permission(scope) {
 
-        return this.permissions.some(
-          (p) => p.user_id === row._id && p.value === column.property
-        );
       },
       save() {
         // split up permissions
