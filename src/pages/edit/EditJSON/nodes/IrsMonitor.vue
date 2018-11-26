@@ -6,9 +6,9 @@
 </template>
 
 <script lang="ts">
-import ConfigNodeMixin from './EditNodeMixin';
-import JSONEditor from './components/JSONEditor.vue';
-import Applet from './components/applet.vue';
+import ConfigNodeMixin from '../EditNodeMixin';
+import JSONEditor from '../components/JSONEditor.vue';
+import Applet from '../components/applet.vue';
 
 export default ConfigNodeMixin.extend({
   components: {Applet, JSONEditor},

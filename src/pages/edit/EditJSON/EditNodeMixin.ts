@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import {cloneDeep, get} from 'lodash';
-import {InstanceConfig} from '@/types';
+import {InstanceConfig} from '../../../types';
 
 export default Vue.extend({
   props: {

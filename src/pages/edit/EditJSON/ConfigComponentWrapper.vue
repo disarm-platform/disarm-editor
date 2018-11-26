@@ -39,7 +39,7 @@ import {TConfig} from '@locational/config-validation/build/module/lib/config_typ
 
 import ComponentMessages from './ComponentMessages.vue';
 import ComponentActions from './ComponentActions.vue';
-import {component_list} from './EditNode/EditNodeDefinitions';
+import {component_list} from './EditNodeDefinitions';
 import { TStandardEdgeResponse } from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
 
 export interface Data {

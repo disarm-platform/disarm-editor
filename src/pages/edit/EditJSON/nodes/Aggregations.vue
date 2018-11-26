@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-  import ConfigNodeMixin from './EditNodeMixin';
-  import JSONEditor from './components/JSONEditor.vue';
+  import ConfigNodeMixin from '../EditNodeMixin';
+  import JSONEditor from '../components/JSONEditor.vue';
 
   export default ConfigNodeMixin.extend({
     components: {JSONEditor},

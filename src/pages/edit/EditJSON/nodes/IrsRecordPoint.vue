@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts">
-import ConfigNodeMixin from './EditNodeMixin';
-import Applet from './components/applet.vue';
+import ConfigNodeMixin from '../EditNodeMixin';
+import Applet from '../components/applet.vue';
 
 export default ConfigNodeMixin.extend({
   components: {Applet},
