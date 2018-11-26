@@ -47,8 +47,7 @@ export function users_and_permissions_for_table(
   return users.map((user: DevBasicUser): DevUserWithPermissions => {
       const user_with_perms: DevUserWithPermissions = {...user, permissions: {}};
       if (!user._id) {
-        console.log('no _id for user', user);
-        return user_with_perms;
+        throw new Error(`no _id for user ${user}`);
       }
       user_with_perms.permissions = create_all_permissions_for_user(permission_options, permissions, user._id);
       return user_with_perms;
@@ -166,14 +165,14 @@ export function bulk_set_permission_for_all_users(
       .filter((p) => p.value === permission_string)
       .map((p) => p.user_id);
     const missing_user_ids = without(all_user_ids, ...user_ids_with_this_permission);
-    const add_these: Permission[] = missing_user_ids.reduce((acc: Permission[], user_id) => {
-      const permission = {
+
+    const add_these: Permission[] = missing_user_ids.map((user_id) => {
+      return {
         user_id,
         value: permission_string,
       };
-      acc.push(permission);
-      return acc;
-    }, []);
+    });
+
     return permissions_copy.concat(add_these);
   } else {
     // remove permission_string for all users
