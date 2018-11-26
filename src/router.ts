@@ -31,6 +31,7 @@ const router = new Router({
       path: '/edit',
       name: 'edit',
       component: Edit,
+      redirect: '/edit/users',
       beforeEnter: ((to, from, next) => {
         if (!store.state.live_instance_config) { return next({name: 'select'}); }
         return next();
@@ -67,6 +68,10 @@ const router = new Router({
       path: '/logout',
       name: 'logout',
       component: Logout,
+    },
+    {
+      path: '*',
+      redirect: '/',
     },
   ],
 });

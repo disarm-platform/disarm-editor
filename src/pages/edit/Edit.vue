@@ -15,7 +15,9 @@
         :live_instance_config="live_instance_config"
         :users="users"
         :permissions="permissions"
+
         @update_permissions="update_permissions"
+        @reload="reload"
     ></router-view>
   </div>
 </template>
@@ -23,8 +25,8 @@
 <script lang='ts'>
   import Vue from 'vue';
   import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
-  import {ACTIONS, MUTATIONS} from '@/store';
-  import {USERS_MUTATIONS} from "@/store/users"
+  import {ROOT_ACTIONS, ROOT_MUTATIONS} from '@/store';
+  import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
 
   export default Vue.extend({
     computed: {
@@ -43,15 +45,26 @@
     },
     methods: {
       reset_selected_instance() {
-        this.$store.dispatch(ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
+        this.$store.dispatch(ROOT_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
         this.$router.push('/');
       },
       reset_selected_config() {
-        this.$store.commit(MUTATIONS.RESET_SELECTED_CONFIG);
+        this.$store.commit(ROOT_MUTATIONS.RESET_SELECTED_CONFIG);
         this.$router.push('/');
       },
       update_permissions(permissions: Permission[]) {
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
+      },
+      reload(view) {
+
+        switch (view) {
+          case 'permissions':
+            this.$store.dispatch(USERS_ACTIONS.REFETCH_PERMISSIONS);
+            break;
+          case 'users':
+            this.$store.dispatch(USERS_ACTIONS.REFETCH_USERS);
+            break;
+        }
       },
     },
   });

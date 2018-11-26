@@ -8,7 +8,7 @@
 <script lang='ts'>
   import Vue from 'vue';
 
-  import {LoggedInUser, MUTATIONS} from '../store';
+  import {LoggedInUser, ROOT_MUTATIONS} from '../store';
 
   export default Vue.extend({
     computed: {

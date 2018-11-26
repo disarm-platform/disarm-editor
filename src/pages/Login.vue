@@ -21,7 +21,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {ACTIONS} from '@/store';
+  import {ROOT_ACTIONS} from '@/store';
 
   interface Data {
     error: string;
@@ -42,7 +42,7 @@
         this.error = '';
         try {
           await this.$store.dispatch(
-            ACTIONS.LOGIN,
+            ROOT_ACTIONS.LOGIN,
             {
               username: this.username,
               password: this.password,

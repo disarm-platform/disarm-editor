@@ -20,7 +20,7 @@ export interface RootState {
   live_instance_config: InstanceConfig | null;
 }
 
-export const MUTATIONS = {
+export const ROOT_MUTATIONS = {
   SET_USER: 'SET_USER',
   RESET_USER: 'RESET_USER',
   SET_SELECTED_INSTANCE: 'SET_SELECTED_INSTANCE',
@@ -29,7 +29,7 @@ export const MUTATIONS = {
   RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
-export const ACTIONS = {
+export const ROOT_ACTIONS = {
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',
   RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
@@ -48,32 +48,32 @@ const store_options: StoreOptions<RootState> = {
   } as RootState,
   getters: {},
   mutations: {
-    [MUTATIONS.SET_USER](state, logged_in_user: LoggedInUser) { state.logged_in_user = logged_in_user; },
-    [MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
-    [MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance: Instance) {
+    [ROOT_MUTATIONS.SET_USER](state, logged_in_user: LoggedInUser) { state.logged_in_user = logged_in_user; },
+    [ROOT_MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
+    [ROOT_MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance: Instance) {
       return state.selected_instance = selected_instance;
     },
-    [MUTATIONS.RESET_SELECTED_INSTANCE](state) { state.selected_instance = null; },
-    [MUTATIONS.SET_SELECTED_CONFIG](state, selected_config: InstanceConfig) {
+    [ROOT_MUTATIONS.RESET_SELECTED_INSTANCE](state) { state.selected_instance = null; },
+    [ROOT_MUTATIONS.SET_SELECTED_CONFIG](state, selected_config: InstanceConfig) {
       return state.live_instance_config = selected_config;
     },
-    [MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
+    [ROOT_MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
   },
   actions: {
-    [ACTIONS.LOGIN](context, {username, password}) {
-      return context.commit(MUTATIONS.SET_USER, {username, api_key: 'real_key'});
+    [ROOT_ACTIONS.LOGIN](context, {username, password}) {
+      return context.commit(ROOT_MUTATIONS.SET_USER, {username, api_key: 'real_key'});
       // // ?? set_api_key?
       // const logged_in_user = login(username, password);
       // context.commit(MUTATIONS.SET_USER, logged_in_user);
     },
-    [ACTIONS.LOGOUT](context) {
-      context.commit(MUTATIONS.RESET_USER);
-      context.commit(MUTATIONS.RESET_SELECTED_INSTANCE);
-      context.commit(MUTATIONS.RESET_SELECTED_CONFIG);
+    [ROOT_ACTIONS.LOGOUT](context) {
+      context.commit(ROOT_MUTATIONS.RESET_USER);
+      context.commit(ROOT_MUTATIONS.RESET_SELECTED_INSTANCE);
+      context.commit(ROOT_MUTATIONS.RESET_SELECTED_CONFIG);
     },
-    [ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
-      context.commit(MUTATIONS.RESET_SELECTED_INSTANCE);
-      context.commit(MUTATIONS.RESET_SELECTED_CONFIG);
+    [ROOT_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
+      context.commit(ROOT_MUTATIONS.RESET_SELECTED_INSTANCE);
+      context.commit(ROOT_MUTATIONS.RESET_SELECTED_CONFIG);
     },
   },
   modules: {

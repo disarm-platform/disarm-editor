@@ -10,14 +10,12 @@
   import Vue from 'vue';
 
   import {InstanceConfig} from '@/types';
-  const schema = require('@locational/config-validation/build/module/config_schema.json');
 
   export default Vue.extend({
     props: {
       live_instance_config: Object as () => InstanceConfig,
     },
     mounted() {
-      console.log('schema', schema);
     },
     data() {
       return {};

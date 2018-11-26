@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-button @click='save'>save table</el-button>
+    <el-button @click="reload">Reload</el-button>
+    <el-button @click='save'>Save</el-button>
 
     <el-table
         ref="multipleTable"
@@ -11,11 +12,15 @@
       <el-table-column
           property="username"
           fixed
+          label="Username"
+          width="100">
+      </el-table-column>
+
+      <el-table-column
+          property="name"
+          fixed
           label="Name"
           width="100">
-        <template slot-scope="scope">
-          <span @click="edit_name(scope)">{{scope.row[scope.column.property]}}</span>
-        </template>
       </el-table-column>
 
       <el-table-column
@@ -57,7 +62,6 @@
       </el-table-column>
     </el-table>
 
-    <el-button @click='add_user'>add user</el-button>
 
   </div>
 </template>
@@ -166,18 +170,8 @@ export default Vue.extend({
       );
       this.$emit('update_permissions', updated_permissions);
     },
-    add_user() {
-      const new_user = {
-        name: 'No-one',
-        username: 'No name',
-        _id: `${Math.random()}`,
-      } as DevBasicUser;
-
-      console.log('Using Math.random() for user._id');
-      this.users.push(new_user);
-    },
-    edit_name(scope: any) {
-      console.log('edit_name for', scope.row[scope.column.property]);
+    reload() {
+      this.$emit('reload', 'permissions');
     },
     save() {
       console.log(this.permissions);
