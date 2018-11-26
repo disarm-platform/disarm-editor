@@ -25,7 +25,7 @@ export interface ComponentList {
   [k: string]: VueConstructor;
 }
 
-export const component_defs: ComponentDefinition[] = [
+export const edit_nodes: ComponentDefinition[] = [
   {
     display_name: 'Instance',
     component_name: 'Instance',
@@ -116,7 +116,7 @@ export const component_defs: ComponentDefinition[] = [
   },
 ];
 
-export const component_list: ComponentList = component_defs.reduce((acc, c: ComponentDefinition) => {
+export const component_list: ComponentList = edit_nodes.reduce((acc, c: ComponentDefinition) => {
   acc[c.component_name] = c.component;
   return acc;
 }, {} as ComponentList);
