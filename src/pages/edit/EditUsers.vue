@@ -69,19 +69,13 @@ import {
   DevUserWithPermissions,
 } from '@/types';
 
-// DEV/DEBUG ONLY
-import {
-  sample_users,
-  sample_permissions,
-  sample_applets,
-} from '../seedData';
+
 import {
   bulk_set_permission_for_all_users,
   bulk_set_all_permissions_for_user,
   toggle_permission,
   users_and_permissions_for_table,
 } from '@/lib/users_with_permissions';
-import {USERS_MUTATIONS} from "@/store/users"
 
 export default Vue.extend({
   props: {
@@ -112,9 +106,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    isChecked(scope: any) {
-      return scope.row.permissions[scope.column.property];
-    },
     toggle(scope: any) {
       const user_id = scope.row._id;
       const permission = scope.column.property;
