@@ -43,6 +43,10 @@ const actions: ActionTree<ConfigState, RootState> = {
   },
 };
 
+export const CONFIG_GETTERS = {
+
+};
+
 const getters: GetterTree<ConfigState, RootState> = {};
 
 export const config_module: Module<ConfigState, RootState> = {

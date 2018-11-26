@@ -22,8 +22,15 @@
           width="100">
       </el-table-column>
 
-    </el-table>
+      <el-table-column
+          label="Actions">
+        <template slot-scope="scope">
+          <el-button type="text" @click="reset_password(scope)">Reset password</el-button>
+          <el-button type="danger" size="mini" @click="delete_user(scope)">Delete</el-button>
+        </template>
+      </el-table-column>
 
+    </el-table>
 
     <el-button @click='add_user'>add user</el-button>
 
@@ -50,10 +57,18 @@
         this.$emit('add_user', new_user);
       },
       edit_name(scope: any) {
-        console.log('edit_name for', scope.row[scope.column.property]);
+        const updated_user = {};
+        this.$emit('update_user', updated_user);
       },
       reload() {
         this.$emit('reload', 'users');
+      },
+      reset_password(scope: any) {
+        const updated_user = {};
+        this.$emit('update_user', updated_user);
+      },
+      delete_user(scope: any) {
+        this.$emit('delete_user', scope);
       },
       save() {
         console.log(this.users);

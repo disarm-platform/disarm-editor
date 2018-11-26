@@ -32,7 +32,8 @@ export const ROOT_ACTIONS = {
 
 const persisted_options = {
   paths: [
-    'logged_in_user', 'selected_instance', 'live_instance_config',
+    'logged_in_user',
+    'config_module.selected_instance', 'config_module.live_instance_config',
     'users_module.users', 'users_module.permissions',
   ],
 };

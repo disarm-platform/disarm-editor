@@ -33,7 +33,7 @@ const router = new Router({
       component: Edit,
       redirect: '/edit/users',
       beforeEnter: ((to, from, next) => {
-        if (!store.state.live_instance_config) { return next({name: 'select'}); }
+        if (!(store.state as any).config_module.live_instance_config) { return next({name: 'select'}); }
         return next();
       }),
       children: [

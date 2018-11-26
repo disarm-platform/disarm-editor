@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="reload">Reload</el-button>
-    <el-button @click='save'>Save</el-button>
+    <el-button @click='save'>Upload</el-button>
 
     <el-table
         ref="multipleTable"
