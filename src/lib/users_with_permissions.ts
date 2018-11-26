@@ -173,14 +173,5 @@ export function bulk_set_permission_for_all_users(
     // remove permission_string for all users
     return permissions.filter((p) => p.value !== permission_string);
   }
-  // users_with_permissions.forEach((user, user_index) => {
-  //   const old_user = users_with_permissions[user_index];
-  //   const new_user = Object.assign(
-  //     {},
-  //     {...old_user},
-  //   ) as DevUserWithPermissions;
-  //   new_user.permissions[permission_string] = permission_value;
-  //   Vue.set(users_with_permissions, user_index, new_user);
-  // });
 }
 
