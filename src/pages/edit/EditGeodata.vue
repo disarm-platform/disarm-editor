@@ -27,12 +27,17 @@
     <el-button :disabled="!(files.length > 0 && !all_uploaded && (!$refs.upload || !$refs.upload.active))" @click.prevent="$refs.upload.active = true" type="button">Start upload</el-button>
     <el-button :disabled="!(files.length > 0 && ($refs.upload && $refs.upload.active))" @click.prevent="reset_upload" type="button">Stop upload</el-button>
 
-    <div>
-      <el-progress v-show='progress' :text-inside="true" :stroke-width="18" :percentage="progress"
-                   :status="status"></el-progress>
+    <div style="margin-top: 20px;">
+      <el-progress
+          v-show='progress' :text-inside="true"
+          :stroke-width="18" :percentage="progress"
+          :status="status"></el-progress>
     </div>
 
-    <div v-show="all_uploaded">Successful upload of: {{all_file_names}}</div>
+    <div v-show="all_uploaded" style="margin-top: 20px;">
+      Successful upload of: {{all_file_names}}.
+      Visit the <router-link :to="{name: 'json'}">editor</router-link> to use it in the configuration.
+    </div>
   </div>
 
 </template>
@@ -50,7 +55,7 @@ export default Vue.extend({
   data() {
     return {
       files: [] as VUFile[],
-      server_url: '',
+      server_url: 'https://httpbin.org/post',
       headers: {},
     };
   },
