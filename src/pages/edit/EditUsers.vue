@@ -54,8 +54,8 @@
   // DEV/DEBUG ONLY
   import {sample_users, sample_permissions, sample_applets} from './sampleUsers';
   import {
-    bulk_set_for_permission,
-    bulk_set_for_user, toggle_permission,
+    bulk_set_permission_for_all_users,
+    bulk_set_all_permissions_for_user, toggle_permission,
     users_and_permissions_for_table
   } from "@/lib/users_with_permissions"
 
@@ -99,21 +99,21 @@
       },
       set_all_for_user(scope: object) {
         const user_id = scope.row._id;
-        bulk_set_for_user(this.permissions, user_id, true, this.permission_options);
+        this.permissions = bulk_set_all_permissions_for_user(this.permissions, user_id, true, this.permission_options);
       },
       set_none_for_user(scope: object) {
         const user_id = scope.row._id;
-        this.permissions = bulk_set_for_user(this.permissions, user_id, false, this.permission_options);
+        this.permissions = bulk_set_all_permissions_for_user(this.permissions, user_id, false, this.permission_options);
       },
       set_all_for_permission(scope: object) {
         const permission_string = scope.column.label;
         const value = true;
-        bulk_set_for_permission(this.users_with_permissions, permission_string, value);
+        bulk_set_permission_for_all_users(this.users_with_permissions, permission_string, value);
       },
       set_none_for_permission(scope: object) {
         const permission_string = scope.column.label;
         const value = false;
-        bulk_set_for_permission(this.users_with_permissions, permission_string, value);
+        bulk_set_permission_for_all_users(this.users_with_permissions, permission_string, value);
       },
       save() {
         console.log(this.permissions)
