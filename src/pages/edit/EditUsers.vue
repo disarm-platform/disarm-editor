@@ -35,11 +35,12 @@
           <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
         </template>
         <template slot-scope="scope">
-          <span @click="toggle(scope)">{{scope.row.permissions[scope.column.label]}}</span>
-          <!--<el-checkbox-->
-            <!--:checked="scope.row.permissions[scope.column.label]"-->
-            <!--@change="toggle(scope)"-->
-          <!--/>-->
+          <span
+            @click="toggle(scope)"
+          >
+            <i v-if="scope.row.permissions[scope.column.label]" class="el-icon-success green"></i>
+            <i v-else class="el-icon-circle-plus-outline"></i>
+          </span>
         </template>
       </el-table-column>
       s
@@ -92,6 +93,9 @@
     mounted() {
     },
     methods: {
+      isChecked(scope) {
+        return scope.row.permissions[scope.column.label];
+      },
       toggle(scope: object) {
         const user_id = scope.row._id;
         const permission = scope.column.label;
@@ -123,4 +127,7 @@
 </script>
 
 <style lang='scss' scoped>
+  .green {
+    color: #2cd02c;
+  }
 </style>
