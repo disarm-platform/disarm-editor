@@ -7,6 +7,7 @@
         :data="users_with_permissions"
         style="width: 100%"
     >
+
       <el-table-column
           property="username"
           fixed
@@ -16,6 +17,7 @@
           <span @click="edit_name(scope)">{{scope.row[scope.column.property]}}</span>
         </template>
       </el-table-column>
+
       <el-table-column
           label="All | None">
         <template slot-scope="scope">
@@ -24,6 +26,7 @@
           <el-button type="text" @click="set_none_for_user(scope)">None</el-button>
         </template>
       </el-table-column>
+
       <el-table-column
           v-for="(permission) in permission_options"
           v-bind:key="permission"
@@ -31,23 +34,25 @@
           :label="permission"
           with="500"
       >
+        <!--PERMISSION COL HEADER -->
         <template slot="header" slot-scope="scope">
           <div>{{scope.column.property}}</div>
           <el-button type="text" @click="set_all_for_permission(scope)">All</el-button>
           |
           <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
         </template>
+
+        <!-- PERMISSION CELL -->
         <template slot-scope="scope">
           <span
               @click="toggle(scope)"
               class="clickable"
           >
-            <i v-if="scope.row.permissions[scope.column.property]" class="el-icon-success green"></i>
-            <i v-else class="el-icon-circle-plus-outline"></i>
+            <i v-if="scope.row.permissions[scope.column.property]" class="active el-icon-success"></i>
+            <i v-else class="inactive el-icon-circle-plus-outline"></i>
           </span>
         </template>
       </el-table-column>
-      s
     </el-table>
 
     <el-button @click='add_user'>add user</el-button>
@@ -76,6 +81,7 @@ import {
   toggle_permission,
   users_and_permissions_for_table,
 } from '@/lib/users_with_permissions';
+import {USERS_MUTATIONS} from "@/store/users"
 
 export default Vue.extend({
   props: {
@@ -116,41 +122,45 @@ export default Vue.extend({
     },
     set_all_for_user(scope: any) {
       const user_id = scope.row._id;
-      this.permissions = bulk_set_all_permissions_for_user(
+      const updated_permissions = bulk_set_all_permissions_for_user(
         this.permissions,
         user_id,
         true,
         this.permission_options,
       );
+      this.$emit('update_permissions', updated_permissions);
     },
     set_none_for_user(scope: any) {
       const user_id = scope.row._id;
-      this.permissions = bulk_set_all_permissions_for_user(
+      const updated_permissions = bulk_set_all_permissions_for_user(
         this.permissions,
         user_id,
         false,
         this.permission_options,
       );
+      this.$emit('update_permissions', updated_permissions);
     },
     set_all_for_permission(scope: any) {
       const permission_string = scope.column.property;
       const value = true;
-      this.permissions = bulk_set_permission_for_all_users(
+      const updated_permissions = bulk_set_permission_for_all_users(
         this.permissions,
         this.users,
         permission_string,
         value,
       );
+      this.$emit('update_permissions', updated_permissions);
     },
     set_none_for_permission(scope: any) {
       const permission_string = scope.column.property;
       const value = false;
-      this.permissions = bulk_set_permission_for_all_users(
+      const updated_permissions = bulk_set_permission_for_all_users(
         this.permissions,
         this.users,
         permission_string,
         value,
       );
+      this.$emit('update_permissions', updated_permissions);
     },
     add_user() {
       const new_user = {
@@ -175,8 +185,13 @@ export default Vue.extend({
 <style lang='scss' scoped>
   .clickable {
     cursor: pointer;
-  }
-  .green {
-    color: #2cd02c;
+    font-size: 18px;
+
+    .active {
+      color: #2cd02c;
+    }
+    .inactive {
+      color: darkgrey;
+    }
   }
 </style>

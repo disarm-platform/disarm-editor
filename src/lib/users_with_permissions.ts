@@ -108,7 +108,7 @@ export function toggle_permission(
   user_id: string,
   permission_type: string,
 ): void {
-  const passed_value = scope.row.permissions[scope.column.label];
+  const passed_value = scope.row.permissions[scope.column.property];
 
   if (passed_value === true) {
     remove_permission(permissions, user_id, permission_type);

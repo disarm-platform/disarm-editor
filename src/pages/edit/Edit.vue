@@ -15,6 +15,7 @@
         :live_instance_config="live_instance_config"
         :users="users"
         :permissions="permissions"
+        @update_permissions="update_permissions"
     ></router-view>
   </div>
 </template>
@@ -23,6 +24,7 @@
   import Vue from 'vue';
   import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
   import {ACTIONS, MUTATIONS} from '@/store';
+  import {USERS_MUTATIONS} from "@/store/users"
 
   export default Vue.extend({
     computed: {
@@ -47,6 +49,9 @@
       reset_selected_config() {
         this.$store.commit(MUTATIONS.RESET_SELECTED_CONFIG);
         this.$router.push('/');
+      },
+      update_permissions(permissions: Permission[]) {
+        this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
       },
       save() {
         console.log('[EDIT] SAVE');
