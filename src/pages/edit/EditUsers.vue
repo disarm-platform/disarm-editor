@@ -40,6 +40,7 @@
         <template slot-scope="scope">
           <span
               @click="toggle(scope)"
+              class="clickable"
           >
             <i v-if="scope.row.permissions[scope.column.property]" class="el-icon-success green"></i>
             <i v-else class="el-icon-circle-plus-outline"></i>
@@ -177,7 +178,10 @@ export default Vue.extend({
 </script>
 
 <style lang='scss' scoped>
-.green {
-  color: #2cd02c;
-}
+  .clickable {
+    cursor: pointer;
+  }
+  .green {
+    color: #2cd02c;
+  }
 </style>
