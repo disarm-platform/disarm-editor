@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import {DevBasicUser, DevUserWithPermissions, Permission, FlatPermissionsRow} from '@/types';
+import {DevBasicUser, DevUserWithPermissions, FlatPermissionsRow, Permission} from '@/types';
 
 //
 // CREATE
@@ -9,27 +9,26 @@ import {DevBasicUser, DevUserWithPermissions, Permission, FlatPermissionsRow} fr
 function create_all_permissions_for_user(
   permission_options: string[],
   permissions: Permission[],
-  user_id: string | undefined) {
+  user_id: string) {
   return permission_options.reduce((acc, permission_string) => {
-    let exists_for_user;
-    if (user_id) {
-      exists_for_user = permission_exists_for_user_id(permissions, user_id, permission_string);
-    } else {
-      exists_for_user = false;
-    }
-    acc[permission_string] = exists_for_user;
+    acc[permission_string] = permission_exists_for_user_id(permissions, user_id, permission_string);
     return acc;
   }, {} as FlatPermissionsRow);
-
 }
 
 function permission_exists_for_user_id(permissions: Permission[], user_id: string, permission_string: string) {
+  if (!(permissions && permissions.length)) { return false; }
+
   return permissions.some((permission) => {
     return (
       permission.user_id === user_id &&
       permission.value === permission_string
     );
   });
+}
+
+function get_permission_for_user(permissions: Permission[], user_id: string, permission_string: string) {
+  return permissions.filter((p) => p.user_id === user_id && p.value === permission_string);
 }
 
 function users_and_permissions_for_table(
@@ -39,7 +38,10 @@ function users_and_permissions_for_table(
 ): DevUserWithPermissions[] {
   return users.map((user: DevBasicUser): DevUserWithPermissions => {
       const user_with_perms: DevUserWithPermissions = {...user, permissions: {}};
-
+      if (!user._id) {
+        console.log('no _id for user', user);
+        return user_with_perms;
+      }
       user_with_perms.permissions = create_all_permissions_for_user(permission_options, permissions, user._id);
       return user_with_perms;
     },
@@ -100,9 +102,26 @@ function bulk_set_for_user(
   user_id: string,
   permission_value: boolean,
   permission_options: string[],
-) {
+): Permission[] {
 
+  if (permission_value) {
+    // add all for user
+    return [];
+  } else {
+    // remove all for user
+    return permissions.filter((p) => p.user_id !== user_id);
+  }
+
+  // return permission_options.reduce((acc, permission_string) => {
+  //   const exists_for_user = permission_exists_for_user_id(permissions, user_id, permission_string);
   //
+  //   if (exists_for_user) {
+  //     // Assume it must be true already - only positive permissions are stored
+  //     return;
+  //   } else {
+  //     // set permissions as true for user
+  //   }
+  // }, {} as FlatPermissionsRow);
 
   // const users_permissions = permissions.filter(p => p.user_id === user_id);
   // if (permission_value === true) {

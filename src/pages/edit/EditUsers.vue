@@ -35,11 +35,11 @@
           <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
         </template>
         <template slot-scope="scope">
-
-          <el-checkbox
-            :checked="scope.row.permissions[scope.column.label]"
-            @change="toggle(scope)"
-          />
+          <span @click="toggle(scope)">{{scope.row.permissions[scope.column.label]}}</span>
+          <!--<el-checkbox-->
+            <!--:checked="scope.row.permissions[scope.column.label]"-->
+            <!--@change="toggle(scope)"-->
+          <!--/>-->
         </template>
       </el-table-column>
       s
@@ -103,7 +103,7 @@
       },
       set_none_for_user(scope: object) {
         const user_id = scope.row._id;
-        bulk_set_for_user(this.permissions, user_id, false, this.permission_options);
+        this.permissions = bulk_set_for_user(this.permissions, user_id, false, this.permission_options);
       },
       set_all_for_permission(scope: object) {
         const permission_string = scope.column.label;
