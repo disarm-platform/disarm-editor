@@ -9,7 +9,9 @@
       <el-button @click="$router.push({name: 'json'})">json</el-button>
       <el-button @click="$router.push({name: 'geodata'})">geodata</el-button>
     </el-button-group>
-    <el-button @click="save">Save</el-button>
+
+    <el-button @click="edit_users">Edit users</el-button>
+    <el-button @click="save">Save CONFIG</el-button>
 
     <router-view
         :live_instance_config="live_instance_config"
@@ -52,6 +54,9 @@
       },
       update_permissions(permissions: Permission[]) {
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
+      },
+      edit_users() {
+        console.log('[EDIT] change users',);
       },
       save() {
         console.log('[EDIT] SAVE');

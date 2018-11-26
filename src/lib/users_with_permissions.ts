@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {without} from 'lodash';
 
-import {DevBasicUser, DevUserWithPermissions, FlatPermissionsRow, Permission} from '@/types';
+import {DevBasicUser, DevUserWithPermissions, FlatPermissionsRow, InstanceConfig, Permission} from '@/types';
 
 //
 // CREATE
@@ -68,16 +68,17 @@ function add_permission(
   permissions: Permission[],
   user_id: string,
   permission_type: string,
+  instance_config: InstanceConfig,
 ): Permission[] {
   const index = existing_index(permissions, user_id, permission_type);
-  // if found do nothing
-  if (index !== -1) {
-  } else {
+  // if found do nothing else create new permission
+  if (index === -1) {
     // else add
-    const new_permission = {
+    const new_permission: Permission = {
       user_id,
       value: permission_type,
-    } as Permission;
+      instance_id: instance_config.config_id,
+    };
     permissions.push(new_permission);
   }
   return permissions;
@@ -107,6 +108,7 @@ export function toggle_permission(
   permissions: Permission[],
   user_id: string,
   permission_type: string,
+  instance_config: InstanceConfig,
 ): Permission[] {
   const passed_value = scope.row.permissions[scope.column.property];
   const permissions_copy = permissions.slice(0);
@@ -114,7 +116,7 @@ export function toggle_permission(
   if (passed_value === true) {
     return remove_permission(permissions_copy, user_id, permission_type);
   } else {
-    return add_permission(permissions_copy, user_id, permission_type);
+    return add_permission(permissions_copy, user_id, permission_type, instance_config);
   }
 }
 
@@ -127,6 +129,7 @@ export function bulk_set_all_permissions_for_user(
   user_id: string,
   permission_value: boolean,
   permission_options: string[],
+  instance_config: InstanceConfig,
 ): Permission[] {
 
   const permissions_copy = permissions.slice(0);
@@ -135,14 +138,15 @@ export function bulk_set_all_permissions_for_user(
     // add all for user, except if existing
     const existing_types = permissions_copy.filter((p) => p.user_id === user_id).map((p) => p.value);
     const missing_types = without(permission_options, ...existing_types);
-    const add_these: Permission[] = missing_types.reduce((acc: Permission[], permission_string: string) => {
-      const permission = {
+
+    const add_these: Permission[] = missing_types.map((permission_string: string) => {
+      return {
         user_id,
         value: permission_string,
+        instance_id: instance_config.config_id,
       };
-      acc.push(permission);
-      return acc;
-    }, []);
+    });
+
     return permissions_copy.concat(add_these);
   } else {
     // remove all for user
@@ -155,6 +159,7 @@ export function bulk_set_permission_for_all_users(
   users: DevBasicUser[],
   permission_string: string,
   permission_value: boolean,
+  instance_config: InstanceConfig,
 ): Permission[] {
   const permissions_copy = permissions.slice(0);
 
@@ -170,6 +175,7 @@ export function bulk_set_permission_for_all_users(
       return {
         user_id,
         value: permission_string,
+        instance_id: instance_config.config_id,
       };
     });
 

@@ -37,9 +37,11 @@
         <!--PERMISSION COL HEADER -->
         <template slot="header" slot-scope="scope">
           <div>{{scope.column.property}}</div>
-          <el-button type="text" @click="set_all_for_permission(scope)">All</el-button>
-          |
-          <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
+          <div>
+            <el-button type="text" @click="set_all_for_permission(scope)">All</el-button>
+            |
+            <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
+          </div>
         </template>
 
         <!-- PERMISSION CELL -->
@@ -109,7 +111,13 @@ export default Vue.extend({
     toggle(scope: any) {
       const user_id = scope.row._id;
       const permission = scope.column.property;
-      const updated_permissions = toggle_permission(scope, this.permissions, user_id, permission);
+      const updated_permissions = toggle_permission(
+        scope,
+        this.permissions,
+        user_id,
+        permission,
+        this.live_instance_config
+      );
       this.$emit('update_permissions', updated_permissions);
     },
     set_all_for_user(scope: any) {
@@ -119,6 +127,7 @@ export default Vue.extend({
         user_id,
         true,
         this.permission_options,
+        this.live_instance_config,
       );
       this.$emit('update_permissions', updated_permissions);
     },
@@ -129,6 +138,7 @@ export default Vue.extend({
         user_id,
         false,
         this.permission_options,
+        this.live_instance_config,
       );
       this.$emit('update_permissions', updated_permissions);
     },
@@ -140,6 +150,7 @@ export default Vue.extend({
         this.users,
         permission_string,
         value,
+        this.live_instance_config,
       );
       this.$emit('update_permissions', updated_permissions);
     },
@@ -151,6 +162,7 @@ export default Vue.extend({
         this.users,
         permission_string,
         value,
+        this.live_instance_config,
       );
       this.$emit('update_permissions', updated_permissions);
     },

@@ -10,7 +10,7 @@ export interface Instance {
 export interface Permission {
     _id?: string;
     user_id: string;
-    instance_id?: string;
+    instance_id: string;
     value: string;
 }
 

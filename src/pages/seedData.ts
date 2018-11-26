@@ -21,13 +21,11 @@ export const sample_users = [
 export const sample_permissions = [
   {
     _id: '0',
-    user_id: '3',
-    instance_id: '1',
-    value: 'write:irs_monitor',
+    user_id: '1',
+    instance_id: 'my_id',
+    value: 'write:irs_plan',
   },
 ];
-
-export const sample_applets = {irs_monitor: {}, irs_plan: {}};
 
 export const sample_config: InstanceConfig = {
   config_id: 'my_id',
