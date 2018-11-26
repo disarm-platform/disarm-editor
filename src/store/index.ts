@@ -59,7 +59,7 @@ const store_options: StoreOptions<RootState> = {
     },
     async [ROOT_ACTIONS.LOGOUT](context) {
       context.commit(ROOT_MUTATIONS.RESET_USER);
-      await context.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG)
+      await context.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
     },
   },
   modules: {

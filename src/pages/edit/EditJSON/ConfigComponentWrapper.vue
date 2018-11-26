@@ -39,11 +39,11 @@ import {get, set, unset} from 'lodash';
 // import ComponentMessages from './ComponentMessages.vue';
 // import ComponentActions from './ComponentActions.vue';
 import {component_list} from './EditNodeDefinitions';
-import {InstanceConfig} from '@/types'
+import {InstanceConfig} from '@/types';
 
 
 export default Vue.extend({
-  components: {...component_list},//, ComponentMessages, ComponentActions},
+  components: {...component_list}, // , ComponentMessages, ComponentActions},
   props: {
     config: Object as () => InstanceConfig,
     component_name: String,
@@ -93,10 +93,10 @@ export default Vue.extend({
       }
     },
     determine_included() {
-      if (!this.show_include) {
-        this.included = true;
-        return;
-      }
+      // if (!this.show_include) {
+      //   this.included = true;
+      //   return;
+      // }
       const config = get(this.config, this.path_name);
       if (!config) {
         this.included = false;

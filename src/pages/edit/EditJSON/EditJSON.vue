@@ -30,8 +30,8 @@
   import Vue from 'vue';
 
   import {InstanceConfig} from '@/types';
-  import {edit_nodes} from '@/pages/edit/EditJSON/EditNodeDefinitions'
-  import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue'
+  import {edit_nodes} from '@/pages/edit/EditJSON/EditNodeDefinitions';
+  import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
 
   export default Vue.extend({
     components: {ConfigComponentWrapper},
@@ -40,7 +40,7 @@
     },
     data() {
       return {
-        edit_nodes: edit_nodes,
+        edit_nodes,
       };
     },
     methods: {

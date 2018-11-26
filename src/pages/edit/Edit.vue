@@ -43,7 +43,7 @@
       permissions(): Permission[] {
         return this.$store.state.users_module.permissions;
       },
-      current_view() {
+      current_view(): string | undefined {
         return this.$route.name;
       },
     },
