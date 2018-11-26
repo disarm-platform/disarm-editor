@@ -7,6 +7,7 @@
         ref="users_table"
         :data="users"
         style="width: 100%"
+        size="mini"
     >
       <el-table-column
           property="username"

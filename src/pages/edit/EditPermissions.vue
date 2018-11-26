@@ -7,6 +7,7 @@
         ref="multipleTable"
         :data="users_with_permissions"
         style="width: 100%"
+        size="mini"
     >
 
       <el-table-column
@@ -183,7 +184,7 @@ export default Vue.extend({
 <style lang='scss' scoped>
   .clickable {
     cursor: pointer;
-    font-size: 18px;
+    font-size: 14px;
 
     .active {
       color: #2cd02c;
