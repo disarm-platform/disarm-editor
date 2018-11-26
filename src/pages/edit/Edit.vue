@@ -33,10 +33,10 @@
         return this.$store.state.live_instance_config;
       },
       users(): DevBasicUser[] {
-        return this.$store.state.users;
+        return this.$store.state.users_module.users;
       },
       permissions(): Permission[] {
-        return this.$store.state.permissions;
+        return this.$store.state.users_module.permissions;
       },
     },
     methods: {
