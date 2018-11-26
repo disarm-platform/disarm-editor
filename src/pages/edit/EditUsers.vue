@@ -108,12 +108,12 @@
       set_all_for_permission(scope: object) {
         const permission_string = scope.column.label;
         const value = true;
-        this.permissions = bulk_set_permission_for_all_users(this.permissions, permission_string, value);
+        this.permissions = bulk_set_permission_for_all_users(this.permissions, this.users, permission_string, value);
       },
       set_none_for_permission(scope: object) {
         const permission_string = scope.column.label;
         const value = false;
-        this.permissions = bulk_set_permission_for_all_users(this.permissions, permission_string, value);
+        this.permissions = bulk_set_permission_for_all_users(this.permissions, this.users, permission_string, value);
       },
       save() {
         console.log(this.permissions)

@@ -130,7 +130,7 @@ export function bulk_set_all_permissions_for_user(
 
   if (permission_value === true) {
     // add all for user, except if existing
-    const existing_types = permissions.filter(p => p.user_id === user_id).map(p => p.value);
+    const existing_types = permissions.filter((p) => p.user_id === user_id).map((p) => p.value);
     const missing_types = without(permission_options, ...existing_types);
     const add_these: Permission[] = missing_types.reduce((acc: Permission[], permission_string: string) => {
       const permission = {
@@ -143,21 +143,35 @@ export function bulk_set_all_permissions_for_user(
     return permissions.concat(add_these);
   } else {
     // remove all for user
-    return permissions.filter(p => p.user_id !== user_id);
+    return permissions.filter((p) => p.user_id !== user_id);
   }
 }
 
 export function bulk_set_permission_for_all_users(
   permissions: Permission[],
+  users: DevBasicUser[],
   permission_string: string,
   permission_value: boolean,
 ): Permission[] {
   if (permission_value === true) {
     // add permission_string for all users, except if existing
-    return [];
+    const all_user_ids = users.map((u) => u._id) as string[];
+    const user_ids_with_this_permission: string[] = permissions
+      .filter((p) => p.value === permission_string)
+      .map((p) => p.user_id);
+    const missing_user_ids = without(all_user_ids, ...user_ids_with_this_permission);
+    const add_these: Permission[] = missing_user_ids.reduce((acc: Permission[], user_id) => {
+      const permission = {
+        user_id,
+        value: permission_string,
+      };
+      acc.push(permission);
+      return acc;
+    }, []);
+    return permissions.concat(add_these);
   } else {
     // remove permission_string for all users
-    return permissions.filter(p => p.value !== permission_string);
+    return permissions.filter((p) => p.value !== permission_string);
   }
   // users_with_permissions.forEach((user, user_index) => {
   //   const old_user = users_with_permissions[user_index];
