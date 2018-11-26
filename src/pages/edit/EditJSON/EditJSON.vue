@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>gonna edit now</h2>
     <textarea name="editor" cols="50" rows="20">{{live_instance_config}}</textarea>
   </div>
 </template>
