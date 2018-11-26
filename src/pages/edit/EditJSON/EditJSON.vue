@@ -8,12 +8,8 @@
           v-for="{display_name, component_name, node_name, path_name, show_include} in edit_nodes"
           :key="component_name"
       >
-          <span slot="label">
-          <!--<span slot="label" :class="{red: !config_not_validated && errors_on_node(node_name)}">-->
+          <span slot="label" :class="{red: errors_on_node(node_name)}">
             {{display_name}}
-            <!--<i v-if="config_not_validated"></i>-->
-            <!--<i class="el-icon-error" v-else-if="errors_on_node(node_name)"></i>-->
-            <!--<i class="el-icon-success" v-else></i>-->
           </span>
         <ConfigComponentWrapper
             :display_name="display_name"
@@ -22,8 +18,6 @@
             :component_name="component_name"
             :config="live_instance_config"
         >
-            <!--:show_include="show_include"-->
-            <!--:validation_result="validation_result"-->
         </ConfigComponentWrapper>
       </el-tab-pane>
     </el-tabs>
@@ -50,6 +44,9 @@
       };
     },
     methods: {
+      errors_on_node() {
+        return (Math.random() > 0.5);
+      },
       save() {
         console.log('[EDIT] save config', this.live_instance_config);
       },
@@ -58,5 +55,7 @@
 </script>
 
 <style lang='scss' scoped>
-
+  .red {
+    color: red;
+  }
 </style>

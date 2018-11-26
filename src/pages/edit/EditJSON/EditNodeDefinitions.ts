@@ -34,14 +34,14 @@ export const edit_nodes: ComponentDefinition[] = [
     component: Instance,
     show_include: false,
   },
-  // {
-  //   display_name: 'Spatial Hierarchy',
-  //   component_name: 'SpatialHierarchy',
-  //   node_name: 'spatial_hierarchy',
-  //   path_name: 'spatial_hierarchy',
-  //   component: SpatialHierarchy,
-  //   show_include: false,
-  // },
+  {
+    display_name: 'Spatial Hierarchy',
+    component_name: 'SpatialHierarchy',
+    node_name: 'spatial_hierarchy',
+    path_name: 'spatial_hierarchy',
+    component: SpatialHierarchy,
+    show_include: false,
+  },
   // {
   //   display_name: 'Map Focus',
   //   component_name: 'MapFocus',

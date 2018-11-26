@@ -34,22 +34,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {set, unset} from 'lodash';
-// import {get, set, unset, cloneDeep} from 'lodash';
-// import {TConfig} from '@locational/config-validation/build/module/lib/config_types/TConfig';
+import {get, set, unset} from 'lodash';
 //
 // import ComponentMessages from './ComponentMessages.vue';
 // import ComponentActions from './ComponentActions.vue';
 import {component_list} from './EditNodeDefinitions';
 import {InstanceConfig} from '@/types'
-// import { TStandardEdgeResponse } from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
-//
-// export interface Data {
-//   backup_config: null;
-//   show_backup_button: boolean;
-//   included: boolean;
-// }
-//
+
+
 export default Vue.extend({
   components: {...component_list},//, ComponentMessages, ComponentActions},
   props: {
@@ -59,15 +51,6 @@ export default Vue.extend({
     node_name: String,
     path_name: String,
   },
-//   props: {
-//     component_name: String,
-//     show_include: Boolean,
-//     display_name: String,
-//     node_name: String,
-//     path_name: String,
-//
-//     validation_result: Object as () => any,
-//   },
   data() {
     return {
       // backup_config: null,
@@ -75,20 +58,10 @@ export default Vue.extend({
       included: true,
     };
   },
-//   computed: {
-//     config(): TConfig {
-//       return this.$store.state.applets_config;
-//     },
-//   },
-//   watch: {
-//     instance_id_and_version() {
-//       this.determine_included()
-//     }
-//   },
-//   mounted() {
-//     this.determine_included();
+  mounted() {
+    this.determine_included();
 //     this.backup_node()
-//   },
+  },
   methods: {
 //     handle_included_change() {
 //       if (this.included) {
@@ -119,18 +92,18 @@ export default Vue.extend({
         this.$store.commit('set_applets_config', new_config);
       }
     },
-//     determine_included() {
-//       if (!this.show_include) {
-//         this.included = true;
-//         return;
-//       }
-//       const config = get(this.config, this.path_name);
-//       if (!config) {
-//         this.included = false;
-//       } else {
-//         this.included = !!(Object.keys(config).length);
-//       }
-//     },
+    determine_included() {
+      if (!this.show_include) {
+        this.included = true;
+        return;
+      }
+      const config = get(this.config, this.path_name);
+      if (!config) {
+        this.included = false;
+      } else {
+        this.included = !!(Object.keys(config).length);
+      }
+    },
 //     backup_node() {
 //       const got = get(this.config, this.path_name);
 //       this.backup_config = cloneDeep(got);
