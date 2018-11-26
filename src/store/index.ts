@@ -6,6 +6,7 @@ import {set_api_key} from '@/lib/handler';
 import {login} from '@/lib/meta_controller';
 import {DevBasicUser, Instance, InstanceConfig} from '@/types';
 import {users_module} from '@/store/users';
+import {CONFIG_ACTIONS, config_module} from '@/store/config';
 
 Vue.use(Vuex);
 
@@ -17,22 +18,16 @@ export interface LoggedInUser {
 export interface RootState {
   logged_in_user: LoggedInUser | null;
   selected_instance: Instance | null;
-  live_instance_config: InstanceConfig | null;
 }
 
 export const ROOT_MUTATIONS = {
   SET_USER: 'SET_USER',
   RESET_USER: 'RESET_USER',
-  SET_SELECTED_INSTANCE: 'SET_SELECTED_INSTANCE',
-  RESET_SELECTED_INSTANCE: 'RESET_SELECTED_INSTANCE',
-  SET_SELECTED_CONFIG: 'SET_SELECTED_CONFIG',
-  RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
 export const ROOT_ACTIONS = {
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',
-  RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
 const persisted_options = {
@@ -53,14 +48,6 @@ const store_options: StoreOptions<RootState> = {
   mutations: {
     [ROOT_MUTATIONS.SET_USER](state, logged_in_user: LoggedInUser) { state.logged_in_user = logged_in_user; },
     [ROOT_MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
-    [ROOT_MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance: Instance) {
-      return state.selected_instance = selected_instance;
-    },
-    [ROOT_MUTATIONS.RESET_SELECTED_INSTANCE](state) { state.selected_instance = null; },
-    [ROOT_MUTATIONS.SET_SELECTED_CONFIG](state, selected_config: InstanceConfig) {
-      return state.live_instance_config = selected_config;
-    },
-    [ROOT_MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
   },
   actions: {
     [ROOT_ACTIONS.LOGIN](context, {username, password}) {
@@ -69,18 +56,14 @@ const store_options: StoreOptions<RootState> = {
       // const logged_in_user = login(username, password);
       // context.commit(MUTATIONS.SET_USER, logged_in_user);
     },
-    [ROOT_ACTIONS.LOGOUT](context) {
+    async [ROOT_ACTIONS.LOGOUT](context) {
       context.commit(ROOT_MUTATIONS.RESET_USER);
-      context.commit(ROOT_MUTATIONS.RESET_SELECTED_INSTANCE);
-      context.commit(ROOT_MUTATIONS.RESET_SELECTED_CONFIG);
-    },
-    [ROOT_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
-      context.commit(ROOT_MUTATIONS.RESET_SELECTED_INSTANCE);
-      context.commit(ROOT_MUTATIONS.RESET_SELECTED_CONFIG);
+      await context.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG)
     },
   },
   modules: {
     users_module,
+    config_module,
   },
 };
 

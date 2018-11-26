@@ -22,9 +22,9 @@
   import SelectInstance from '@/pages/select/SelectInstance.vue';
   import SelectInstanceConfig from '@/pages/select/SelectInstanceConfig.vue';
   import {Instance, InstanceConfig} from '@/types';
-  import {ROOT_ACTIONS, ROOT_MUTATIONS} from '@/store';
   import {USERS_MUTATIONS} from '@/store/users';
   import {sample_config, sample_permissions, sample_users} from '@/pages/seedData';
+  import {CONFIG_ACTIONS, CONFIG_MUTATIONS} from '@/store/config';
 
   export default Vue.extend({
     components: {SelectInstance, SelectInstanceConfig},
@@ -39,13 +39,13 @@
     },
     methods: {
       select_instance(instance: Instance) {
-        this.$store.commit(ROOT_MUTATIONS.SET_SELECTED_INSTANCE, instance);
+        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, instance);
         this.$store.commit(USERS_MUTATIONS.SET_USERS, sample_users);
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, sample_permissions);
       },
-      deselect_instance() {this.$store.dispatch(ROOT_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG); },
+      deselect_instance() {this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG); },
       select_config(instance_config: InstanceConfig) {
-        this.$store.commit(ROOT_MUTATIONS.SET_SELECTED_CONFIG, instance_config);
+        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, instance_config);
         this.$router.push({name: 'edit'});
       },
     },
