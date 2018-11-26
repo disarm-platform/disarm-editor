@@ -3,9 +3,9 @@
   <div>
     <h2>Select a geodata file to upload</h2>
     <p>Geodata should be a JSON file containing a GeoJSON FeatureCollection.</p>
-    <p>It's a good idea to make sure the file is already named with the type of geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
-    </p>
-    <p>This will help you selecting the right file in the
+    <p>
+      It's a good idea to make sure the file is already named with the type of geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
+      This will help you selecting the right file in the
       <router-link to="/edit/json">config editor</router-link>.
     </p>
 
@@ -37,6 +37,7 @@
     <div v-show="all_uploaded" style="margin-top: 20px;">
       Successful upload of: {{all_file_names}}.
       Visit the <router-link :to="{name: 'json'}">editor</router-link> to use it in the configuration.
+      <el-button @click="reset_upload">Upload another</el-button>
     </div>
   </div>
 
