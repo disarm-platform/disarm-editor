@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import {cloneDeep, get} from 'lodash';
-import {InstanceConfig} from '../../../types';
+import {InstanceConfig} from '@/types';
 
 export default Vue.extend({
   props: {
@@ -31,7 +31,7 @@ export default Vue.extend({
         this.live_node_config = cloneDeep(got);
         this.backup_node();
       } else {
-        console.log('config missing for ', this.path_name);
+        throw new Error(`config missing for ${this.path_name}`);
       }
     },
     reset_node() {
