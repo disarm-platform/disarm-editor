@@ -5,7 +5,7 @@
       <h1 style="margin-top: 0;">{{display_name}}</h1>
       <div>
       <el-checkbox v-if="show_include" v-model="included" @change="handle_included_change" style="margin-top: 0.5em;margin-bottom: 1em;">Include</el-checkbox>
-      <el-button v-if="show_include && show_backup_button" style="margin-left: 10px;" type="text" @click="reset">Reset</el-button>
+      <el-button v-if="show_include && show_backup_button" style="margin-left: 10px;" type="text" @click="reset_node">Reset</el-button>
       </div>
     </div>
 
@@ -39,7 +39,7 @@ import {TConfig} from '@locational/config-validation/build/module/lib/config_typ
 
 import ComponentMessages from './ComponentMessages.vue';
 import ComponentActions from './ComponentActions.vue';
-import {component_list} from './component_defs';
+import {component_list} from './EditNode/EditNodeDefinitions';
 import { TStandardEdgeResponse } from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
 
 export interface Data {
@@ -78,7 +78,7 @@ export default Vue.extend({
   },
   mounted() {
     this.determine_included();
-    this.make_backup()
+    this.backup_node()
   },
   methods: {
     handle_included_change() {
@@ -90,7 +90,7 @@ export default Vue.extend({
       } else {
         // config is being excluded now
         // take backup
-        this.make_backup()
+        this.backup_node()
       }
       this.save({})
     },
@@ -122,11 +122,11 @@ export default Vue.extend({
         this.included = !!(Object.keys(config).length);
       }
     },
-    make_backup() {
+    backup_node() {
       const got = get(this.config, this.path_name);
       this.backup_config = cloneDeep(got);
     },
-    reset() {
+    reset_node() {
       this.show_backup_button = false;
       this.save(this.backup_config)
     }
