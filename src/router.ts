@@ -7,8 +7,9 @@ import Select from '@/pages/select/Select.vue';
 import Logout from '@/pages/Logout.vue';
 import Edit from '@/pages/edit/Edit.vue';
 import EditUsers from '@/pages/edit/EditUsers.vue';
-import EditJSON from '@/pages/edit/EditJSON.vue';
+import EditJSON from '@/pages/edit/EditJSON/EditJSON.vue';
 import EditGeodata from '@/pages/edit/EditGeodata.vue';
+import EditPermissions from '@/pages/edit/EditPermissions.vue';
 
 Vue.use(Router);
 
@@ -39,6 +40,11 @@ const router = new Router({
           path: 'users',
           name: 'users',
           component: EditUsers,
+        },
+        {
+          path: 'permissions',
+          name: 'permissions',
+          component: EditPermissions,
         },
         {
           path: 'json',

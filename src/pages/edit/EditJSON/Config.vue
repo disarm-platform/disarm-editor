@@ -66,92 +66,92 @@ export interface Data {
 }
 
 export default Vue.extend({
-  components: {ConfigComponentWrapper, ...component_list},
-  data(): Data {
-    return {
-      component_defs,
-    };
-  },
-  computed: {
-    config(): TConfig {
-      return this.$store.state.applets_config;
-    },
-    validation_result(): any {
-      return this.$store.state.validation_result;
-    },
-    config_not_validated(): boolean {
-      return this.$store.state.validation_status === ValidationStatus.NotValidated;
-    },
-    config_valid(): boolean {
-      return this.$store.state.validation_status === ValidationStatus.Valid;
-    },
-  },
-  methods: {
-    errors_on_node(node_name: string) {
-      if (!this.validation_result) {
-        return false;
-      }
-
-      return get_validation_result_for_node(this.validation_result, node_name).length > 0;
-    },
-    validate_config() {
-      // 0. Reset old validation result
-      this.$store.commit('reset_validation_status');
-      this.$store.commit('reset_validation_result');
-        let location_selection_result = {}
-
-        if(!!this.config.spatial_hierarchy && geodata_cache) {
-          location_selection_result = generate_location_selection(
-                this.config.spatial_hierarchy as TSpatialHierarchy,
-                geodata_cache,
-            );
-        }
-        // 1. Attempt to create location_selection, if needed for full validation
-
-
-
-      // 2. Attach location_selection to config
-      const config: TConfig = {
-        ...this.config,
-        location_selection: location_selection_result.location_selection,
-      };
-
-
-      // 3. Run config validation
-      const validation_result = validate(config);
-
-      // 4. Shape validation result for consumption
-      if (location_selection_result && location_selection_result.status === EValidationStatus.Red) {
-
-        const lc_result: TStandardEdgeResponse = {
-          status: EStandardEdgeStatus.Red,
-          message: location_selection_result.message,
-          source_node_name: 'spatial_hierarchy',
-          target_node_name: 'geodata',
-          relationship_hint: 'fields exist',
-          required: true,
-          custom_edge_responses: (location_selection_result.support_messages as string[]).map((m) => {
-            return {
-              status: ECustomEdgeStatus.Red,
-              message: m,
-            };
-          }),
-          support_messages: [],
-        };
-
-        validation_result.edge_messages.push(lc_result);
-        if (validation_result.status === EUnifiedStatus.Green) {
-          validation_result.status = EUnifiedStatus.Red;
-        }
-      }
-
-      const config_invalid = validation_result.status === EUnifiedStatus.Red;
-      const validation_status = config_invalid ?  ValidationStatus.Invalid : ValidationStatus.Valid;
-
-      this.$store.commit('set_validation_result', validation_result);
-      this.$store.commit('set_validation_status', validation_status);
-    }
-  },
+  // components: {ConfigComponentWrapper, ...component_list},
+  // data(): Data {
+  //   return {
+  //     component_defs,
+  //   };
+  // },
+  // computed: {
+  //   config(): TConfig {
+  //     return this.$store.state.applets_config;
+  //   },
+  //   validation_result(): any {
+  //     return this.$store.state.validation_result;
+  //   },
+  //   config_not_validated(): boolean {
+  //     return this.$store.state.validation_status === ValidationStatus.NotValidated;
+  //   },
+  //   config_valid(): boolean {
+  //     return this.$store.state.validation_status === ValidationStatus.Valid;
+  //   },
+  // },
+  // methods: {
+  //   errors_on_node(node_name: string) {
+  //     if (!this.validation_result) {
+  //       return false;
+  //     }
+  //
+  //     return get_validation_result_for_node(this.validation_result, node_name).length > 0;
+  //   },
+  //   validate_config() {
+  //     // 0. Reset old validation result
+  //     this.$store.commit('reset_validation_status');
+  //     this.$store.commit('reset_validation_result');
+  //       let location_selection_result = {}
+  //
+  //       if(!!this.config.spatial_hierarchy && geodata_cache) {
+  //         location_selection_result = generate_location_selection(
+  //               this.config.spatial_hierarchy as TSpatialHierarchy,
+  //               geodata_cache,
+  //           );
+  //       }
+  //       // 1. Attempt to create location_selection, if needed for full validation
+  //
+  //
+  //
+  //     // 2. Attach location_selection to config
+  //     const config: TConfig = {
+  //       ...this.config,
+  //       location_selection: location_selection_result.location_selection,
+  //     };
+  //
+  //
+  //     // 3. Run config validation
+  //     const validation_result = validate(config);
+  //
+  //     // 4. Shape validation result for consumption
+  //     if (location_selection_result && location_selection_result.status === EValidationStatus.Red) {
+  //
+  //       const lc_result: TStandardEdgeResponse = {
+  //         status: EStandardEdgeStatus.Red,
+  //         message: location_selection_result.message,
+  //         source_node_name: 'spatial_hierarchy',
+  //         target_node_name: 'geodata',
+  //         relationship_hint: 'fields exist',
+  //         required: true,
+  //         custom_edge_responses: (location_selection_result.support_messages as string[]).map((m) => {
+  //           return {
+  //             status: ECustomEdgeStatus.Red,
+  //             message: m,
+  //           };
+  //         }),
+  //         support_messages: [],
+  //       };
+  //
+  //       validation_result.edge_messages.push(lc_result);
+  //       if (validation_result.status === EUnifiedStatus.Green) {
+  //         validation_result.status = EUnifiedStatus.Red;
+  //       }
+  //     }
+  //
+  //     const config_invalid = validation_result.status === EUnifiedStatus.Red;
+  //     const validation_status = config_invalid ?  ValidationStatus.Invalid : ValidationStatus.Valid;
+  //
+  //     this.$store.commit('set_validation_result', validation_result);
+  //     this.$store.commit('set_validation_status', validation_status);
+  //   }
+  // },
 });
 </script>
 <style>

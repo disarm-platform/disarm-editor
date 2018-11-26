@@ -2,6 +2,7 @@
   <div>
     <h2>gonna edit now</h2>
     <textarea name="editor" cols="50" rows="20">{{live_instance_config}}</textarea>
+    <el-button @click="save">Save CONFIG</el-button>
   </div>
 </template>
 
@@ -21,7 +22,11 @@
     data() {
       return {};
     },
-    methods: {},
+    methods: {
+      save() {
+        console.log('[EDIT] save config', this.live_instance_config);
+      },
+    },
   });
 </script>
 
