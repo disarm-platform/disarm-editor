@@ -31,7 +31,7 @@ export default Vue.extend({
         this.live_node_config = cloneDeep(got);
         this.backup_node();
       } else {
-        throw new Error(`config missing for ${this.path_name}`);
+        throw new Error(`instance_config is missing property for ${this.path_name}`);
       }
     },
     reset_node() {
