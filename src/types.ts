@@ -22,11 +22,11 @@ export interface DevBasicUser {
 }
 
 export interface DevUserWithPermissions extends DevBasicUser {
-  permissions: PermissionsRowObject;
+  permissions: FlatPermissionsRow;
 }
 
-export interface PermissionsRowObject {
-  [index: string]: boolean;
+export interface FlatPermissionsRow {
+  [index: string]: boolean; // e.g. {'write:irs_plan': true}
 }
 
 
