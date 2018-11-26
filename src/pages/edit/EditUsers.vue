@@ -69,7 +69,7 @@ import {
   sample_users,
   sample_permissions,
   sample_applets,
-} from './sampleUsers';
+} from '../seedData';
 import {
   bulk_set_permission_for_all_users,
   bulk_set_all_permissions_for_user,
@@ -80,20 +80,15 @@ import {
 export default Vue.extend({
   props: {
     live_instance_config: Object as () => InstanceConfig,
-  },
-  data() {
-    return {
-      users: sample_users as DevBasicUser[],
-      permissions: sample_permissions as Permission[],
-    };
+    users: Array as () => DevBasicUser[],
+    permissions: Array as () => Permission[],
   },
   computed: {
     permission_options(): string[] {
       const output: string[] = [];
 
       const types = ['write', 'read'];
-      // const applet_names: string[] = Object.keys(this.live_instance_config.applets);
-      const applet_names: string[] = Object.keys(sample_applets);
+      const applet_names: string[] = Object.keys(this.live_instance_config.applets);
 
       applet_names.forEach((applet) => {
         types.forEach((type) => {

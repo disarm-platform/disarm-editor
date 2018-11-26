@@ -4,7 +4,7 @@ import createPersistedState from 'vuex-persistedstate';
 
 import {set_api_key} from '@/lib/handler';
 import {login} from '@/lib/meta_controller';
-import {Instance, InstanceConfig} from '@/types';
+import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
 
 Vue.use(Vuex);
 
@@ -16,8 +16,9 @@ export interface LoggedInUser {
 export interface RootState {
   logged_in_user: LoggedInUser | null;
   selected_instance: Instance | null;
-  live_instance_config: any; // InstanceConfig | null;
-  users_with_permissions: any; // UsersWithPermissions[];
+  live_instance_config: InstanceConfig | null;
+  users: DevBasicUser[];
+  permissions: Permission[];
 }
 
 export const MUTATIONS = {
@@ -29,6 +30,8 @@ export const MUTATIONS = {
   RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
   SET_USERS: 'SET_USERS',
   RESET_USERS: 'RESET_USERS',
+  SET_PERMISSIONS: 'SET_PERMISSIONS',
+  RESET_PERMISSIONS: 'RESET_PERMISSIONS',
 };
 
 export const ACTIONS = {
@@ -38,7 +41,7 @@ export const ACTIONS = {
 };
 
 const persisted_options = {
-  paths: ['logged_in_user', 'selected_instance', 'live_instance_config'],
+  paths: ['logged_in_user', 'selected_instance', 'live_instance_config', 'users', 'permissions'],
 };
 
 const store = new Vuex.Store({
@@ -47,7 +50,8 @@ const store = new Vuex.Store({
     logged_in_user: null,
     selected_instance: null,
     live_instance_config: null,
-    users_with_permissions: [],
+    users: [],
+    permissions: [],
   } as RootState,
   getters: {},
   mutations: {
@@ -61,8 +65,10 @@ const store = new Vuex.Store({
       return state.live_instance_config = selected_config;
     },
     [MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
-    [MUTATIONS.SET_USERS](state, users) { state.users_with_permissions = users; },
-    [MUTATIONS.RESET_USERS](state) { state.users_with_permissions = []; },
+    [MUTATIONS.SET_USERS](state, users) { state.users = users; },
+    [MUTATIONS.RESET_USERS](state) { state.users = []; },
+    [MUTATIONS.SET_PERMISSIONS](state, permissions) { state.permissions = permissions; },
+    [MUTATIONS.RESET_PERMISSIONS](state) { state.permissions = []; },
   },
   actions: {
     [ACTIONS.LOGIN](context, {username, password}) {

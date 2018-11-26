@@ -1,3 +1,5 @@
+import {InstanceConfig} from "@/types";
+
 export const sample_users = [
   {
     _id: '1',
@@ -26,3 +28,14 @@ export const sample_permissions = [
 ];
 
 export const sample_applets = {irs_monitor: {}, irs_plan: {}};
+
+export const sample_config: InstanceConfig = {
+  config_id: 'my_id',
+  config_version: '1',
+  applets: {meta: {}, irs_record_point: {metadata: {show: false, optional_fields: []}}, irs_plan: {table_output: []}},
+  instance: {
+    title: 'Demo Config',
+    location_name: 'some location',
+    slug: 'demo_config',
+  },
+};

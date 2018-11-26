@@ -13,13 +13,15 @@
 
     <router-view
         :live_instance_config="live_instance_config"
+        :users="users"
+        :permissions="permissions"
     ></router-view>
   </div>
 </template>
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {Instance, InstanceConfig} from '@/types';
+  import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
   import {ACTIONS, MUTATIONS} from '@/store';
 
   export default Vue.extend({
@@ -29,6 +31,12 @@
       },
       live_instance_config(): InstanceConfig {
         return this.$store.state.live_instance_config;
+      },
+      users(): DevBasicUser[] {
+        return this.$store.state.users;
+      },
+      permissions(): Permission[] {
+        return this.$store.state.permissions;
       },
     },
     methods: {

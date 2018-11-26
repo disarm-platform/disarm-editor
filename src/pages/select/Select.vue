@@ -23,17 +23,7 @@
   import SelectInstanceConfig from '@/pages/select/SelectInstanceConfig.vue';
   import {Instance, InstanceConfig} from '@/types';
   import {ACTIONS, MUTATIONS} from '@/store';
-
-  const sample_config: InstanceConfig = {
-    config_id: 'my_id',
-    config_version: '1',
-    applets: {meta: {}},
-    instance: {
-      title: 'Demo Config',
-      location_name: 'some location',
-      slug: 'demo_config',
-    },
-  };
+  import {sample_config, sample_permissions, sample_users} from "@/pages/seedData"
 
   export default Vue.extend({
     components: {SelectInstance, SelectInstanceConfig},
@@ -47,7 +37,11 @@
       selected_instance(): Instance { return this.$store.state.selected_instance; },
     },
     methods: {
-      select_instance(instance: Instance) {this.$store.commit(MUTATIONS.SET_SELECTED_INSTANCE, instance); },
+      select_instance(instance: Instance) {
+        this.$store.commit(MUTATIONS.SET_SELECTED_INSTANCE, instance);
+        this.$store.commit(MUTATIONS.SET_USERS, sample_users);
+        this.$store.commit(MUTATIONS.SET_PERMISSIONS, sample_permissions);
+      },
       deselect_instance() {this.$store.dispatch(ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG); },
       select_config(instance_config: InstanceConfig) {
         this.$store.commit(MUTATIONS.SET_SELECTED_CONFIG, instance_config);

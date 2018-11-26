@@ -30,8 +30,6 @@ export interface FlatPermissionsRow {
 }
 
 
-export type Applets = TApplets;
-
 export type InstanceConfig = TConfig;
 export type DoumaUser = DoumaUser;
 
