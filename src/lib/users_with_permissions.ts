@@ -129,7 +129,7 @@ export function bulk_set_all_permissions_for_user(
 ): Permission[] {
 
   if (permission_value === true) {
-    // add all for user
+    // add all for user, except if existing
     const existing_types = permissions.filter(p => p.user_id === user_id).map(p => p.value);
     const missing_types = without(permission_options, ...existing_types);
     const add_these: Permission[] = missing_types.reduce((acc: Permission[], permission_string: string) => {
@@ -148,18 +148,25 @@ export function bulk_set_all_permissions_for_user(
 }
 
 export function bulk_set_permission_for_all_users(
-  users_with_permissions: DevUserWithPermissions[],
+  permissions: Permission[],
   permission_string: string,
   permission_value: boolean,
-): void {
-  users_with_permissions.forEach((user, user_index) => {
-    const old_user = users_with_permissions[user_index];
-    const new_user = Object.assign(
-      {},
-      {...old_user},
-    ) as DevUserWithPermissions;
-    new_user.permissions[permission_string] = permission_value;
-    Vue.set(users_with_permissions, user_index, new_user);
-  });
+): Permission[] {
+  if (permission_value === true) {
+    // add permission_string for all users, except if existing
+    return [];
+  } else {
+    // remove permission_string for all users
+    return permissions.filter(p => p.value !== permission_string);
+  }
+  // users_with_permissions.forEach((user, user_index) => {
+  //   const old_user = users_with_permissions[user_index];
+  //   const new_user = Object.assign(
+  //     {},
+  //     {...old_user},
+  //   ) as DevUserWithPermissions;
+  //   new_user.permissions[permission_string] = permission_value;
+  //   Vue.set(users_with_permissions, user_index, new_user);
+  // });
 }
 
