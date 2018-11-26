@@ -1,4 +1,4 @@
-import {InstanceConfig} from "@/types";
+import {InstanceConfig} from '@/types';
 
 export const sample_users = [
   {

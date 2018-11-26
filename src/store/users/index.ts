@@ -31,7 +31,7 @@ const mutations: MutationTree<UsersState> = {
 export const USERS_ACTIONS = {
   REFETCH_USERS: 'RELOAD_USERS',
   REFETCH_PERMISSIONS: 'RELOAD_PERMISSIONS',
-}
+};
 
 const actions: ActionTree<UsersState, RootState> = {
   [USERS_ACTIONS.REFETCH_USERS](context) {

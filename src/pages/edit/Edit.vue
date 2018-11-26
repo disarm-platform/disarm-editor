@@ -55,8 +55,7 @@
       update_permissions(permissions: Permission[]) {
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
       },
-      reload(view) {
-
+      reload(view: string) {
         switch (view) {
           case 'permissions':
             this.$store.dispatch(USERS_ACTIONS.REFETCH_PERMISSIONS);

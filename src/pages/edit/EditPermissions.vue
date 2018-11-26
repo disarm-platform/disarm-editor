@@ -120,7 +120,7 @@ export default Vue.extend({
         this.permissions,
         user_id,
         permission,
-        this.live_instance_config
+        this.live_instance_config,
       );
       this.$emit('update_permissions', updated_permissions);
     },

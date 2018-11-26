@@ -15,27 +15,27 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {
-  EStandardEdgeStatus,
-  TStandardEdgeResponse,
-} from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
-import { get_validation_result_for_node } from '../../lib/get_validation_result_for_node';
-
-export default Vue.extend({
-  props: {
-    node_name: String,
-    validation_result: Object,
-  },
-  computed: {
-    responses(): any {
-      if (!this.validation_result) {
-        return [];
-      }
-      return get_validation_result_for_node(this.validation_result, this.node_name);
-    },
-  },
-});
+// import Vue from 'vue';
+// import {
+//   EStandardEdgeStatus,
+//   TStandardEdgeResponse,
+// } from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
+// import { get_validation_result_for_node } from '../../lib/get_validation_result_for_node';
+//
+// export default Vue.extend({
+//   props: {
+//     node_name: String,
+//     validation_result: Object,
+//   },
+//   computed: {
+//     responses(): any {
+//       if (!this.validation_result) {
+//         return [];
+//       }
+//       return get_validation_result_for_node(this.validation_result, this.node_name);
+//     },
+//   },
+// });
 </script>
 
 <style scoped>

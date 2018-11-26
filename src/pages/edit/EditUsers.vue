@@ -55,9 +55,9 @@
         this.$emit('reload', 'users');
       },
       save() {
-        console.log(this.permissions);
+        console.log(this.users);
       },
-    }
+    },
   });
 </script>
 

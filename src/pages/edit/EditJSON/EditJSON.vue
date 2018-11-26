@@ -15,11 +15,6 @@
     props: {
       live_instance_config: Object as () => InstanceConfig,
     },
-    mounted() {
-    },
-    data() {
-      return {};
-    },
     methods: {
       save() {
         console.log('[EDIT] save config', this.live_instance_config);

@@ -36,7 +36,10 @@ export const ROOT_ACTIONS = {
 };
 
 const persisted_options = {
-  paths: ['logged_in_user', 'selected_instance', 'live_instance_config', 'users_module.users', 'users_module.permissions'],
+  paths: [
+    'logged_in_user', 'selected_instance', 'live_instance_config',
+    'users_module.users', 'users_module.permissions',
+  ],
 };
 
 const store_options: StoreOptions<RootState> = {

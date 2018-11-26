@@ -41,31 +41,31 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {set, unset} from 'lodash';
-import {component_defs, component_list, ComponentDefinition} from './EditNodeDefinitions';
-import ConfigComponentWrapper from './ConfigComponentWrapper.vue';
-import {TConfig} from '@locational/config-validation/build/module/lib/config_types/TConfig';
-import {TGeodataLayer} from '@locational/geodata-support/build/module/config_types/TGeodata';
-import { geodata_cache } from '@/geodata_cache';
-import {validate} from '@locational/config-validation';
-import { generate_location_selection } from '@locational/geodata-support';
-import { TSpatialHierarchy } from '@locational/geodata-support/build/main/config_types/TSpatialHierarchy';
-import { EValidationStatus } from '@locational/geodata-support/build/module/config_types/TValidationResponse';
-import {
-  TStandardEdgeResponse,
-  EStandardEdgeStatus,
-} from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
-import { ValidationStatus } from '@/store/types';
-import { EUnifiedStatus } from '@locational/config-validation/build/module/lib/TUnifiedResponse';
-import { ECustomEdgeStatus } from '@locational/config-validation/build/module/lib/TCustomEdgeResponse';
-import { get_validation_result_for_node } from '@/lib/get_validation_result_for_node';
-
-export interface Data {
-  component_defs: ComponentDefinition[];
-}
-
-export default Vue.extend({
+// import Vue from 'vue';
+// import {set, unset} from 'lodash';
+// import {component_defs, component_list, ComponentDefinition} from './EditNodeDefinitions';
+// import ConfigComponentWrapper from './ConfigComponentWrapper.vue';
+// import {TConfig} from '@locational/config-validation/build/module/lib/config_types/TConfig';
+// import {TGeodataLayer} from '@locational/geodata-support/build/module/config_types/TGeodata';
+// import { geodata_cache } from '@/geodata_cache';
+// import {validate} from '@locational/config-validation';
+// import { generate_location_selection } from '@locational/geodata-support';
+// import { TSpatialHierarchy } from '@locational/geodata-support/build/main/config_types/TSpatialHierarchy';
+// import { EValidationStatus } from '@locational/geodata-support/build/module/config_types/TValidationResponse';
+// import {
+//   TStandardEdgeResponse,
+//   EStandardEdgeStatus,
+// } from '@locational/config-validation/build/module/lib/TStandardEdgeResponse';
+// import { ValidationStatus } from '@/store/types';
+// import { EUnifiedStatus } from '@locational/config-validation/build/module/lib/TUnifiedResponse';
+// import { ECustomEdgeStatus } from '@locational/config-validation/build/module/lib/TCustomEdgeResponse';
+// import { get_validation_result_for_node } from '@/lib/get_validation_result_for_node';
+//
+// export interface Data {
+//   component_defs: ComponentDefinition[];
+// }
+//
+// export default Vue.extend({
   // components: {ConfigComponentWrapper, ...component_list},
   // data(): Data {
   //   return {
@@ -152,7 +152,7 @@ export default Vue.extend({
   //     this.$store.commit('set_validation_status', validation_status);
   //   }
   // },
-});
+// });
 </script>
 <style>
   .red {

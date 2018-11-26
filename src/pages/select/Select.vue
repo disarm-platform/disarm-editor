@@ -24,7 +24,7 @@
   import {Instance, InstanceConfig} from '@/types';
   import {ROOT_ACTIONS, ROOT_MUTATIONS} from '@/store';
   import {USERS_MUTATIONS} from '@/store/users';
-  import {sample_config, sample_permissions, sample_users} from "@/pages/seedData"
+  import {sample_config, sample_permissions, sample_users} from '@/pages/seedData';
 
   export default Vue.extend({
     components: {SelectInstance, SelectInstanceConfig},

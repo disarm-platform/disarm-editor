@@ -10,13 +10,13 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-
-  export default Vue.extend({
-    props: {
-      disabled: Boolean,
-    },
-  });
+  // import Vue from 'vue';
+  //
+  // export default Vue.extend({
+  //   props: {
+  //     disabled: Boolean,
+  //   },
+  // });
 </script>
 
 <style scoped>
