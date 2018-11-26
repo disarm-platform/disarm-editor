@@ -69,11 +69,10 @@ function add_permission(
   permissions: Permission[],
   user_id: string,
   permission_type: string,
-): void {
+): Permission[] {
   const index = existing_index(permissions, user_id, permission_type);
   // if found do nothing
   if (index !== -1) {
-    return;
   } else {
     // else add
     const new_permission = {
@@ -82,18 +81,20 @@ function add_permission(
     } as Permission;
     permissions.push(new_permission);
   }
+  return permissions;
 }
 
 function remove_permission(
   permissions: Permission[],
   user_id: string,
   permission_type: string,
-): void {
+): Permission[] {
   const index = existing_index(permissions, user_id, permission_type);
 
   // if found remove
   if (index !== -1) {
     permissions.splice(index, 1);
+    return permissions;
   } else {
     throw new Error(
       `Cannot find permission ${permission_type} for` +
@@ -107,13 +108,14 @@ export function toggle_permission(
   permissions: Permission[],
   user_id: string,
   permission_type: string,
-): void {
+): Permission[] {
   const passed_value = scope.row.permissions[scope.column.property];
+  const permissions_copy = permissions.slice(0);
 
   if (passed_value === true) {
-    remove_permission(permissions, user_id, permission_type);
+    return remove_permission(permissions_copy, user_id, permission_type);
   } else {
-    add_permission(permissions, user_id, permission_type);
+    return add_permission(permissions_copy, user_id, permission_type);
   }
 }
 
@@ -128,9 +130,11 @@ export function bulk_set_all_permissions_for_user(
   permission_options: string[],
 ): Permission[] {
 
+  const permissions_copy = permissions.slice(0);
+
   if (permission_value === true) {
     // add all for user, except if existing
-    const existing_types = permissions.filter((p) => p.user_id === user_id).map((p) => p.value);
+    const existing_types = permissions_copy.filter((p) => p.user_id === user_id).map((p) => p.value);
     const missing_types = without(permission_options, ...existing_types);
     const add_these: Permission[] = missing_types.reduce((acc: Permission[], permission_string: string) => {
       const permission = {
@@ -140,10 +144,10 @@ export function bulk_set_all_permissions_for_user(
       acc.push(permission);
       return acc;
     }, []);
-    return permissions.concat(add_these);
+    return permissions_copy.concat(add_these);
   } else {
     // remove all for user
-    return permissions.filter((p) => p.user_id !== user_id);
+    return permissions_copy.filter((p) => p.user_id !== user_id);
   }
 }
 
@@ -153,10 +157,12 @@ export function bulk_set_permission_for_all_users(
   permission_string: string,
   permission_value: boolean,
 ): Permission[] {
+  const permissions_copy = permissions.slice(0);
+
   if (permission_value === true) {
     // add permission_string for all users, except if existing
     const all_user_ids = users.map((u) => u._id) as string[];
-    const user_ids_with_this_permission: string[] = permissions
+    const user_ids_with_this_permission: string[] = permissions_copy
       .filter((p) => p.value === permission_string)
       .map((p) => p.user_id);
     const missing_user_ids = without(all_user_ids, ...user_ids_with_this_permission);
@@ -168,10 +174,10 @@ export function bulk_set_permission_for_all_users(
       acc.push(permission);
       return acc;
     }, []);
-    return permissions.concat(add_these);
+    return permissions_copy.concat(add_these);
   } else {
     // remove permission_string for all users
-    return permissions.filter((p) => p.value !== permission_string);
+    return permissions_copy.filter((p) => p.value !== permission_string);
   }
 }
 

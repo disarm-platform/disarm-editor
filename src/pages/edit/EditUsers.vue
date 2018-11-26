@@ -118,7 +118,8 @@ export default Vue.extend({
     toggle(scope: any) {
       const user_id = scope.row._id;
       const permission = scope.column.property;
-      toggle_permission(scope, this.permissions, user_id, permission);
+      const updated_permissions = toggle_permission(scope, this.permissions, user_id, permission);
+      this.$emit('update_permissions', updated_permissions);
     },
     set_all_for_user(scope: any) {
       const user_id = scope.row._id;
