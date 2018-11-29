@@ -15,7 +15,10 @@
       </el-col>
       <el-col :span="12">
         <ul>
-          <li v-for="(message, index) in priority_messages" :key="index">{{message}}</li>
+          <li
+              v-for="(val, index) in priority_messages"
+              :key="index"
+          ><span :class="colour_me(val.status)">{{val.status}}</span>: {{val.message}} [<em>{{val.source_node}}</em>]</li>
         </ul>
       </el-col>
     </el-row>
@@ -54,6 +57,12 @@
   import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
   import {TUnifiedResponse} from "@locational/config-validation/build/module/lib/TUnifiedResponse"
 
+  interface ValidationMessage {
+    message: string;
+    source_node?: string;
+    status: 'Green' | 'Red' | 'Blue';
+  }
+
   export default Vue.extend({
     components: {ConfigComponentWrapper},
     props: {
@@ -85,6 +94,16 @@
       this.config_copy_string = JSON.stringify(this.live_instance_config, null, 2);
     },
     methods: {
+      colour_me(text: string) {
+        switch(text) {
+          case text.match(/\bred\b/):
+            return 'red';
+          case text.match(/\bgreen\b/):
+            return 'green';
+          case text.match(/\bblue\b/):
+            return 'blue';
+        }
+      },
       update() {
         console.log('[update] do nothing')
       },
@@ -97,22 +116,30 @@
         this.priority_messages = this.prioritise_messages(this.unified_response);
         this.$emit('update_config', this.config_copy);
       },
-      prioritise_messages(v: TUnifiedResponse): string[] {
-        const result = [];
+      prioritise_messages(v: TUnifiedResponse): ValidationMessage[] {
+        let result = [];
 
         if (v.status === 'Green') {
-          result.push('No probs');
+          result.push({status: 'Green', message: 'No probs'});
           return result;
         }
 
         if (v.edge_messages.length) {
-          const failed = v.edge_messages.filter(m => m.status.match(/^Red/)).map(m => m.message);
-          return result.concat(failed);
+          v.edge_messages.filter(m => m.status.match(/^Red/)).forEach(m => {
+            if (m.custom_edge_responses.length > 0) {
+              m.custom_edge_responses.forEach(c => {
+                result.push({message: c.message, status: 'Red', source_node: m.source_node_name})
+              })
+            } else {
+              result.push({message: m.message, status: 'Red', source_node: m.source_node_name});
+            }
+
+          });
+          return result
         } else {
           const failed = v.support_messages;
           return result.concat(failed);
         }
-
 
         return result
       }
@@ -123,5 +150,11 @@
 <style lang='scss' scoped>
   .red {
     color: red;
+  }
+  .green {
+    color: green;
+  }
+  .blue {
+    color: blue;
   }
 </style>
