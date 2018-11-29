@@ -18,7 +18,11 @@
           <li
               v-for="(val, index) in priority_messages"
               :key="index"
-          ><span :class="colour_me(val.status)">{{val.status}}</span>: {{val.message}} [<em>{{val.source_node?val.source_node:'Unknown/schema'}}</em>]</li>
+          >
+            <span :class="colour_me(val.status)">{{val.status}}</span>
+            : {{val.message}}
+            [<em>{{val.source_node ? val.source_node :'Unknown/schema'}}</em>]
+          </li>
         </ul>
       </el-col>
     </el-row>
@@ -49,137 +53,136 @@
 </template>
 
 <script lang='ts'>
-import Vue from "vue";
-import { validate } from "@disarm/config-validation";
+  import Vue from 'vue';
+  import {validate} from '@disarm/config-validation';
 
-import { InstanceConfig } from "@/types";
-import { edit_nodes } from "@/pages/edit/EditJSON/EditNodeDefinitions";
-import ConfigComponentWrapper from "@/pages/edit/EditJSON/ConfigComponentWrapper.vue";
-import { TUnifiedResponse } from "@locational/config-validation/build/module/lib/TUnifiedResponse";
+  import {InstanceConfig} from '@/types';
+  import {edit_nodes} from '@/pages/edit/EditJSON/EditNodeDefinitions';
+  import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
+  import {TUnifiedResponse} from '@locational/config-validation/build/module/lib/TUnifiedResponse';
 
-interface ValidationMessage {
-  message: string;
-  source_node?: string;
-  status: "Green" | "Red" | "Blue";
-}
-
-export default Vue.extend({
-  components: { ConfigComponentWrapper },
-  props: {
-    live_instance_config: Object as () => InstanceConfig
-  },
-  data() {
-    return {
-      edit_nodes,
-      config_copy_string: "",
-      priority_messages: [] as ValidationMessage[],
-      unified_response: {}
-    };
-  },
-  computed: {
-    config_copy(): InstanceConfig | null {
-      try {
-        return JSON.parse(this.config_copy_string);
-      } catch (e) {
-        console.log("Not Json", e);
-        return null;
-      }
-    }
-  },
-  watch: {
-    live_instance_config: () => {
-      console.log("prop changed!");
-    }
-  },
-  mounted() {
-    this.config_copy_string = JSON.stringify(
-      this.live_instance_config,
-      null,
-      2
-    );
-  },
-  methods: {
-    colour_me(text: string) {
-      // take a string that has a color in it, return the color
-      return !text
-        ? ""
-        : text.match(/\bred\b/i)
-          ? "red"
-          : text.match(/\bgreen\b/i)
-            ? "green"
-            : text.match(/\bblue\b/i) ? "blue" : "yellow";
-    },
-    update() {
-      console.log("[update] do nothing");
-    },
-    validate() {
-      if (!this.config_copy) {
-        return (this.priority_messages = [
-          { message: "Not JSON, cannot validate", status: "Red" }
-        ]);
-      }
-      console.log("validate", this.config_copy);
-      this.unified_response = validate(this.config_copy);
-      this.priority_messages = this.prioritise_messages(this
-        .unified_response as TUnifiedResponse);
-      this.$emit("update_config", this.config_copy);
-    },
-    prioritise_messages(v: TUnifiedResponse): ValidationMessage[] {
-      let result: ValidationMessage[] = [];
-
-      if (v.status === "Green") {
-        result.push({ status: "Green", message: "No probs" });
-        return result;
-      }
-
-      if (v.edge_messages.length) {
-        v.edge_messages.filter(m => m.status.match(/^Red/)).forEach(m => {
-          if (m.custom_edge_responses.length > 0) {
-            m.custom_edge_responses.forEach(c => {
-              result.push({
-                message: c.message,
-                status: "Red",
-                source_node: m.source_node_name
-              });
-            });
-          } else {
-            result.push({
-              message: m.message,
-              status: "Red",
-              source_node: m.source_node_name
-            });
-          }
-        });
-        return result;
-      } else {
-        const support_messages = v.support_messages;
-        if (support_messages) {
-          const failed: ValidationMessage[] = support_messages.map(
-            m =>
-              ({
-                message: m,
-                status: "Red",
-                node_name: null
-              } as ValidationMessage)
-          );
-          return result.concat(failed);
-        }
-      }
-
-      return result;
-    }
+  interface ValidationMessage {
+    message: string;
+    source_node?: string;
+    status: 'Green' | 'Red' | 'Blue';
   }
-});
+
+  export default Vue.extend({
+    components: {ConfigComponentWrapper},
+    props: {
+      live_instance_config: Object as () => InstanceConfig,
+    },
+    data() {
+      return {
+        edit_nodes,
+        config_copy_string: '',
+        priority_messages: [] as ValidationMessage[],
+        unified_response: {},
+      };
+    },
+    computed: {
+      config_copy(): InstanceConfig | null {
+        try {
+          return JSON.parse(this.config_copy_string);
+        } catch (e) {
+          return null;
+        }
+      },
+    },
+    watch: {
+      live_instance_config: () => {
+        console.log('prop changed!');
+      },
+    },
+    mounted() {
+      this.config_copy_string = JSON.stringify(
+        this.live_instance_config,
+        null,
+        2,
+      );
+    },
+    methods: {
+      colour_me(text: string) {
+        // take a string that has a color in it, return the color
+        return !text
+          ? ''
+          : text.match(/\bred\b/i)
+            ? 'red'
+            : text.match(/\bgreen\b/i)
+              ? 'green'
+              : text.match(/\bblue\b/i) ? 'blue' : 'yellow';
+      },
+      update() {
+        console.log('[update] do nothing');
+      },
+      validate() {
+        if (!this.config_copy) {
+          return (this.priority_messages = [
+            {message: 'Not JSON, cannot validate', status: 'Red'},
+          ]);
+        }
+        this.unified_response = validate(this.config_copy);
+        this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
+        this.$emit('update_config', this.config_copy);
+      },
+      prioritise_messages(v: TUnifiedResponse): ValidationMessage[] {
+        const result: ValidationMessage[] = [];
+
+        if (v.status === 'Green') {
+          result.push({status: 'Green', message: 'No probs'});
+          return result;
+        }
+
+        if (v.edge_messages.length) {
+          v.edge_messages.filter((m) => m.status.match(/^Red/)).forEach((m) => {
+            if (m.custom_edge_responses.length > 0) {
+              m.custom_edge_responses.forEach((c) => {
+                result.push({
+                  message: c.message,
+                  status: 'Red',
+                  source_node: m.source_node_name,
+                });
+              });
+            } else {
+              result.push({
+                message: m.message,
+                status: 'Red',
+                source_node: m.source_node_name,
+              });
+            }
+          });
+          return result;
+        } else {
+          const support_messages = v.support_messages;
+          if (support_messages) {
+            const failed: ValidationMessage[] = support_messages.map(
+              (m) =>
+                ({
+                  message: m,
+                  status: 'Red',
+                  node_name: null,
+                } as ValidationMessage),
+            );
+            return result.concat(failed);
+          }
+        }
+
+        return result;
+      },
+    },
+  });
 </script>
 
 <style lang='scss' scoped>
-.red {
-  color: red;
-}
-.green {
-  color: green;
-}
-.blue {
-  color: blue;
-}
+  .red {
+    color: red;
+  }
+
+  .green {
+    color: green;
+  }
+
+  .blue {
+    color: blue;
+  }
 </style>
