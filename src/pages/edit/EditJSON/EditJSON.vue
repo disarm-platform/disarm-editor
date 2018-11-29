@@ -18,7 +18,7 @@
           <li
               v-for="(val, index) in priority_messages"
               :key="index"
-          ><span :class="colour_me(val.status)">{{val.status}}</span>: {{val.message}} [<em>{{val.source_node}}</em>]</li>
+          ><span :class="colour_me(val.status)">{{val.status}}</span>: {{val.message}} [<em>{{val.source_node?val.source_node:'Unknown/schema'}}</em>]</li>
         </ul>
       </el-col>
     </el-row>
