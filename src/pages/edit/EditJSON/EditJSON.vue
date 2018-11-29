@@ -96,11 +96,11 @@
     methods: {
       colour_me(text: string) {
         switch(text) {
-          case text.match(/\bred\b/):
+          case text.match(/\bred\b/i):
             return 'red';
-          case text.match(/\bgreen\b/):
+          case text.match(/\bgreen\b/i):
             return 'green';
-          case text.match(/\bblue\b/):
+          case text.match(/\bblue\b/i):
             return 'blue';
         }
       },
