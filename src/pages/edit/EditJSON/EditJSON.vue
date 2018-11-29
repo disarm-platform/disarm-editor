@@ -5,13 +5,7 @@
 
     <el-row>
       <el-col :span="12">
-        <el-input
-            ref="editor"
-            type="textarea"
-            :rows="20"
-            placeholder="Please input"
-            v-model="config_copy_string">
-        </el-input>
+        <EditJSONRaw :live_instance_config="live_instance_config"></EditJSONRaw>
       </el-col>
       <el-col :span="12">
         <ul>
@@ -56,118 +50,51 @@
   import Vue from 'vue';
   import {validate} from '@disarm/config-validation';
 
-  import {InstanceConfig} from '@/types';
+  import EditJSONRaw from './EditJSONRaw.vue';
+
+  import {InstanceConfig, ValidationMessage} from '@/types';
   import {edit_nodes} from '@/pages/edit/EditJSON/EditNodeDefinitions';
   import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
   import {TUnifiedResponse} from '@locational/config-validation/build/module/lib/TUnifiedResponse';
-
-  interface ValidationMessage {
-    message: string;
-    source_node?: string;
-    status: 'Green' | 'Red' | 'Blue';
-  }
+  import {do_prioritise_messages} from '@/pages/edit/EditJSON/priortise';
 
   export default Vue.extend({
-    components: {ConfigComponentWrapper},
+    components: {ConfigComponentWrapper, EditJSONRaw},
     props: {
       live_instance_config: Object as () => InstanceConfig,
     },
     data() {
       return {
         edit_nodes,
-        config_copy_string: '',
         priority_messages: [] as ValidationMessage[],
         unified_response: {},
       };
     },
-    computed: {
-      config_copy(): InstanceConfig | null {
-        try {
-          return JSON.parse(this.config_copy_string);
-        } catch (e) {
-          return null;
-        }
-      },
-    },
-    watch: {
-      live_instance_config: () => {
-        console.log('prop changed!');
-      },
-    },
-    mounted() {
-      this.config_copy_string = JSON.stringify(
-        this.live_instance_config,
-        null,
-        2,
-      );
-    },
     methods: {
-      colour_me(text: string) {
-        // take a string that has a color in it, return the color
-        return !text
-          ? ''
-          : text.match(/\bred\b/i)
-            ? 'red'
-            : text.match(/\bgreen\b/i)
-              ? 'green'
-              : text.match(/\bblue\b/i) ? 'blue' : 'yellow';
-      },
       update() {
-        console.log('[update] do nothing');
+        console.log('[update] does nothing');
       },
       validate() {
-        if (!this.config_copy) {
+        if (!this.live_instance_config) {
           return (this.priority_messages = [
             {message: 'Not JSON, cannot validate', status: 'Red'},
           ]);
         }
-        this.unified_response = validate(this.config_copy);
+        this.unified_response = validate(this.live_instance_config);
         this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
-        this.$emit('update_config', this.config_copy);
+        this.$emit('update_config', this.live_instance_config);
       },
-      prioritise_messages(v: TUnifiedResponse): ValidationMessage[] {
-        const result: ValidationMessage[] = [];
-
-        if (v.status === 'Green') {
-          result.push({status: 'Green', message: 'No probs'});
-          return result;
-        }
-
-        if (v.edge_messages.length) {
-          v.edge_messages.filter((m) => m.status.match(/^Red/)).forEach((m) => {
-            if (m.custom_edge_responses.length > 0) {
-              m.custom_edge_responses.forEach((c) => {
-                result.push({
-                  message: c.message,
-                  status: 'Red',
-                  source_node: m.source_node_name,
-                });
-              });
-            } else {
-              result.push({
-                message: m.message,
-                status: 'Red',
-                source_node: m.source_node_name,
-              });
-            }
-          });
-          return result;
+      prioritise_messages(validation_output: TUnifiedResponse): ValidationMessage[] {
+        return do_prioritise_messages(validation_output);
+      },
+      colour_me(text: string) {
+        // take a string that has a color in it, return the color
+        const matched = text.match(/(\bred\b|\bblue\b|\bgreen\b)/i);
+        if (matched) {
+          return matched[0].toLocaleLowerCase();
         } else {
-          const support_messages = v.support_messages;
-          if (support_messages) {
-            const failed: ValidationMessage[] = support_messages.map(
-              (m) =>
-                ({
-                  message: m,
-                  status: 'Red',
-                  node_name: null,
-                } as ValidationMessage),
-            );
-            return result.concat(failed);
-          }
+          return 'yellow';
         }
-
-        return result;
       },
     },
   });
@@ -184,5 +111,9 @@
 
   .blue {
     color: blue;
+  }
+
+  .yellow {
+    color: yellow;
   }
 </style>

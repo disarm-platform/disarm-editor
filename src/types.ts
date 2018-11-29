@@ -33,3 +33,9 @@ export interface FlatPermissionsRow {
 export type InstanceConfig = TConfig;
 export type DoumaUser = DoumaUser;
 
+
+export interface ValidationMessage {
+  message: string;
+  source_node?: string;
+  status: 'Green' | 'Red' | 'Blue';
+}
