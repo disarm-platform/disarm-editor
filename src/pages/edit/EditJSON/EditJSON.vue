@@ -76,6 +76,11 @@
         }
       },
     },
+    watch: {
+      'live_instance_config': () => {
+        console.log('prop changed!');
+      }
+    },
     mounted() {
       this.config_copy_string = JSON.stringify(this.live_instance_config, null, 2);
     },
@@ -85,11 +90,12 @@
       },
       validate() {
         if (!this.config_copy) {
-          console.log("NOT JSON, cannot validate")
-          return
+          return this.priority_messages = ['Not JSON, cannot validate']
         }
+
         this.unified_response = validate(this.config_copy);
         this.priority_messages = this.prioritise_messages(this.unified_response);
+        this.$emit('update_config', this.config_copy);
       },
       prioritise_messages(v: TUnifiedResponse): string[] {
         const result = [];

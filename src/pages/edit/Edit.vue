@@ -16,6 +16,7 @@
         :users="users"
         :permissions="permissions"
 
+        @update_config="update_config"
         @update_permissions="update_permissions"
         @add_user="add_user"
         @reload="reload"
@@ -55,6 +56,9 @@
       reset_selected_config() {
         this.$store.commit(CONFIG_MUTATIONS.RESET_SELECTED_CONFIG);
         this.$router.push('/');
+      },
+      update_config(config: InstanceConfig) {
+        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, config);
       },
       update_permissions(permissions: Permission[]) {
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
