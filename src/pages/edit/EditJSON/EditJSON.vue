@@ -5,7 +5,15 @@
 
     <el-row>
       <el-col :span="12">
-        <EditJSONRaw :live_instance_config="live_instance_config"></EditJSONRaw>
+        <el-switch
+            v-model="ui_show_raw"
+            active-text="Raw"
+            inactive-text="Structured"
+            active-color="#a1d1ff"
+            inactive-color="#4ea8ff">
+        </el-switch>
+        <EditJSONRaw v-if="ui_show_raw" :live_instance_config="live_instance_config"></EditJSONRaw>
+        <EditJSONStructured v-else :live_instance_config="live_instance_config"></EditJSONStructured>
       </el-col>
       <el-col :span="12">
         <ul>
@@ -21,28 +29,6 @@
       </el-col>
     </el-row>
 
-
-    <!--<el-tabs tab-position="left" style="height: 800px; overflow: scroll;">-->
-    <!--<el-tab-pane-->
-    <!--v-if="live_instance_config"-->
-    <!--v-for="{display_name, component_name, node_name, path_name, show_include} in edit_nodes"-->
-    <!--:key="component_name"-->
-    <!--&gt;-->
-    <!--<span slot="label">-->
-    <!--{{display_name}}-->
-    <!--</span>-->
-    <!--<ConfigComponentWrapper-->
-    <!--:display_name="display_name"-->
-    <!--:node_name="node_name"-->
-    <!--:path_name="path_name"-->
-    <!--:component_name="component_name"-->
-    <!--:config="live_instance_config"-->
-    <!--&gt;-->
-    <!--</ConfigComponentWrapper>-->
-    <!--</el-tab-pane>-->
-    <!--</el-tabs>-->
-
-
   </div>
 </template>
 
@@ -51,21 +37,20 @@
   import {validate} from '@disarm/config-validation';
 
   import EditJSONRaw from './EditJSONRaw.vue';
+  import EditJSONStructured from './EditJSONStructured.vue';
 
   import {InstanceConfig, ValidationMessage} from '@/types';
-  import {edit_nodes} from '@/pages/edit/EditJSON/EditNodeDefinitions';
-  import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
   import {TUnifiedResponse} from '@locational/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/pages/edit/EditJSON/priortise';
 
   export default Vue.extend({
-    components: {ConfigComponentWrapper, EditJSONRaw},
+    components: {EditJSONRaw, EditJSONStructured},
     props: {
       live_instance_config: Object as () => InstanceConfig,
     },
     data() {
       return {
-        edit_nodes,
+        ui_show_raw: true,
         priority_messages: [] as ValidationMessage[],
         unified_response: {},
       };
