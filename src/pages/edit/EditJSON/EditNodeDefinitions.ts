@@ -42,14 +42,14 @@ export const edit_nodes: ComponentDefinition[] = [
     component: SpatialHierarchy,
     show_include: false,
   },
-  // {
-  //   display_name: 'Map Focus',
-  //   component_name: 'MapFocus',
-  //   node_name: 'map_focus',
-  //   path_name: 'map_focus',
-  //   component: MapFocus,
-  //   show_include: false,
-  // },
+  {
+    display_name: 'Map Focus',
+    component_name: 'MapFocus',
+    node_name: 'map_focus',
+    path_name: 'map_focus',
+    component: MapFocus,
+    show_include: false,
+  },
   // {
   //   display_name: 'Monitor',
   //   component_name: 'IrsMonitor',

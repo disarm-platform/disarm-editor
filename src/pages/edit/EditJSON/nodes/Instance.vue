@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-  import ConfigNodeMixin from '../EditNodeMixin';
+  import ConfigNodeMixin from './EditNodeMixin';
 
   export default ConfigNodeMixin.extend({
   });

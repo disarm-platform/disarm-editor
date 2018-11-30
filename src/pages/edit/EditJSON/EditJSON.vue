@@ -50,7 +50,7 @@
     },
     data() {
       return {
-        ui_show_raw: true,
+        ui_show_raw: false,
         priority_messages: [] as ValidationMessage[],
         unified_response: {},
       };

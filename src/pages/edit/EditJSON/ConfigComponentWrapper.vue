@@ -53,7 +53,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      // backup_config: null,
+      // backup_node_config: null,
       // show_backup_button: false,
       included: true,
     };
@@ -66,7 +66,7 @@ export default Vue.extend({
 //     handle_included_change() {
 //       if (this.included) {
 //         // show backup button, if we have a backup
-//         if (this.backup_config) {
+//         if (this.backup_node_config) {
 //           this.show_backup_button = true
 //         }
 //       } else {
@@ -106,11 +106,11 @@ export default Vue.extend({
     },
 //     backup_node() {
 //       const got = get(this.config, this.path_name);
-//       this.backup_config = cloneDeep(got);
+//       this.backup_node_config = cloneDeep(got);
 //     },
 //     reset_node() {
 //       this.show_backup_button = false;
-//       this.save(this.backup_config)
+//       this.save(this.backup_node_config)
 //     }
   },
 });

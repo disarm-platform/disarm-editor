@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <Applet v-model="live_node_config" @input="emit_change"/>
+    <GenericApplet v-model="live_node_config" @input="emit_change"/>
 
     <el-checkbox v-model="live_node_config.metadata.show" @input="emit_change">Show metadata page</el-checkbox>
 
@@ -28,11 +28,11 @@
 </template>
 
 <script lang="ts">
-import ConfigNodeMixin from '../EditNodeMixin';
-import Applet from '../components/applet.vue';
+import ConfigNodeMixin from './EditNodeMixin';
+import GenericApplet from '../components/GenericApplet.vue';
 
 export default ConfigNodeMixin.extend({
-  components: {Applet},
+  components: {GenericApplet},
   data() {
     return {
       field: '',

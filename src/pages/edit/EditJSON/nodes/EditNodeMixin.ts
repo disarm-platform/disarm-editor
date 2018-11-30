@@ -10,7 +10,7 @@ export default Vue.extend({
   data() {
     return {
       live_node_config: {},
-      backup_config: {},
+      backup_node_config: {},
     };
   },
   watch: {
@@ -35,10 +35,10 @@ export default Vue.extend({
       }
     },
     reset_node() {
-      this.live_node_config = cloneDeep(this.backup_config);
+      this.live_node_config = cloneDeep(this.backup_node_config);
     },
     backup_node() {
-      this.backup_config = cloneDeep(this.live_node_config);
+      this.backup_node_config = cloneDeep(this.live_node_config);
     },
     emit_change() {
       this.$emit('change', this.live_node_config);
