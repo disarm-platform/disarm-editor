@@ -3,7 +3,6 @@ import Vuex, {StoreOptions} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
 import COMMON from '@/lib/common';
-import {set_api_key} from '@/lib/handler';
 import {login} from '@/lib/meta_controller';
 import {DevBasicUser, Instance, InstanceConfig} from '@/types';
 import {users_module} from '@/store/users';
@@ -58,8 +57,14 @@ const store_options: StoreOptions<RootState> = {
     [ROOT_MUTATIONS.RESET_API_URL](state) { state.api_url = COMMON.api.url; },
   },
   actions: {
-    [ROOT_ACTIONS.LOGIN](context, {username, password}) {
-      return context.commit(ROOT_MUTATIONS.SET_USER, {username, api_key: 'real_key'});
+    async [ROOT_ACTIONS.LOGIN](context, {username, password}) {
+      try{
+        const result = await login(username,password);
+        return context.commit(ROOT_MUTATIONS.SET_USER, {username:result.username, api_key: result.key});
+      }catch(e){
+        throw e
+      }
+   
       // // ?? set_api_key?
       // const logged_in_user = login(username, password);
       // context.commit(MUTATIONS.SET_USER, logged_in_user);
@@ -76,9 +81,5 @@ const store_options: StoreOptions<RootState> = {
 };
 
 const store = new Vuex.Store(store_options);
-
-// Only on first-load (or page reload): reset API-Key only
-// @ts-ignore
-set_api_key(store.state.user ? store.state.user.key : '');
 
 export default store;
