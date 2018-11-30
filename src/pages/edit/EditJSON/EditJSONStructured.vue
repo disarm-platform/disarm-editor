@@ -24,7 +24,7 @@
   import Vue from 'vue';
   import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
   import {InstanceConfig} from '@/types';
-  import {edit_nodes} from '@/pages/edit/EditJSON/EditNodeDefinitions';
+  import {edit_nodes} from '@/pages/edit/EditJSON/nodes/EditNodeDefinitions';
 
 
   export default Vue.extend({

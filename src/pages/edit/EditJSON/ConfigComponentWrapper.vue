@@ -38,7 +38,7 @@ import {get, set, unset} from 'lodash';
 //
 // import ComponentMessages from './ComponentMessages.vue';
 // import ComponentActions from './ComponentActions.vue';
-import {component_list} from './EditNodeDefinitions';
+import {component_list} from './nodes/EditNodeDefinitions';
 import {InstanceConfig} from '@/types';
 
 
