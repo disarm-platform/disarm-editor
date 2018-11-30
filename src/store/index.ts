@@ -26,6 +26,7 @@ export const ROOT_MUTATIONS = {
   SET_USER: 'SET_USER',
   RESET_USER: 'RESET_USER',
   SET_API_URL: 'SET_API_URL',
+  RESET_API_URL: 'RESET_API_URL',
 };
 
 export const ROOT_ACTIONS = {
@@ -54,6 +55,7 @@ const store_options: StoreOptions<RootState> = {
     [ROOT_MUTATIONS.SET_USER](state, logged_in_user: LoggedInUser) { state.logged_in_user = logged_in_user; },
     [ROOT_MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
     [ROOT_MUTATIONS.SET_API_URL](state, api_url) { state.api_url = api_url; },
+    [ROOT_MUTATIONS.RESET_API_URL](state) { state.api_url = COMMON.api.url; },
   },
   actions: {
     [ROOT_ACTIONS.LOGIN](context, {username, password}) {
