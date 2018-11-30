@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
+import COMMON from '@/lib/common';
 import {set_api_key} from '@/lib/handler';
 import {login} from '@/lib/meta_controller';
 import {DevBasicUser, Instance, InstanceConfig} from '@/types';
@@ -18,11 +19,13 @@ export interface LoggedInUser {
 export interface RootState {
   logged_in_user: LoggedInUser | null;
   selected_instance: Instance | null;
+  api_url: string;
 }
 
 export const ROOT_MUTATIONS = {
   SET_USER: 'SET_USER',
   RESET_USER: 'RESET_USER',
+  SET_API_URL: 'SET_API_URL',
 };
 
 export const ROOT_ACTIONS = {
@@ -32,7 +35,7 @@ export const ROOT_ACTIONS = {
 
 const persisted_options = {
   paths: [
-    'logged_in_user',
+    'logged_in_user', 'api_url',
     'config_module.selected_instance', 'config_module.live_instance_config',
     'users_module.users', 'users_module.permissions',
   ],
@@ -42,6 +45,7 @@ const store_options: StoreOptions<RootState> = {
   plugins: [createPersistedState(persisted_options)],
   state: {
     logged_in_user: null,
+    api_url: COMMON.api.url,
     selected_instance: null,
     live_instance_config: null,
   } as RootState,
@@ -49,6 +53,7 @@ const store_options: StoreOptions<RootState> = {
   mutations: {
     [ROOT_MUTATIONS.SET_USER](state, logged_in_user: LoggedInUser) { state.logged_in_user = logged_in_user; },
     [ROOT_MUTATIONS.RESET_USER](state) { state.logged_in_user = null; },
+    [ROOT_MUTATIONS.SET_API_URL](state, api_url) { state.api_url = api_url; },
   },
   actions: {
     [ROOT_ACTIONS.LOGIN](context, {username, password}) {

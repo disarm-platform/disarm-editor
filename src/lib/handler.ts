@@ -1,6 +1,7 @@
 import axios from 'axios';
+import {get} from 'lodash';
 
-import COMMON from './common';
+import store from '@/store';
 
 declare var process: {
   env: {
@@ -10,15 +11,7 @@ declare var process: {
 };
 
 export function get_api_url() {
-  return COMMON.api.dev_url;
-  // const production_host = process.env.VUE_APP_API_URL || location.hostname.replace('editor', 'api');
-  // const version = COMMON.api.version;
-  //
-  // if (process.env.NODE_ENV === 'production') {
-  //   return urljoin('https://', production_host, version);
-  // } else {
-  //   return urljoin(COMMON.api.dev_url, version);
-  // }
+  return get(store, 'state.api_url', null);
 }
 
 
