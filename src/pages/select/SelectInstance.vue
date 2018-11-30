@@ -2,6 +2,15 @@
   <div>
     <h2>List of instances</h2>
 
+    <el-form :inline="true" :model="instanceForm" class="demo-form-inline">
+  <el-form-item label="New Instance">
+    <el-input v-model="instanceForm.name" placeholder="New Instance Name"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="saveInstance">Save</el-button>
+  </el-form-item>
+</el-form>
+
     <el-table
         ref="instance_table"
         :data="instance_list"
@@ -27,6 +36,7 @@
     </el-table>
 
     <el-button type="text" @click="deselect">Select none</el-button>
+    <el-button type="text" @click="deselect">Create Instance</el-button>
   </div>
 </template>
 
@@ -41,7 +51,11 @@
     data() {
       return {
         currentRow: null as null | Instance,
+        instanceForm:{
+          name:''
+        } as Instance
       };
+
     },
     computed: {
       selected_instance(): Instance { return this.$store.state.selected_instance; },
@@ -64,6 +78,9 @@
         this.$refs.instance_table.setCurrentRow();
         this.$emit('deselect');
       },
+      saveInstance(){
+        console.log('Saving instance',this.instanceForm)
+      }
     },
   });
 </script>
