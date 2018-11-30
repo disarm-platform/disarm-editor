@@ -41,6 +41,7 @@ export default Vue.extend({
       this.backup_node_config = cloneDeep(this.live_node_config);
     },
     emit_change() {
+      console.log('better place to do saving?')
       this.$emit('change', this.live_node_config);
     },
   },
