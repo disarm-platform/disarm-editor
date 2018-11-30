@@ -21,6 +21,8 @@
         @add_user="add_user"
         @reload="reload"
     ></router-view>
+
+    <el-button @click="blank">blank</el-button>
   </div>
 </template>
 
@@ -29,6 +31,7 @@
   import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
   import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
   import {CONFIG_ACTIONS, CONFIG_MUTATIONS} from '@/store/config';
+  import {blank_for_path} from "@/lib/fake_config"
 
   export default Vue.extend({
     computed: {
@@ -75,6 +78,9 @@
             this.$store.dispatch(USERS_ACTIONS.REFETCH_USERS);
             break;
         }
+      },
+      async blank() {
+        console.log('blank', await blank_for_path(''))
       },
     },
   });
