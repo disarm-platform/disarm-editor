@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {get} from 'lodash';
 
+import COMMON from '@/lib/common';
 import store from '@/store';
 
 declare var process: {
@@ -10,17 +11,23 @@ declare var process: {
   };
 };
 
-export function get_api_url() {
-  return get(store, 'state.api_url', null);
+function get_api_url():string {
+  const version = get(store, 'state.api_version',COMMON.api.version);
+  const url = get(store, 'state.api_url', COMMON.api.url)
+  return url+version
 }
 
+export const standard_handler = async (incoming_options:{url:string,method:string,data:any, params:string}) => {
+  const default_options = {
+    headers: {
+      "API-Key": get(store, 'state.logged_in_user.api_key', ''),
+    },
+    baseURL: get(store, 'state.api_url', COMMON.api.url)
+  }
+  const merged = {
+    ...default_options,
+    ...incoming_options,
+  }
 
-export const standard_handler = axios.create({
-  baseURL: get_api_url(),
-});
-
-export function set_api_key(api_key: string) {
-  standard_handler.defaults.headers = {
-    'API-Key': api_key,
-  };
+  return axios(merged)
 }
