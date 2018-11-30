@@ -5,17 +5,11 @@
 </template>
 
 <script lang="ts">
-  import ConfigNodeMixin from './EditNodeMixin';
+  import Vue from 'vue';
   import JSONEditor from '../components/SimpleJSONEditor.vue';
 
-  export default ConfigNodeMixin.extend({
+  export default Vue.extend({
     components: {JSONEditor},
-    methods: {
-      update_node_config(node_config: any) {
-        this.live_node_config = node_config;
-        this.emit_change();
-      },
-    },
   });
 </script>
 

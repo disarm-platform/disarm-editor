@@ -8,30 +8,32 @@
   <span slot="label">
   {{display_name}}
   </span>
-      <ConfigComponentWrapper
+      <NodeWrapper
           :display_name="display_name"
           :node_name="node_name"
           :path_name="path_name"
           :component_name="component_name"
-          :config="live_instance_config"
+          :instance_config="live_instance_config"
+          @change_root="change_root"
       >
-      </ConfigComponentWrapper>
+      </NodeWrapper>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script lang='ts'>
   import Vue from 'vue';
-  import ConfigComponentWrapper from '@/pages/edit/EditJSON/ConfigComponentWrapper.vue';
-  import {InstanceConfig} from '@/types';
-  import {edit_nodes} from '@/pages/edit/EditJSON/nodes/EditNodeDefinitions';
+  import {cloneDeep, set} from 'lodash';
 
+  import NodeWrapper from './NodeWrapper.vue';
+  import {InstanceConfig} from '@/types';
+  import {edit_nodes} from './nodes/EditNodeDefinitions';
 
   export default Vue.extend({
     props: {
       live_instance_config: Object as () => InstanceConfig,
     },
-    components: {ConfigComponentWrapper},
+    components: {NodeWrapper},
     mounted() {
     },
     data() {
@@ -39,7 +41,13 @@
         edit_nodes,
       };
     },
-    methods: {},
+    methods: {
+      change_root({node_config, path_name}) {
+        console.log(`update config in EditJSONStructured`, node_config, path_name);
+        const copy = set(cloneDeep(this.live_instance_config), path_name, node_config);
+        this.$emit('update', copy);
+      },
+    },
   });
 </script>
 

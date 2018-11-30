@@ -1,48 +1,33 @@
 import Vue from 'vue';
 import {cloneDeep, get} from 'lodash';
-import {InstanceConfig} from '@/types';
 
 export default Vue.extend({
   props: {
-    path_name: String,
-    config: Object as () => InstanceConfig,
+    node_config: Object,
   },
   data() {
     return {
-      live_node_config: {},
-      backup_node_config: {},
+      editable_config: {},
     };
   },
   watch: {
-    config: {
+    node_config: {
       handler() {
-        this.setup_node();
+        this.clone_node();
       },
       deep: true,
     },
   },
   created() {
-    this.setup_node();
+    this.clone_node();
   },
   methods: {
-    setup_node() {
-      const got = get(this.config, this.path_name);
-      if (got) {
-        this.live_node_config = cloneDeep(got);
-        this.backup_node();
-      } else {
-        console.log(`instance_config is missing property for ${this.path_name}`);
-      }
-    },
-    reset_node() {
-      this.live_node_config = cloneDeep(this.backup_node_config);
-    },
-    backup_node() {
-      this.backup_node_config = cloneDeep(this.live_node_config);
+    clone_node() {
+      console.log('clone_node', this.node_config)
+      this.editable_config = cloneDeep(this.node_config);
     },
     emit_change() {
-      console.log('better place to do saving?')
-      this.$emit('change', this.live_node_config);
+      this.$emit('change_node', this.editable_config);
     },
   },
 });

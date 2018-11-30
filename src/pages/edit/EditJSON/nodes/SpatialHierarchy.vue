@@ -1,24 +1,14 @@
 <template>
   <div>
-    <JSONEditor :node_config="live_node_config" @change="update_node_config"/>
+    <SimpleJSONEditor :node_config="editable_config" @change="emit_change"/>
   </div>
 </template>
 
 <script lang="ts">
-  import ConfigNodeMixin from './EditNodeMixin';
-  import JSONEditor from '../components/SimpleJSONEditor.vue';
+  import EditNodeMixin from './EditNodeMixin';
+  import SimpleJSONEditor from '@/pages/edit/EditJSON/components/SimpleJSONEditor.vue'
 
-  export default ConfigNodeMixin.extend({
-    components: {JSONEditor},
-    methods: {
-      update_node_config(node_config: any) {
-        this.live_node_config = node_config;
-        this.emit_change();
-      },
-    },
+  export default EditNodeMixin.extend({
+    components: {SimpleJSONEditor},
   });
 </script>
-
-<style scoped>
-
-</style>

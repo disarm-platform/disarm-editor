@@ -1,13 +1,11 @@
 <template>
   <div>
-    <el-alert v-if="json_error" type="error" title="Configuration is not valid json"
-              description="Ensure it is valid JSON and try again"/>
-
     <el-input rows="20" type="textarea" v-model="local_node_config"></el-input>
 
     <div style="margin: 0.5em 0;">
+      <el-button @click="save" type="primary">Save</el-button>
       <el-button @click="format_as_json">Format</el-button>
-      <el-button @click="save">Save</el-button>
+      <el-button @click="clear" type="warning">Clear</el-button>
     </div>
 
   </div>
@@ -19,7 +17,7 @@
 
   export default Vue.extend({
     props: {
-      live_node_config: Object as () => InstanceConfig,
+      node_config: Object as () => InstanceConfig,
     },
     data() {
       return {
@@ -28,7 +26,7 @@
       };
     },
     watch: {
-      live_node_config: {
+      node_config: {
         handler() {
           this.stringify_config();
         },
@@ -42,7 +40,7 @@
       stringify_config(): void {
         try {
           this.json_error = false;
-          this.local_node_config = JSON.stringify(this.live_node_config, undefined, 4);
+          this.local_node_config = JSON.stringify(this.node_config, undefined, 4);
         } catch (e) {
           // passing the json failed
           this.json_error = true;
@@ -64,6 +62,9 @@
         } catch (e) {
           this.json_error = true;
         }
+      },
+      clear() {
+        this.$emit('change', '');
       },
     },
   });

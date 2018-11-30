@@ -12,17 +12,14 @@
     </el-button-group>
 
     <router-view
-        :live_instance_config="live_instance_config"
         :users="users"
         :permissions="permissions"
 
-        @update_config="update_config"
         @update_permissions="update_permissions"
         @add_user="add_user"
         @reload="reload"
     ></router-view>
 
-    <el-button @click="blank">blank</el-button>
   </div>
 </template>
 
@@ -31,15 +28,14 @@
   import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
   import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
   import {CONFIG_ACTIONS, CONFIG_MUTATIONS} from '@/store/config';
-  import {blank_for_path} from "@/lib/fake_config"
 
   export default Vue.extend({
     computed: {
+      live_instance_config(): InstanceConfig { // This is retrieved just for cosmetic use, not for its data
+        return this.$store.state.config_module.live_instance_config;
+      },
       selected_instance(): Instance {
         return this.$store.state.config_module.selected_instance;
-      },
-      live_instance_config(): InstanceConfig {
-        return this.$store.state.config_module.live_instance_config;
       },
       users(): DevBasicUser[] {
         return this.$store.state.users_module.users;
@@ -60,9 +56,6 @@
         this.$store.commit(CONFIG_MUTATIONS.RESET_SELECTED_CONFIG);
         this.$router.push('/');
       },
-      update_config(config: InstanceConfig) {
-        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, config);
-      },
       update_permissions(permissions: Permission[]) {
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
       },
@@ -78,9 +71,6 @@
             this.$store.dispatch(USERS_ACTIONS.REFETCH_USERS);
             break;
         }
-      },
-      async blank() {
-        console.log('blank', await blank_for_path(''))
       },
     },
   });
