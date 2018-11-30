@@ -41,7 +41,7 @@
 
   import {InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@locational/config-validation/build/module/lib/TUnifiedResponse';
-  import {do_prioritise_messages} from '@/pages/edit/EditJSON/priortise';
+  import {do_prioritise_messages} from '@/pages/edit/EditJSON/priortise_messages';
 
   export default Vue.extend({
     components: {EditJSONRaw, EditJSONStructured},
