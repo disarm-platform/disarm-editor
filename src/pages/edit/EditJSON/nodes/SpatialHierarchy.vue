@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <SimpleJSONEditor :node_config="editable_config" @change="emit_change"/>
-  </div>
+  <SimpleJSONEditor :config="editable_config" @change="stick_change"/>
 </template>
 
 <script lang="ts">
