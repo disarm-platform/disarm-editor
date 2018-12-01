@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Editing: {{selected_instance.name}} @ version {{live_instance_config.config_version}}
+    <p>Editing: {{selected_instance.name}} @ version {{config_version}}
       <el-button type='text' @click="reset_selected_config">Change</el-button>
     </p>
 
@@ -25,6 +25,8 @@
 
 <script lang='ts'>
   import Vue from 'vue';
+  import {get} from 'lodash';
+
   import {DevBasicUser, Instance, InstanceConfig, Permission} from '@/types';
   import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
   import {CONFIG_ACTIONS, CONFIG_MUTATIONS} from '@/store/config';
@@ -33,6 +35,9 @@
     computed: {
       live_instance_config(): InstanceConfig { // This is retrieved just for cosmetic use, not for its data
         return this.$store.state.config_module.live_instance_config;
+      },
+      config_version(): string {
+        return get(this.live_instance_config, 'config_version', 'unknown');
       },
       selected_instance(): Instance {
         return this.$store.state.config_module.selected_instance;
