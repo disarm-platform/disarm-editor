@@ -28,8 +28,8 @@
 
   import {component_list} from './nodes/EditNodeDefinitions';
   import {InstanceConfig} from '@/types';
-  import {blank_for_path} from '@/lib/sample_node';
-  import {CONFIG_MUTATIONS} from '@/store/config';
+  import {blank_for_path} from '@/lib/sample_node'
+  import {CONFIG_MUTATIONS} from "@/store/config"
 
   export default Vue.extend({
     components: {...component_list},
@@ -46,7 +46,7 @@
       };
     },
     computed: {
-      node_config(): any {
+      node_config() {
         return get(this.instance_config, this.path_name);
       },
     },
@@ -62,7 +62,7 @@
       async insert_blank() {
         const content = await blank_for_path(this.path_name);
         this.change_wrapper(content);
-      },
+      }
     },
   });
 </script>
