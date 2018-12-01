@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-  import EditNodeMixin from './EditNodeMixin'
+  import EditNodeMixin from './EditNodeMixin';
 
   export default EditNodeMixin.extend({
   });

@@ -1,2 +1,1 @@
-declare module 'json-schema-faker' {
-}
+declare module 'json-schema-faker';

@@ -39,12 +39,12 @@
   import {validate} from '@disarm/config-validation';
 
   import EditJSONStructured from './EditJSONStructured.vue';
-  import SimpleJSONEditor from "@/pages/edit/EditJSON/components/SimpleJSONEditor.vue"
+  import SimpleJSONEditor from '@/pages/edit/EditJSON/components/SimpleJSONEditor.vue';
 
   import {InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@locational/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
-  import {CONFIG_MUTATIONS} from '@/store/config'
+  import {CONFIG_MUTATIONS} from '@/store/config';
 
   export default Vue.extend({
     components: {SimpleJSONEditor, EditJSONStructured},

@@ -26,13 +26,13 @@
       };
     },
     computed: {
-      local_node_config() {
+      local_node_config(): any | null {
         try {
           return JSON.parse(this.config_string);
         } catch (e) {
           return null;
         }
-      }
+      },
     },
     created() {
       this.config_string = JSON.stringify(this.config, undefined, 2);

@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import EditNodeMixin from './EditNodeMixin';
-  import SimpleJSONEditor from '@/pages/edit/EditJSON/components/SimpleJSONEditor.vue'
+  import SimpleJSONEditor from '@/pages/edit/EditJSON/components/SimpleJSONEditor.vue';
 
   export default EditNodeMixin.extend({
     components: {SimpleJSONEditor},
