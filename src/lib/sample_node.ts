@@ -2,8 +2,7 @@ import jsf from 'json-schema-faker';
 import {get} from 'lodash';
 
 // Ideal would be to use simple primitives
-
-const schema = require('@disarm/config-validation/build/module/config_schema.json');
+import schema from '@disarm/config-validation/build/module/config_schema.json';
 
 (jsf as any).option({
   alwaysFakeOptionals: true,
