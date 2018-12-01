@@ -1,26 +1,16 @@
 <template>
   <div>
-    <GenericApplet v-model="live_node_config" @input="emit_change"/>
-    <JSONEditor :node_config="live_node_config" @change="update_node_config"/>
+    <GenericApplet :node_config="editable_config" @input="emit_change"/>
+    <SimpleJSONEditor :config="editable_config" @change="stick_change"/>
   </div>
 </template>
 
 <script lang="ts">
-import ConfigNodeMixin from './EditNodeMixin';
-import JSONEditor from '../components/SimpleJSONEditor.vue';
-import GenericApplet from '../components/GenericApplet.vue';
+  import ConfigNodeMixin from './EditNodeMixin';
+  import SimpleJSONEditor from '../components/SimpleJSONEditor.vue';
+  import GenericApplet from '../components/GenericApplet.vue';
 
-export default ConfigNodeMixin.extend({
-  components: {GenericApplet, JSONEditor},
-  methods: {
-    update_node_config(node_config: any) {
-      this.live_node_config = node_config;
-      this.emit_change();
-    },
-  },
-});
+  export default ConfigNodeMixin.extend({
+    components: {GenericApplet, SimpleJSONEditor},
+  });
 </script>
-
-<style scoped>
-
-</style>

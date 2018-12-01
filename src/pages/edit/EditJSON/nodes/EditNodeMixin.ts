@@ -11,7 +11,7 @@ import {cloneDeep, get} from 'lodash';
 
 export default Vue.extend({
   props: {
-    incoming_node_config: Object,
+    incoming_node_config: [Object, Array],
   },
   data() {
     return {

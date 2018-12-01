@@ -55,7 +55,6 @@
     },
     methods: {
       change_wrapper: debounce(function (node_config) {
-        console.log(`update config in NodeWrapper`, node_config, this.path_name);
         const copy = cloneDeep(this.instance_config);
         set(copy, this.path_name, node_config);
         this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, copy);

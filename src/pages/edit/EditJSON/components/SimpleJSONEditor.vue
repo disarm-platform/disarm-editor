@@ -17,7 +17,7 @@
 
   export default Vue.extend({
     props: {
-      config: Object,
+      config: [Object, Array],
     },
     data() {
       return {

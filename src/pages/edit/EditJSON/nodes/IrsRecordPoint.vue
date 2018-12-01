@@ -1,14 +1,14 @@
 <template>
   <div>
 
-    <GenericApplet v-model="live_node_config" @input="emit_change"/>
+    <GenericApplet :node-config="editable_config" @input="emit_change"/>
 
-    <el-checkbox v-model="live_node_config.metadata.show" @input="emit_change">Show metadata page</el-checkbox>
+    <el-checkbox v-model="editable_config.metadata.show" @input="emit_change">Show metadata page</el-checkbox>
 
     <h5>Custom fields (optional_fields)</h5>
 
     <ul>
-      <li v-for="(field, index) in live_node_config.metadata.optional_fields" :key="index">
+      <li v-for="(field, index) in editable_config.metadata.optional_fields" :key="index">
         {{field}}
         <el-button type="text" icon="el-icon-close" @click="remove(index)"></el-button>
       </li>
@@ -36,7 +36,7 @@ export default ConfigNodeMixin.extend({
   data() {
     return {
       field: '',
-      live_node_config: {
+      editable_config: {
         metadata: {},
       },
     };
@@ -45,13 +45,13 @@ export default ConfigNodeMixin.extend({
     add(e: Event) {
       e.preventDefault();
       // @ts-ignore
-      this.live_node_config.metadata.optional_fields.push(this.field);
+      this.editable_config.metadata.optional_fields.push(this.field);
       this.field = '';
       this.emit_change();
     },
     remove(index: number) {
       // @ts-ignore
-      this.live_node_config.metadata.optional_fields.splice(index, 1);
+      this.editable_config.metadata.optional_fields.splice(index, 1);
       this.emit_change();
     },
   },
