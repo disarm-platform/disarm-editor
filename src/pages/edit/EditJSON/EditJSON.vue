@@ -50,9 +50,9 @@
     components: {SimpleJSONEditor, EditJSONStructured},
     data() {
       return {
-        ui_show_raw: false,
         priority_messages: [] as ValidationMessage[],
         unified_response: {},
+        ui_show_raw: false,
       };
     },
     computed: {

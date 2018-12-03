@@ -16,7 +16,6 @@
         :permissions="permissions"
 
         @update_permissions="update_permissions"
-        @add_user="add_user"
         @reload="reload"
     ></router-view>
 
@@ -63,9 +62,6 @@
       },
       update_permissions(permissions: Permission[]) {
         this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
-      },
-      add_user(user: DevBasicUser) {
-        this.$store.commit(USERS_MUTATIONS.ADD_USER, user);
       },
       reload(view: string) {
         switch (view) {
