@@ -5,6 +5,7 @@ import Decorators from './Decorators.vue';
 import Form from './Form.vue';
 import Instance from './Instance.vue';
 import MapFocus from './MapFocus.vue';
+import Meta from './Meta.vue';
 import SpatialHierarchy from './SpatialHierarchy.vue';
 import Validations from './Validations.vue';
 import IrsMonitor from './IrsMonitor.vue';
@@ -51,6 +52,13 @@ export const edit_nodes: ComponentDefinition[] = [
     show_include: false,
   },
   {
+    display_name: 'Meta',
+    component_name: 'Meta',
+    node_name: 'meta',
+    path_name: 'applets.meta',
+    component: Meta,
+    show_include: false,
+  },  {
     display_name: 'Monitor',
     component_name: 'IrsMonitor',
     node_name: 'irs_monitor',

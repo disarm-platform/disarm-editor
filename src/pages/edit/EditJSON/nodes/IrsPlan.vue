@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericApplet :node_config="editable_config" @input="emit_change"/>
-    <SimpleJSONEditor :config="editable_config" @change="stick_change"/>
+    <textarea v-model="editable_config.table_output"></textarea>
   </div>
 </template>
 
