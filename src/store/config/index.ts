@@ -38,6 +38,7 @@ export const CONFIG_ACTIONS = {
   RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
   FETCH_INSTANCES: 'FETCH_INSTANCES',
   FETCH_INSTANCE_CONFIGS: 'FETCH_INSTANCE_CONFIGS',
+  FETCH_INSTANCE_CONFIG:'FETCH_INSTANCE_CONFIG',
   CREATE_INSTANCE: 'CREATE_INSTANCE',
 };
 
@@ -61,10 +62,17 @@ const actions: ActionTree<ConfigState, RootState> = {
     }
   },
   async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIGS](context, instance_id: string) {
-    const result: AxiosResponse = await standard_handler({
-      url:`/config/${instance_id}`,
-      method:'get'
-    } as any)
+    try{
+      const result: AxiosResponse = await standard_handler({
+        url:`/instance/${instance_id}/published_instanceconfigs`,
+        method:'get'
+      } as any)
+      return result.data;
+    }catch(e){
+      throw e;
+    }
+ 
+
   },
   async [CONFIG_ACTIONS.FETCH_INSTANCES](context) {
     const options = {
@@ -89,6 +97,17 @@ const actions: ActionTree<ConfigState, RootState> = {
     try{
       const result: AxiosResponse = await standard_handler(options as any);
       return result.data
+    }catch(e){
+      throw e
+    }
+  },
+  async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIG](context,payload){
+    try{
+      const result = await standard_handler({
+        url:`config/${payload}`,
+        method:'get'
+      } as any)
+      return result.data;
     }catch(e){
       throw e
     }
