@@ -79,7 +79,8 @@
         this.$emit('deselect');
       },
       saveInstance(){
-        this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE,this.instanceForm);
+        this.$emit('create',this.instanceForm)
+        this.instanceForm.name = '';
       }
     },
   });
