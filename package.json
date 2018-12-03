@@ -9,7 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@disarm/config-validation": "0.1.2",
+    "@disarm/config-validation": "0.1.4",
     "@disarm/geodata-support": "0.0.12",
     "@locational/douma-types": "0.0.1",
     "axios": "^0.18.0",

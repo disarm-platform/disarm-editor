@@ -1,9 +1,9 @@
 import jsf from 'json-schema-faker';
 import {get} from 'lodash';
 
-// Ideal would be to use simple primitives
 import schema from '@disarm/config-validation/build/module/config_schema.json';
 
+// Ideal would be to use simple primitives, but jsf fakes with 'real' fake strings, etc.
 (jsf as any).option({
   alwaysFakeOptionals: true,
   fixedProbabilities: true,
