@@ -77,7 +77,7 @@ function add_permission(
     const new_permission: Permission = {
       user_id,
       value: permission_type,
-      instance_id: instance_config.config_id,
+      instance_id: instance_config.instance_id,
     };
     permissions.push(new_permission);
   }
@@ -143,7 +143,7 @@ export function bulk_set_all_permissions_for_user(
       return {
         user_id,
         value: permission_string,
-        instance_id: instance_config.config_id,
+        instance_id: instance_config.instance_id,
       };
     });
 
@@ -175,7 +175,7 @@ export function bulk_set_permission_for_all_users(
       return {
         user_id,
         value: permission_string,
-        instance_id: instance_config.config_id,
+        instance_id: instance_config.instance_id,
       };
     });
 

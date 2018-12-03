@@ -31,7 +31,7 @@
 <script lang='ts'>
   import Vue from 'vue';
   import {Instance, InstanceConfig} from '@/types';
-  import { TConfig } from '@locational/config-validation/build/module/lib/config_types/TConfig';
+  import { TConfig } from '@disarm/config-validation/build/module/lib/config_types/TConfig';
 
   export default Vue.extend({
     props: {

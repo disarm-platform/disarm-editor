@@ -28,12 +28,6 @@ export const sample_permissions = [
 ];
 
 export const sample_config: InstanceConfig = {
-  config_id: 'my_id',
-  config_version: '1',
+  instance_id: 'my_id',
   applets: {meta: {}, irs_record_point: {metadata: {show: false, optional_fields: []}}, irs_plan: {table_output: []}},
-  instance: {
-    title: 'Demo Config',
-    location_name: 'some location',
-    slug: 'demo_config',
-  },
 };

@@ -12,8 +12,10 @@
             active-color="#a1d1ff"
             inactive-color="#4ea8ff">
         </el-switch>
-        <EditJSONRaw v-if="ui_show_raw" :live_instance_config="live_instance_config"></EditJSONRaw>
-        <EditJSONStructured v-else :live_instance_config="live_instance_config"></EditJSONStructured>
+
+        <SimpleJSONEditor v-if="ui_show_raw" :config="live_instance_config" @change="update"></SimpleJSONEditor>
+        <EditJSONStructured v-else :live_instance_config="live_instance_config" @update="update"></EditJSONStructured>
+
       </el-col>
       <el-col :span="12">
         <ul>
@@ -36,18 +38,16 @@
   import Vue from 'vue';
   import {validate} from '@disarm/config-validation';
 
-  import EditJSONRaw from './EditJSONRaw.vue';
   import EditJSONStructured from './EditJSONStructured.vue';
+  import SimpleJSONEditor from '@/pages/edit/EditJSON/components/SimpleJSONEditor.vue';
 
   import {InstanceConfig, ValidationMessage} from '@/types';
-  import {TUnifiedResponse} from '@locational/config-validation/build/module/lib/TUnifiedResponse';
-  import {do_prioritise_messages} from '@/pages/edit/EditJSON/priortise';
+  import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
+  import {do_prioritise_messages} from '@/lib/priortise_messages';
+  import {CONFIG_MUTATIONS} from '@/store/config';
 
   export default Vue.extend({
-    components: {EditJSONRaw, EditJSONStructured},
-    props: {
-      live_instance_config: Object as () => InstanceConfig,
-    },
+    components: {SimpleJSONEditor, EditJSONStructured},
     data() {
       return {
         ui_show_raw: false,
@@ -55,9 +55,14 @@
         unified_response: {},
       };
     },
+    computed: {
+      live_instance_config(): InstanceConfig {
+        return this.$store.state.config_module.live_instance_config;
+      },
+    },
     methods: {
-      update() {
-        console.log('[update] does nothing');
+      update(instance_config: InstanceConfig) {
+        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, instance_config);
       },
       validate() {
         if (!this.live_instance_config) {

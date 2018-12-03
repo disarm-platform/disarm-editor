@@ -1,47 +1,44 @@
+// Components using this mixin
+// will have access to an editable copy of the node_config as `editable_config`
+// must call the 'emit_change' method when the inputs are changed
+//
+// Optionally, can use the 'stick_change' method to update the 'editable_config' from a child
+// instead of mutating props - e.g. for SimpleJSONEditor component
+
+
 import Vue from 'vue';
 import {cloneDeep, get} from 'lodash';
-import {InstanceConfig} from '@/types';
 
 export default Vue.extend({
   props: {
-    path_name: String,
-    config: Object as () => InstanceConfig,
+    incoming_node_config: [Object, Array],
   },
   data() {
     return {
-      live_node_config: {},
-      backup_node_config: {},
+      editable_config: {},
     };
   },
   watch: {
-    config: {
+    incoming_node_config: {
       handler() {
-        this.setup_node();
+        this.clone_node_for_editing();
       },
       deep: true,
     },
   },
   created() {
-    this.setup_node();
+    this.clone_node_for_editing();
   },
   methods: {
-    setup_node() {
-      const got = get(this.config, this.path_name);
-      if (got) {
-        this.live_node_config = cloneDeep(got);
-        this.backup_node();
-      } else {
-        console.log(`instance_config is missing property for ${this.path_name}`);
-      }
-    },
-    reset_node() {
-      this.live_node_config = cloneDeep(this.backup_node_config);
-    },
-    backup_node() {
-      this.backup_node_config = cloneDeep(this.live_node_config);
+    clone_node_for_editing() {
+      this.editable_config = cloneDeep(this.incoming_node_config);
     },
     emit_change() {
-      this.$emit('change', this.live_node_config);
+      this.$emit('change_node', this.editable_config);
+    },
+    stick_change(updated: any) {
+      this.editable_config = updated;
+      this.emit_change();
     },
   },
 });

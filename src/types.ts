@@ -1,6 +1,6 @@
-import { TConfig } from '@locational/config-validation/build/module/lib/config_types/TConfig';
+import { TConfig } from '@disarm/config-validation/build/module/lib/config_types/TConfig';
 import { DoumaUser} from '@locational/douma-types';
-import {TApplets} from '@locational/config-validation/build/module/lib/config_types/TApplets';
+import {TApplets} from '@disarm/config-validation/build/module/lib/config_types/TApplets';
 
 export interface Instance {
   _id: string;

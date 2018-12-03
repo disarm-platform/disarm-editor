@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="live_instance_config">
     <el-button @click="reload">Reload</el-button>
     <el-button @click='save'>Upload</el-button>
 
@@ -65,6 +65,8 @@
 
 
   </div>
+
+  <div v-else>Config is either invalid or empty. Try filling it up.</div>
 </template>
 
 <script lang='ts'>

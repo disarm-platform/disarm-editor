@@ -1,5 +1,5 @@
-import {TUnifiedResponse} from '@locational/config-validation/build/main/lib/TUnifiedResponse';
-import {ValidationMessage} from '@/types';
+import {TUnifiedResponse} from '@disarm/config-validation/build/main/lib/TUnifiedResponse';
+import {ValidationMessage} from '../types';
 
 export function do_prioritise_messages(v: TUnifiedResponse): ValidationMessage[] {
   const result: ValidationMessage[] = [];

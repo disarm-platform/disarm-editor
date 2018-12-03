@@ -9,11 +9,12 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@disarm/config-validation": "0.0.4",
-    "@locational/config-validation": "0.0.5",
+    "@disarm/config-validation": "0.1.4",
+    "@disarm/geodata-support": "0.0.12",
     "@locational/douma-types": "0.0.1",
     "axios": "^0.18.0",
     "element-ui": "^2.4.11",
+    "json-schema-faker": "^0.5.0-rc16",
     "url-join": "^4.0.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
