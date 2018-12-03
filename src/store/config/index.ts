@@ -36,8 +36,8 @@ const mutations: MutationTree<ConfigState> = {
 
 export const CONFIG_ACTIONS = {
   RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
-  FETCH_INSTANCES:'FETCH_INSTANCES',
-  FETCH_INSTANCE_CONFIGS:'FETCH_INSTANCE_CONFIGS',
+  FETCH_INSTANCES: 'FETCH_INSTANCES',
+  FETCH_INSTANCE_CONFIGS: 'FETCH_INSTANCE_CONFIGS',
   CREATE_INSTANCE: 'CREATE_INSTANCE',
 };
 
@@ -57,7 +57,40 @@ const actions: ActionTree<ConfigState, RootState> = {
       const result: AxiosResponse = await standard_handler(options as any)
       //context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, result.data)
     } catch (e) {
-      console.log(e)
+      throw e
+    }
+  },
+  async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIGS](context, instance_id: string) {
+    const result: AxiosResponse = await standard_handler({
+      url:`/config/${instance_id}`,
+      method:'get'
+    } as any)
+  },
+  async [CONFIG_ACTIONS.FETCH_INSTANCES](context) {
+    const options = {
+      url: '/instance',
+      method: 'get'
+    }
+
+    try {
+      const result: AxiosResponse = await standard_handler(options as any)
+      return result.data;
+    } catch (e) {
+      throw e
+    }
+  },
+  async [CONFIG_ACTIONS.CREATE_INSTANCE](context,payload){
+    const options = {
+      url: '/instance',
+      method: 'post',
+      data:payload
+    }
+
+    try{
+      const result: AxiosResponse = await standard_handler(options as any);
+      return result.data
+    }catch(e){
+      throw e
     }
   }
 };
@@ -65,6 +98,8 @@ const actions: ActionTree<ConfigState, RootState> = {
 export const CONFIG_GETTERS = {
 
 };
+
+
 
 const getters: GetterTree<ConfigState, RootState> = {};
 

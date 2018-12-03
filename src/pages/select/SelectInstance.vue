@@ -36,13 +36,13 @@
     </el-table>
 
     <el-button type="text" @click="deselect">Select none</el-button>
-    <el-button type="text" @click="deselect">Create Instance</el-button>
   </div>
 </template>
 
 <script lang='ts'>
   import Vue from 'vue';
   import {Instance} from '@/types';
+  import {CONFIG_ACTIONS} from '@/store/config'
 
   export default Vue.extend({
     props: {
@@ -79,7 +79,7 @@
         this.$emit('deselect');
       },
       saveInstance(){
-        console.log('Saving instance',this.instanceForm)
+        this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE,this.instanceForm);
       }
     },
   });
