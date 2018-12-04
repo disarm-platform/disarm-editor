@@ -2,15 +2,6 @@
   <div>
     <h2>List of instances</h2>
 
-    <el-form :inline="true" :model="instanceForm" class="demo-form-inline">
-      <el-form-item label="New Instance">
-        <el-input v-model="instanceForm.name" placeholder="New Instance Name"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="saveInstance">Save</el-button>
-      </el-form-item>
-    </el-form>
-
     <el-table
       ref="instance_table"
       :data="instance_list"
@@ -28,7 +19,6 @@
       <el-table-column label="ID" prop="_id"></el-table-column>
     </el-table>
 
-    <el-button type="text" @click="deselect">Select none</el-button>
   </div>
 </template>
 
@@ -44,7 +34,7 @@ export default Vue.extend({
   data() {
     return {
       currentRow: null as null | Instance,
-      instanceForm: {
+      instance_form: {
         name: '',
       } as Instance,
     };
@@ -68,15 +58,6 @@ export default Vue.extend({
     handleCurrentChange(val: Instance) {
       this.currentRow = val;
       this.$emit('select', val);
-    },
-    deselect() {
-      // @ts-ignore
-      this.$refs.instance_table.setCurrentRow();
-      this.$emit('deselect');
-    },
-    saveInstance() {
-      this.$emit('select', this.instanceForm);
-      this.instanceForm.name = '';
     },
   },
 });

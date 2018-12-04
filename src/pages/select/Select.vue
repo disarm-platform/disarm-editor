@@ -7,6 +7,8 @@
       @deselect="deselect_instance"
     ></SelectInstance>
 
+    <CreateInstance @create_new="create_instance"></CreateInstance>
+
   </div>
 </template>
 
@@ -14,13 +16,14 @@
   import Vue from 'vue';
 
   import SelectInstance from '@/pages/select/SelectInstance.vue';
+  import CreateInstance from '@/pages/select/CreateInstance.vue';
   import {Instance} from '@/types';
   import {CONFIG_ACTIONS} from '@/store/config';
 
   const sample_instances = [{_id: 'a1', name: 'Demo Config'}, {_id: 'b2', name: 'Different Demo Config'}];
 
   export default Vue.extend({
-    components: {SelectInstance},
+    components: {SelectInstance, CreateInstance},
     data() {
       return {
         instance_list: null as Instance[] | null,
@@ -49,8 +52,8 @@
         await this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
       },
       async create_instance(instance: Instance){
-         this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE, instance);
-      }
+      this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE, instance);
+      },
     },
   });
 </script>
