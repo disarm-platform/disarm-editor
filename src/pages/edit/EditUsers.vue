@@ -41,38 +41,39 @@
 <script lang='ts'>
   import Vue from 'vue';
   import {DevBasicUser} from '@/types';
+  import {USERS_MUTATIONS} from '@/store/users'
 
   export default Vue.extend({
-    props: {
-      users: Array as () => DevBasicUser[],
+    computed: {
+      users(): any { return this.$store.state.users_module.users; },
     },
     methods: {
       add_user() {
+        // TODO: @refac to separate file, don't create models in here
         const new_user = {
           name: 'No-one',
           username: 'No name',
-          _id: `${Math.random()}`,
+          _id: null,
         } as DevBasicUser;
 
-        console.log('Using Math.random() for user._id');
-        this.$emit('add_user', new_user);
+        this.$store.commit(USERS_MUTATIONS.ADD_USER, new_user);
       },
       edit_name(scope: any) {
         const updated_user = {};
-        this.$emit('update_user', updated_user);
+        console.log('update_user', updated_user);
       },
       reload() {
-        this.$emit('reload', 'users');
+        console.log('reload', 'users');
       },
       reset_password(scope: any) {
         const updated_user = {};
-        this.$emit('update_user', updated_user);
+        console.log('update_user', updated_user);
       },
       delete_user(scope: any) {
-        this.$emit('delete_user', scope);
+        console.log('delete_user');
       },
       save() {
-        console.log(this.users);
+        console.log('[SAVE]', this.users);
       },
     },
   });

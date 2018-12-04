@@ -16,7 +16,7 @@ export interface Permission {
 
 export interface DevBasicUser {
   // This is just for dev, need to use DoumaUser
-  _id?: string;
+  _id: string | null;
   name: string;
   username: string;
 }
