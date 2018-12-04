@@ -39,19 +39,27 @@
     computed: {
       selected_instance(): Instance { return this.$store.state.config_module.selected_instance; },
     },
+    async mounted(){
+      // DESELECT INSTANCE
+
+      try { 
+        this.instance_list = await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
+      } catch(e) {
+        console.log(e)
+      }
+      
+    },
     methods: {
       async select_instance(instance: Instance) {
-        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, instance);
-        await this.$store.dispatch(USERS_ACTIONS.FETCH_USERS);
-        await this.$store.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
+        this.$store.dispatch(CONFIG_ACTIONS.SELECT_INSTANCE, instance);
+        this.$router.push({name: 'edit'});
       },
       async deselect_instance() {
         await this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
       },
-      select_config(instance_config: InstanceConfig) {
-        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, instance_config);
-        this.$router.push({name: 'edit'});
-      },
+      async create_instance(instance_data: any){
+         this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE,instance_data);
+      }
     },
   });
 </script>
