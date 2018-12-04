@@ -1,25 +1,36 @@
 <template>
   <div>
     <el-alert v-if="json_error" type="error">Invalid JSON</el-alert>
-    <el-input rows="20" type="textarea" v-model="config_string"></el-input>
+    <el-row>
+      <el-col :span="12">
 
-    <div style="margin: 0.5em 0;">
-      <el-button @click="upload_changes" type="primary">Save</el-button>
-      <el-button @click="clear" type="warning">Clear</el-button>
-    </div>
+        <el-input rows="20" type="textarea" v-model="config_string"></el-input>
 
+        <div style="margin: 0.5em 0;">
+          <el-button @click="upload_changes" type="primary">Save</el-button>
+          <el-button @click="clear" type="warning">Clear</el-button>
+        </div>
+      </el-col>
+
+
+      <el-col :span="12" style="padding-left: 10px;">
+        <ValidationMessages :priority_messages="priority_messages"></ValidationMessages>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script lang="ts">
   import Vue from 'vue';
-  import {cloneDeep} from 'lodash';
 
-  import {EditableInstanceConfig, InstanceConfig} from '@/types';
-  import {CONFIG_MUTATIONS} from '@/store/config'
+  import {EditableInstanceConfig} from '@/types';
+  import {CONFIG_MUTATIONS} from '@/store/config';
+  import ValidationMessages from '@/pages/edit/EditJSON/components/ValidationMessages.vue'
 
   export default Vue.extend({
+    components: {ValidationMessages},
     props: {
       config: [Object, Array],
+      priority_messages: Array,
     },
     data() {
       return {
@@ -50,3 +61,6 @@
     },
   });
 </script>
+
+<style scoped>
+</style>

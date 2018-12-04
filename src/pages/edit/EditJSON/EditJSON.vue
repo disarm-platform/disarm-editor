@@ -1,39 +1,29 @@
 <template>
   <div>
 
-    <el-button-group style="margin-bottom: 20px;">
-      <el-button :disabled="!unsaved_changes" @click="update_remote" type="primary" size="mini">Upload changes</el-button>
-      <el-button @click="check_if_valid" type="warning" size="mini">Check if valid</el-button>
-      <el-button @click="view_geodata_summary" type="success" size="mini">Show geodata summary</el-button>
-    </el-button-group>
+    <div>
+      <el-button-group style="margin-bottom: 20px;">
+        <el-button :disabled="!unsaved_changes" @click="update_remote" type="primary" size="mini">Upload changes
+        </el-button>
+        <el-button @click="check_if_valid" type="warning" size="mini">Check if valid</el-button>
+        <el-button @click="view_geodata_summary" type="success" size="mini">Show geodata summary</el-button>
+      </el-button-group>
+    </div>
 
-    <el-row>
-      <el-col :span="12">
-        <el-switch
-            v-model="ui_show_raw"
-            active-text="Raw"
-            inactive-text="Structured"
-            active-color="#a1d1ff"
-            inactive-color="#4ea8ff">
-        </el-switch>
 
-        <EditJSONRaw v-if="ui_show_raw" :config="live_instance_config"></EditJSONRaw>
-        <EditJSONStructured v-else :live_instance_config="live_instance_config"></EditJSONStructured>
+    <div style="margin-bottom: 20px;">
+      <el-switch
+          v-model="ui_show_raw"
+          active-text="Raw"
+          inactive-text="Structured"
+          active-color="#a1d1ff"
+          inactive-color="#4ea8ff">
+      </el-switch>
+    </div>
 
-      </el-col>
-      <el-col :span="12">
-        <ul>
-          <li
-              v-for="(val, index) in priority_messages"
-              :key="index"
-          >
-            <span :class="colour_me(val.status)">{{val.status}}</span>
-            : {{val.message}}
-            [<em>{{val.source_node ? val.source_node :'Unknown/schema'}}</em>]
-          </li>
-        </ul>
-      </el-col>
-    </el-row>
+    <EditJSONRaw v-if="ui_show_raw" :config="live_instance_config" :priority_messages="priority_messages"></EditJSONRaw>
+    <EditJSONStructured v-else :live_instance_config="live_instance_config"
+                        :priority_messages="priority_messages"></EditJSONStructured>
 
   </div>
 </template>
@@ -43,7 +33,7 @@
   import {validate} from '@disarm/config-validation';
 
   import EditJSONStructured from './EditJSONStructured.vue';
-  import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue'
+  import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
 
   import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
@@ -83,17 +73,8 @@
       prioritise_messages(validation_output: TUnifiedResponse): ValidationMessage[] {
         return do_prioritise_messages(validation_output);
       },
-      colour_me(text: string) {
-        // take a string that has a color in it, return the color
-        const matched = text.match(/(\bred\b|\bblue\b|\bgreen\b)/i);
-        if (matched) {
-          return matched[0].toLocaleLowerCase();
-        } else {
-          return 'yellow';
-        }
-      },
       view_geodata_summary() {
-        console.log('[VIEW GEODATA SUMMARY]: in here?')
+        console.log('[VIEW GEODATA SUMMARY]: in here?');
       },
     },
   });

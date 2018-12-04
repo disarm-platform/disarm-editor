@@ -6,7 +6,7 @@
         :key="component_name"
     >
 
-      <span slot="label">
+      <span slot="label" :style="style_errors_in_node(node_name)">
       {{display_name}}
       </span>
       <NodeWrapper
@@ -15,6 +15,7 @@
           :path_name="path_name"
           :component_name="component_name"
           :instance_config="live_instance_config"
+          :priority_messages="priority_messages"
           @change="update_local_from_node"
       >
       </NodeWrapper>
@@ -28,13 +29,14 @@
   import {cloneDeep, set} from 'lodash';
 
   import NodeWrapper from './nodes/NodeWrapper.vue';
-  import {EditableInstanceConfig, InstanceConfig} from '@/types';
+  import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
   import {edit_nodes} from './nodes/EditNodeDefinitions';
-  import {CONFIG_MUTATIONS} from '@/store/config'
+  import {CONFIG_MUTATIONS} from '@/store/config';
 
   export default Vue.extend({
     props: {
       live_instance_config: Object as () => InstanceConfig,
+      priority_messages: Array as () => ValidationMessage[],
     },
     components: {NodeWrapper},
     data() {
@@ -48,10 +50,22 @@
         set(copy, path_name, node_config);
         this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, copy);
       },
+      style_errors_in_node(node_name): string {
+        const count = this.priority_messages.filter((msg) => {
+          return msg.source_node === node_name
+        }).length;
+        if (count > 0) {
+          return 'color: red;';
+        } else {
+          return '';
+        }
+      },
     },
   });
 </script>
 
 <style lang='scss' scoped>
-
+  .red {
+    color: red;
+  }
 </style>
