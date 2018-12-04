@@ -20,8 +20,6 @@
   import {Instance} from '@/types';
   import {CONFIG_ACTIONS} from '@/store/config';
 
-  const sample_instances = [{_id: 'a1', name: 'Demo Config'}, {_id: 'b2', name: 'Different Demo Config'}];
-
   export default Vue.extend({
     components: {SelectInstance, CreateInstance},
     data() {
@@ -33,15 +31,13 @@
       selected_instance(): Instance { return this.$store.state.config_module.selected_instance; },
     },
     async mounted(){
-      // DESELECT INSTANCE
       await this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
 
       try {
         this.instance_list = await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
       } catch(e) {
-        console.log(e)
+        throw e;
       }
-      
     },
     methods: {
       async select_instance(instance: Instance) {
@@ -52,7 +48,7 @@
         await this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
       },
       async create_instance(instance: Instance){
-      this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE, instance);
+        await this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE, instance);
       },
     },
   });
