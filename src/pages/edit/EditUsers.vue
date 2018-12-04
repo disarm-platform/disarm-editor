@@ -26,8 +26,8 @@
       <el-table-column
           label="Actions">
         <template slot-scope="scope">
-          <el-button type="text" @click="reset_password(scope)">Reset password</el-button>
           <el-button type="danger" size="mini" @click="delete_user(scope)">Delete</el-button>
+          <el-button type="text" @click="reset_password(scope)">Reset password</el-button>
         </template>
       </el-table-column>
 

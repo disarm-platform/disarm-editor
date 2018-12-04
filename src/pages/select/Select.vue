@@ -6,7 +6,7 @@
       @create="create_instance"
     ></SelectInstance>
 
-    <CreateInstance @create_new="create_instance"></CreateInstance>
+    <CreateInstance @create_new="create_instance" style="margin-top: 20px;"></CreateInstance>
 
   </div>
 </template>
