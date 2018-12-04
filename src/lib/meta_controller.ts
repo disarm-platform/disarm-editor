@@ -1,5 +1,5 @@
-import {standard_handler} from '@/lib/handler';
-import {LoggedInUser} from '@/store';
+import { standard_handler } from '@/lib/handler';
+import { LoggedInUser } from '@/store';
 
 export async function login(username: string, password: string): Promise<LoggedInUser> {
   const options = {
@@ -10,6 +10,6 @@ export async function login(username: string, password: string): Promise<LoggedI
       password,
     },
   };
-  const res = await standard_handler(options);
+  const res = await standard_handler(options as any);
   return res.data;
 }

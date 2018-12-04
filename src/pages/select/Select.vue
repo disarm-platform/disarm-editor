@@ -3,6 +3,7 @@
     <SelectInstance
       :instance_list="instance_list"
       @select="select_instance"
+      @create="create_instance"
       @deselect="deselect_instance"
     ></SelectInstance>
 
