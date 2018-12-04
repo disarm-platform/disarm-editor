@@ -17,6 +17,7 @@ export function do_prioritise_messages(v: TUnifiedResponse): ValidationMessage[]
             message: c.message,
             status: 'Red',
             source_node: m.source_node_name,
+            target_node: m.target_node_name,
           });
         });
       } else {
@@ -24,6 +25,7 @@ export function do_prioritise_messages(v: TUnifiedResponse): ValidationMessage[]
           message: m.message,
           status: 'Red',
           source_node: m.source_node_name,
+          target_node: m.target_node_name,
         });
       }
     });
@@ -36,7 +38,6 @@ export function do_prioritise_messages(v: TUnifiedResponse): ValidationMessage[]
           ({
             message: m,
             status: 'Red',
-            node_name: null,
           } as ValidationMessage),
       );
       return result.concat(failed);

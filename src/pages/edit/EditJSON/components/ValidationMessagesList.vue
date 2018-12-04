@@ -6,8 +6,9 @@
           v-for="(val, index) in filtered_messages"
           :key="index"
       >
+        [{{val.target_node}}]
         {{val.message}}
-        [<em>{{val.source_node ? val.source_node :'Unknown/schema'}}</em>]
+        <span v-if="!filtered_for_node">Source: <em>{{val.source_node ? val.source_node :'Unknown/schema'}}</em></span>
       </li>
     </ul>
   </div>
@@ -20,7 +21,7 @@ import {ValidationMessage} from '@/types';
 export default Vue.extend({
   props: {
     priority_messages: Array as () => ValidationMessage[],
-    filtered_for_node: Object as () => string | null,
+    filtered_for_node: String as () => string | null,
   },
   computed: {
     filtered_messages(): ValidationMessage[] {
