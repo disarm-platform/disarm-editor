@@ -11,12 +11,6 @@ declare var process: {
   };
 };
 
-function get_api_url(): string {
-  const version = get(store, 'state.api_version', COMMON.api.version);
-  const url = get(store, 'state.api_url', COMMON.api.url);
-  return url + version;
-}
-
 export const standard_handler = async (incoming_options: {url: string, method: string, data: any, params: string}) => {
   const default_options = {
     headers: {

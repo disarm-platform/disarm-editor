@@ -5,6 +5,7 @@ import { ROOT_ACTIONS, ROOT_MUTATIONS, RootState } from '@/store';
 import { DevBasicUser, Instance, InstanceConfig, Permission } from '@/types';
 import { standard_handler } from '@/lib/handler';
 import { AxiosRequestConfig, AxiosResponse } from '../../../node_modules/axios';
+import { USERS_ACTIONS } from '../users';
 
 export interface ConfigState {
   selected_instance: Instance | null;
@@ -35,18 +36,15 @@ const mutations: MutationTree<ConfigState> = {
 };
 
 export const CONFIG_ACTIONS = {
-  RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
-  FETCH_INSTANCES: 'FETCH_INSTANCES',
-  FETCH_INSTANCE_CONFIGS: 'FETCH_INSTANCE_CONFIGS',
-  FETCH_INSTANCE_CONFIG: 'FETCH_INSTANCE_CONFIG',
   CREATE_INSTANCE: 'CREATE_INSTANCE',
+  FETCH_INSTANCES: 'FETCH_INSTANCES',
+  SELECT_INSTANCE: 'SELECT_INSTANCE',
+  FETCH_LATEST_INSTANCE_CONFIG: 'FETCH_LATEST_INSTANCE_CONFIG',
+  UPDATE_INSTANCE_CONFIG: 'UPDATE_INSTANCE_CONFIG',
+  RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
 const actions: ActionTree<ConfigState, RootState> = {
-  [CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
-    context.commit(CONFIG_MUTATIONS.RESET_SELECTED_INSTANCE);
-    context.commit(CONFIG_MUTATIONS.RESET_SELECTED_CONFIG);
-  },
   async [CONFIG_ACTIONS.CREATE_INSTANCE](context, instance: Instance) {
     const options = {
       url: '/instance',
@@ -56,23 +54,10 @@ const actions: ActionTree<ConfigState, RootState> = {
 
     try {
       const result: AxiosResponse = await standard_handler(options as any);
-      // context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, result.data)
+      await context.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
     } catch (e) {
       throw e;
     }
-  },
-  async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIGS](context, instance_id: string) {
-    try {
-      const result: AxiosResponse = await standard_handler({
-        url: `/instance/${instance_id}/published_instanceconfigs`,
-        method: 'get',
-      } as any);
-      return result.data;
-    } catch (e) {
-      throw e;
-    }
-
-
   },
   async [CONFIG_ACTIONS.FETCH_INSTANCES](context) {
     const options = {
@@ -87,35 +72,49 @@ const actions: ActionTree<ConfigState, RootState> = {
       throw e;
     }
   },
-  async [CONFIG_ACTIONS.CREATE_INSTANCE](context, payload) {
+  async [CONFIG_ACTIONS.SELECT_INSTANCE](context, instance) {
+    context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, instance);
+    await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG, {instance_id: instance._id});
+    await context.dispatch(USERS_ACTIONS.FETCH_USERS, {instance_id: instance._id});
+    await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS, {instance_id: instance._id});
+  },
+  async [CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG](context, {instance_id}) {
     const options = {
-      url: '/instance',
-      method: 'post',
-      data: payload,
-    };
-
+      method: 'get',
+      url: '/config/latest',
+      params: {
+        instance_id,
+      },
+    } as any;
     try {
-      const result: AxiosResponse = await standard_handler(options as any);
-      return result.data;
+      const result: AxiosResponse = await standard_handler(options);
+      context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, result.data);
     } catch (e) {
       throw e;
     }
   },
-  async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIG](context, payload) {
+  async [CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG](context, {instance_id, instance_config}) {
+    const options = {
+      method: 'put',
+      url: '/config/update',
+      data: instance_config,
+      params: {
+        instance_id,
+      },
+    } as any;
     try {
-      const result = await standard_handler({
-        url: `config/${payload}`,
-        method: 'get',
-      } as any);
-      return result.data;
+      const result: AxiosResponse = await standard_handler(options);
     } catch (e) {
       throw e;
     }
+  },
+  async [CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG](context) {
+    context.commit(CONFIG_MUTATIONS.RESET_SELECTED_INSTANCE);
+    context.commit(CONFIG_MUTATIONS.RESET_SELECTED_CONFIG);
   },
 };
 
 export const CONFIG_GETTERS = {
-
 };
 
 

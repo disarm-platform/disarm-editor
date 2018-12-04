@@ -2,9 +2,8 @@
 import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
 
 
-import {ROOT_MUTATIONS, RootState} from '@/store';
+import {RootState} from '@/store';
 import {DevBasicUser, DoumaUser, Permission} from '@/types';
-import {sample_permissions, sample_users} from '@/pages/seedData';
 import {standard_handler } from '@/lib/handler';
 
 export interface UsersState {
@@ -35,17 +34,19 @@ const mutations: MutationTree<UsersState> = {
 
 export const USERS_ACTIONS = {
   FETCH_USERS: 'FETCH_USERS',
+  UPDATE_USER: 'UPDATE_USER',
   FETCH_PERMISSIONS: 'FETCH_PERMISSIONS',
-  REFETCH_USERS: 'REFETCH_USERS',
-  REFETCH_PERMISSIONS: 'REFETCH_PERMISSIONS',
+  UPDATE_PERMISSIONS: 'UPDATE_PERMISSIONS',
 };
 
 const actions: ActionTree<UsersState, RootState> = {
-  async [USERS_ACTIONS.FETCH_USERS](context) {
-    const fetched = sample_users;
+  async [USERS_ACTIONS.FETCH_USERS](context, {instance_id}) {
     const options = {
       method: 'get',
       url: '/all_users',
+      params: {
+        instance_id,
+      },
     };
     try {
       const result = await standard_handler(options as any);
@@ -54,25 +55,21 @@ const actions: ActionTree<UsersState, RootState> = {
     } catch (e) {
       console.log(e);
     }
-
   },
-  async [USERS_ACTIONS.REFETCH_USERS](context) {
-    context.commit(USERS_MUTATIONS.RESET_USERS);
+  async [USERS_ACTIONS.UPDATE_USER](context, user) {
     const options = {
-      method: 'get',
-      url: '/all_users',
+      method: 'put',
+      url: '/user',
+      data: user,
     };
     try {
       const result = await standard_handler(options as any);
-      return result;
+      await context.dispatch(USERS_ACTIONS.FETCH_USERS);
     } catch (e) {
       console.log(e);
     }
-    console.log('[TODO] refetch users from remote...');
-    await context.dispatch(USERS_ACTIONS.FETCH_USERS);
   },
   async [USERS_ACTIONS.FETCH_PERMISSIONS](context, {instance_id}) {
-    const fetched = sample_permissions;
     const options = {
       method: 'get',
       url: '/permission',
@@ -82,29 +79,26 @@ const actions: ActionTree<UsersState, RootState> = {
     };
     try {
       const result = await standard_handler(options as any);
-      context.commit(USERS_MUTATIONS.SET_PERMISSIONS, result.data);
+      return  context.commit(USERS_MUTATIONS.SET_PERMISSIONS, result.data);
     } catch (e) {
       console.log(e);
     }
-
   },
-  async [USERS_ACTIONS.REFETCH_PERMISSIONS](context, {instance_id}) {
+  async [USERS_ACTIONS.UPDATE_PERMISSIONS](context, {permissions, instance_id}) {
     const options = {
-      method: 'get',
-      url: '/permission',
+      method: 'put',
+      url: '/permissions',
+      data: permissions,
       params: {
         instance_id,
       },
     };
     try {
       const result = await standard_handler(options as any);
-      return  context.commit(USERS_MUTATIONS.RESET_PERMISSIONS, result.data);
+      await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
     } catch (e) {
       console.log(e);
     }
-
-    await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
-    console.log('[TODO] refetch permissions from remote...');
   },
 };
 
