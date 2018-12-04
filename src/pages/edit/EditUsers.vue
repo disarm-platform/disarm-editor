@@ -39,8 +39,7 @@
 
 <script lang='ts'>
 import Vue from 'vue';
-import {DevBasicUser} from '@/types';
-import {USERS_MUTATIONS} from '@/store/users';
+import {generate_password} from "@/lib/generate_password"
 
 export default Vue.extend({
   computed: {
@@ -48,14 +47,16 @@ export default Vue.extend({
   },
   methods: {
     add_user() {
-      // TODO: @refac to separate file, don't create models in here
-      const new_user = {
-        name: 'No-one',
-        username: 'No name',
-        _id: null,
-      } as DevBasicUser;
+      const new_password = generate_password();
+      console.log('password', new_password);
+      // // TODO: @refac to separate file, don't create models in here
+      // const new_user = {
+      //   name: 'No-one',
+      //   username: 'No name',
+      //   _id: null,
+      // } as DevBasicUser;
 
-      this.$store.commit(USERS_MUTATIONS.ADD_USER, new_user);
+      // this.$store.commit(USERS_MUTATIONS.ADD_USER, new_user);
     },
     edit_name(scope: any) {
       const updated_user = {};
