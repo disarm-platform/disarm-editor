@@ -7,6 +7,8 @@ import {login} from '@/lib/meta_controller';
 import {DevBasicUser, Instance, InstanceConfig} from '@/types';
 import {users_module} from '@/store/users';
 import {CONFIG_ACTIONS, config_module} from '@/store/config';
+import {geodata_module} from '@/store/geodata';
+
 
 Vue.use(Vuex);
 
@@ -77,6 +79,7 @@ const store_options: StoreOptions<RootState> = {
   modules: {
     users_module,
     config_module,
+    geodata_module,
   },
 };
 
