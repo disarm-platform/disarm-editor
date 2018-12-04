@@ -1,15 +1,15 @@
 <template>
-  <!--INSTRUCTIONS -->
   <div>
-    <h2>Select a geodata file to upload</h2>
+    <h2>Upload geodata file</h2>
     <p>Geodata should be a JSON file containing a GeoJSON FeatureCollection.</p>
     <p>
-      It's a good idea to make sure the file is already named with the type of geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
+      It's a good idea to make sure the file is already named with the type of
+      geodata and a date or version: e.g. <code>villages.2018-11-23.json</code>
       This will help you selecting the right file in the
       <router-link to="/edit/json">config editor</router-link>.
     </p>
 
-    <el-button :disabled="files.length > 0">
+    <el-button :disabled="files.length > 0" size="mini">
       <file-upload
         v-if="files.length === 0 || !all_uploaded"
         ref="upload"
@@ -24,8 +24,14 @@
     </el-button>
 
 
-    <el-button :disabled="!(files.length > 0 && !all_uploaded && (!$refs.upload || !$refs.upload.active))" @click.prevent="$refs.upload.active = true" type="button">Start upload</el-button>
-    <el-button :disabled="!(files.length > 0 && ($refs.upload && $refs.upload.active))" @click.prevent="reset_upload" type="button">Stop upload</el-button>
+    <el-button
+        :disabled="!(files.length > 0 && !all_uploaded && (!$refs.upload || !$refs.upload.active))"
+        @click.prevent="$refs.upload.active = true" type="button" size="mini">
+      Start upload</el-button>
+    <el-button
+        :disabled="!(files.length > 0 && ($refs.upload && $refs.upload.active))"
+        @click.prevent="reset_upload" type="button" size="mini">
+      Stop upload</el-button>
 
     <div style="margin-top: 20px;">
       <el-progress

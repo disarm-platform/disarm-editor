@@ -2,8 +2,9 @@
   <div>
 
     <div style="margin-bottom: 20px;">
-      <el-button @click="check_if_valid">Check if valid</el-button>
-      <el-button @click="update_remote">Publish</el-button>
+      <el-button @click="check_if_valid" size="mini">Check if valid</el-button>
+      <el-button @click="view_geodata_summary" size="mini">Show geodata summary</el-button>
+      <el-button @click="update_remote" size="mini">Publish</el-button>
     </div>
 
     <el-row>

@@ -15,7 +15,7 @@
 
     <div v-else>
       No data
-      <el-button @click="insert_blank">Insert new blank</el-button>
+      <el-button @click="insert_blank" size="mini">Insert new blank</el-button>
     </div>
 
 

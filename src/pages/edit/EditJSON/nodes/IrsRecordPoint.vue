@@ -20,7 +20,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="add">Add field</el-button>
+        <el-button type="primary" @click="add" size="mini">Add field</el-button>
       </el-form-item>
     </el-form>
 

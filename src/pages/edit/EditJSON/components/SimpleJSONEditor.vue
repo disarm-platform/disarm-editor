@@ -4,8 +4,8 @@
     <el-input rows="20" type="textarea" v-model="config_string"></el-input>
 
     <div style="margin: 0.5em 0;">
-      <el-button @click="save" type="primary">Save</el-button>
-      <el-button @click="clear" type="warning">Clear</el-button>
+      <el-button @click="save" type="primary" size="mini">Save</el-button>
+      <el-button @click="clear" type="warning" size="mini">Clear</el-button>
     </div>
 
   </div>

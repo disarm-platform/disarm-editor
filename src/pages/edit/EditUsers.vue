@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-button @click="reload">Reload</el-button>
-    <el-button @click='save'>Save</el-button>
+    <el-button @click="reload" size="mini">Reload</el-button>
+    <el-button @click='save' size="mini">Save</el-button>
 
     <el-table
         ref="users_table"
         :data="users"
-        style="width: 100%"
+        style="width: 100%; margin-bottom: 20px;"
         size="mini"
     >
       <el-table-column
@@ -33,7 +33,7 @@
 
     </el-table>
 
-    <el-button @click='add_user'>add user</el-button>
+    <el-button @click='add_user' size="mini">add user</el-button>
 
   </div>
 </template>
