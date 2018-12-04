@@ -3,7 +3,7 @@ import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 
 import { ROOT_ACTIONS, ROOT_MUTATIONS, RootState } from '@/store';
 import { DevBasicUser, Instance, InstanceConfig, Permission } from '@/types';
-import { standard_handler } from '@/lib/handler'
+import { standard_handler } from '@/lib/handler';
 import { AxiosRequestConfig, AxiosResponse } from '../../../node_modules/axios';
 
 export interface ConfigState {
@@ -38,7 +38,7 @@ export const CONFIG_ACTIONS = {
   RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
   FETCH_INSTANCES: 'FETCH_INSTANCES',
   FETCH_INSTANCE_CONFIGS: 'FETCH_INSTANCE_CONFIGS',
-  FETCH_INSTANCE_CONFIG:'FETCH_INSTANCE_CONFIG',
+  FETCH_INSTANCE_CONFIG: 'FETCH_INSTANCE_CONFIG',
   CREATE_INSTANCE: 'CREATE_INSTANCE',
 };
 
@@ -51,67 +51,67 @@ const actions: ActionTree<ConfigState, RootState> = {
     const options = {
       url: '/instance',
       method: 'post',
-      data: instance
-    }
+      data: instance,
+    };
 
     try {
-      const result: AxiosResponse = await standard_handler(options as any)
-      //context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, result.data)
+      const result: AxiosResponse = await standard_handler(options as any);
+      // context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, result.data)
     } catch (e) {
-      throw e
+      throw e;
     }
   },
   async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIGS](context, instance_id: string) {
-    try{
+    try {
       const result: AxiosResponse = await standard_handler({
-        url:`/instance/${instance_id}/published_instanceconfigs`,
-        method:'get'
-      } as any)
+        url: `/instance/${instance_id}/published_instanceconfigs`,
+        method: 'get',
+      } as any);
       return result.data;
-    }catch(e){
+    } catch (e) {
       throw e;
     }
- 
+
 
   },
   async [CONFIG_ACTIONS.FETCH_INSTANCES](context) {
     const options = {
       url: '/instance',
-      method: 'get'
-    }
+      method: 'get',
+    };
 
     try {
-      const result: AxiosResponse = await standard_handler(options as any)
+      const result: AxiosResponse = await standard_handler(options as any);
       return result.data;
     } catch (e) {
-      throw e
+      throw e;
     }
   },
-  async [CONFIG_ACTIONS.CREATE_INSTANCE](context,payload){
+  async [CONFIG_ACTIONS.CREATE_INSTANCE](context, payload) {
     const options = {
       url: '/instance',
       method: 'post',
-      data:payload
-    }
+      data: payload,
+    };
 
-    try{
+    try {
       const result: AxiosResponse = await standard_handler(options as any);
-      return result.data
-    }catch(e){
-      throw e
+      return result.data;
+    } catch (e) {
+      throw e;
     }
   },
-  async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIG](context,payload){
-    try{
+  async [CONFIG_ACTIONS.FETCH_INSTANCE_CONFIG](context, payload) {
+    try {
       const result = await standard_handler({
-        url:`config/${payload}`,
-        method:'get'
-      } as any)
+        url: `config/${payload}`,
+        method: 'get',
+      } as any);
       return result.data;
-    }catch(e){
-      throw e
+    } catch (e) {
+      throw e;
     }
-  }
+  },
 };
 
 export const CONFIG_GETTERS = {

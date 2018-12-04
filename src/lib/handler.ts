@@ -11,23 +11,23 @@ declare var process: {
   };
 };
 
-function get_api_url():string {
-  const version = get(store, 'state.api_version',COMMON.api.version);
-  const url = get(store, 'state.api_url', COMMON.api.url)
-  return url+version
+function get_api_url(): string {
+  const version = get(store, 'state.api_version', COMMON.api.version);
+  const url = get(store, 'state.api_url', COMMON.api.url);
+  return url + version;
 }
 
-export const standard_handler = async (incoming_options:{url:string,method:string,data:any, params:string}) => {
+export const standard_handler = async (incoming_options: {url: string, method: string, data: any, params: string}) => {
   const default_options = {
     headers: {
-      "API-Key": get(store, 'state.logged_in_user.api_key', ''),
+      'API-Key': get(store, 'state.logged_in_user.api_key', ''),
     },
-    baseURL: get(store, 'state.api_url', COMMON.api.url)
-  }
+    baseURL: get(store, 'state.api_url', COMMON.api.url),
+  };
   const merged = {
     ...default_options,
     ...incoming_options,
-  }
+  };
 
-  return axios(merged)
-}
+  return axios(merged);
+};
