@@ -19,13 +19,13 @@
       size="small"
       style="width: 100%"
     >
+      <el-table-column label="Name" prop="name"></el-table-column>
       <el-table-column label="Actions">
         <template slot-scope="scope">
           <el-button type="text" size="small">Select</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="_id"></el-table-column>
-      <el-table-column prop="name"></el-table-column>
+      <el-table-column label="ID" prop="_id"></el-table-column>
     </el-table>
 
     <el-button type="text" @click="deselect">Select none</el-button>

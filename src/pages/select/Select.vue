@@ -7,13 +7,6 @@
       @deselect="deselect_instance"
     ></SelectInstance>
 
-    <SelectInstanceConfig
-      v-if="selected_instance"
-      :selected_instance="selected_instance"
-      :config_list="config_list"
-      @select="select_config"
-    ></SelectInstanceConfig>
-
   </div>
 </template>
 
@@ -21,20 +14,16 @@
   import Vue from 'vue';
 
   import SelectInstance from '@/pages/select/SelectInstance.vue';
-  import SelectInstanceConfig from '@/pages/select/SelectInstanceConfig.vue';
-  import {Instance, InstanceConfig} from '@/types';
-  import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
-  import {sample_config} from '@/pages/seedData';
-  import {CONFIG_ACTIONS, CONFIG_MUTATIONS} from '@/store/config';
+  import {Instance} from '@/types';
+  import {CONFIG_ACTIONS} from '@/store/config';
 
   const sample_instances = [{_id: 'a1', name: 'Demo Config'}, {_id: 'b2', name: 'Different Demo Config'}];
 
   export default Vue.extend({
-    components: {SelectInstance, SelectInstanceConfig},
+    components: {SelectInstance},
     data() {
       return {
-        instance_list: sample_instances as Instance[],
-        config_list: [sample_config, {...sample_config, config_version: '2'}],
+        instance_list: null as Instance[] | null,
       };
     },
     computed: {
@@ -42,8 +31,9 @@
     },
     async mounted(){
       // DESELECT INSTANCE
+      await this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
 
-      try { 
+      try {
         this.instance_list = await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
       } catch(e) {
         console.log(e)
@@ -58,8 +48,8 @@
       async deselect_instance() {
         await this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
       },
-      async create_instance(instance_data: any){
-         this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE,instance_data);
+      async create_instance(instance: Instance){
+         this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE, instance);
       }
     },
   });
