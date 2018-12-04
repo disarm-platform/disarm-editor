@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import {without} from 'lodash';
 
 import {DevBasicUser, DevUserWithPermissions, FlatPermissionsRow, InstanceConfig, Permission} from '@/types';
