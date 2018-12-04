@@ -12,8 +12,10 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
+  import {cloneDeep} from 'lodash';
 
-  import {InstanceConfig} from '@/types';
+  import {EditableInstanceConfig, InstanceConfig} from '@/types';
+  import {CONFIG_MUTATIONS} from '@/store/config'
 
   export default Vue.extend({
     props: {
@@ -26,7 +28,7 @@
       };
     },
     computed: {
-      local_config(): any | null {
+      local_config(): EditableInstanceConfig {
         try {
           return JSON.parse(this.config_string);
         } catch (e) {
@@ -39,7 +41,7 @@
     },
     methods: {
       save() {
-        this.$emit('change', this.local_config);
+        this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, this.local_config);
       },
       clear() {
         this.config_string = '';

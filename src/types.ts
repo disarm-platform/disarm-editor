@@ -31,6 +31,11 @@ export interface FlatPermissionsRow {
 
 
 export type InstanceConfig = TConfig;
+
+export interface EditableInstanceConfig extends InstanceConfig {
+  unsaved_changes: boolean;
+}
+
 export type DoumaUser = DoumaUser;
 
 

@@ -1,7 +1,10 @@
 <template>
   <div>
-    <el-button @click="update">Update</el-button>
-    <el-button @click="validate">Validate</el-button>
+
+    <div style="margin-bottom: 20px;">
+      <el-button @click="check_if_valid">Check if valid</el-button>
+      <el-button @click="update_remote">Publish</el-button>
+    </div>
 
     <el-row>
       <el-col :span="12">
@@ -13,8 +16,8 @@
             inactive-color="#4ea8ff">
         </el-switch>
 
-        <SimpleJSONEditor v-if="ui_show_raw" :config="live_instance_config" @change="update"></SimpleJSONEditor>
-        <EditJSONStructured v-else :live_instance_config="live_instance_config" @update="update"></EditJSONStructured>
+        <EditJSONRaw v-if="ui_show_raw" :config="live_instance_config"></EditJSONRaw>
+        <EditJSONStructured v-else :live_instance_config="live_instance_config"></EditJSONStructured>
 
       </el-col>
       <el-col :span="12">
@@ -39,15 +42,14 @@
   import {validate} from '@disarm/config-validation';
 
   import EditJSONStructured from './EditJSONStructured.vue';
-  import SimpleJSONEditor from '@/pages/edit/EditJSON/components/SimpleJSONEditor.vue';
+  import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue'
 
-  import {InstanceConfig, ValidationMessage} from '@/types';
+  import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
-  import {CONFIG_MUTATIONS} from '@/store/config';
 
   export default Vue.extend({
-    components: {SimpleJSONEditor, EditJSONStructured},
+    components: {EditJSONStructured, EditJSONRaw},
     data() {
       return {
         priority_messages: [] as ValidationMessage[],
@@ -61,10 +63,10 @@
       },
     },
     methods: {
-      update(instance_config: InstanceConfig) {
-        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, instance_config);
+      update_remote(instance_config: EditableInstanceConfig) {
+        console.log('[UPDATE REMOTE]');
       },
-      validate() {
+      check_if_valid() {
         if (!this.live_instance_config) {
           return (this.priority_messages = [
             {message: 'Not JSON, cannot validate', status: 'Red'},

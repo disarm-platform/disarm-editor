@@ -4,11 +4,10 @@ import createPersistedState from 'vuex-persistedstate';
 
 import COMMON from '@/lib/common';
 import {login} from '@/lib/meta_controller';
-import {DevBasicUser, Instance, InstanceConfig} from '@/types';
+import {Instance} from '@/types';
 import {users_module} from '@/store/users';
 import {CONFIG_ACTIONS, config_module} from '@/store/config';
 import {geodata_module} from '@/store/geodata';
-
 
 Vue.use(Vuex);
 
@@ -48,8 +47,6 @@ const store_options: StoreOptions<RootState> = {
   state: {
     logged_in_user: null,
     api_url: COMMON.api.url,
-    selected_instance: null,
-    live_instance_config: null,
   } as RootState,
   getters: {},
   mutations: {
@@ -62,7 +59,7 @@ const store_options: StoreOptions<RootState> = {
     async [ROOT_ACTIONS.LOGIN](context, {username, password}) {
       try {
         const result = await login(username, password);
-        return context.commit(ROOT_MUTATIONS.SET_USER, {username: result.username, api_key: result.key});
+        return context.commit(ROOT_MUTATIONS.SET_USER, {username: result.username, api_key: result.api_key});
       } catch (e) {
         throw e;
       }

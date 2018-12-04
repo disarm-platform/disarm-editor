@@ -1,9 +1,8 @@
-// profile/index.ts
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 
-import { ROOT_ACTIONS, ROOT_MUTATIONS, RootState } from '@/store';
+import { RootState } from '@/store';
 import { standard_handler } from '@/lib/handler';
-import { AxiosRequestConfig, AxiosResponse } from '../../../node_modules/axios';
+import { AxiosResponse } from 'axios';
 
 export interface GeodataState {
   geodata_summaries: any[];

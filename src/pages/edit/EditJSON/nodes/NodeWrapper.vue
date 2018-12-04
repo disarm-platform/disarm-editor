@@ -26,10 +26,10 @@
   import Vue from 'vue';
   import {get, debounce, cloneDeep, set} from 'lodash';
 
-  import {component_list} from './nodes/EditNodeDefinitions';
-  import {InstanceConfig} from '@/types';
-  import {blank_for_path} from '@/lib/sample_node';
-  import {CONFIG_MUTATIONS} from '@/store/config';
+  import {component_list} from './EditNodeDefinitions';
+  import {EditableInstanceConfig, InstanceConfig} from '../../../../types';
+  import {blank_for_path} from '../../../../lib/sample_node';
+  import {CONFIG_MUTATIONS} from '../../../../store/config';
 
   export default Vue.extend({
     components: {...component_list},
@@ -54,10 +54,8 @@
       this.node_config_backup = cloneDeep(this.node_config);
     },
     methods: {
-      change_wrapper: debounce(function(this: any, node_config) {
-        const copy = cloneDeep(this.instance_config);
-        set(copy, this.path_name, node_config);
-        this.$store.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, copy);
+      change_wrapper: debounce(function(this: any, updated_node_config) {
+        this.$emit('change', updated_node_config, this.path_name);
       }, 450),
       async insert_blank() {
         const content = await blank_for_path(this.path_name);

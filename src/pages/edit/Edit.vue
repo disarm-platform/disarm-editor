@@ -1,10 +1,10 @@
 <template>
   <div>
     <p>Editing: {{selected_instance.name}} @ version {{config_version}}
-      <el-button type='text' @click="reset_selected_config">Change</el-button>
+      <el-button type='text' @click="reset_selected_config">Change instance</el-button>
     </p>
 
-    <el-button-group>
+    <el-button-group style="margin-bottom: 20px;">
       <el-button :type='current_view === "users" ? "info" : ""' @click="$router.push({name: 'users'})">users</el-button>
       <el-button :type='current_view === "permissions" ? "info" : ""' @click="$router.push({name: 'permissions'})">permissions</el-button>
       <el-button :type='current_view === "json" ? "info" : ""' @click="$router.push({name: 'json'})">json</el-button>
@@ -12,7 +12,6 @@
     </el-button-group>
 
     <router-view
-      @reload="reload"
     ></router-view>
 
   </div>
@@ -42,23 +41,8 @@
       },
     },
     methods: {
-      reset_selected_instance() {
-        this.$store.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
-        this.$router.push('/');
-      },
       reset_selected_config() {
-        this.$store.commit(CONFIG_MUTATIONS.RESET_SELECTED_CONFIG);
-        this.$router.push('/');
-      },
-      reload(view: string) {
-        switch (view) {
-          case 'permissions':
-            this.$store.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
-            break;
-          case 'users':
-            this.$store.dispatch(USERS_ACTIONS.FETCH_USERS);
-            break;
-        }
+        this.$router.push({name: 'select'});
       },
     },
   });

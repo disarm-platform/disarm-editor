@@ -1,15 +1,15 @@
-// profile/index.ts
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 
 import { ROOT_ACTIONS, ROOT_MUTATIONS, RootState } from '@/store';
-import { DevBasicUser, Instance, InstanceConfig, Permission } from '@/types';
+import {DevBasicUser, EditableInstanceConfig, Instance, InstanceConfig, Permission} from '@/types';
 import { standard_handler } from '@/lib/handler';
 import { AxiosRequestConfig, AxiosResponse } from '../../../node_modules/axios';
-import { USERS_ACTIONS } from '../users';
+import {USERS_ACTIONS, USERS_MUTATIONS} from '../users';
+import {sample_config, sample_permissions, sample_users} from '@/pages/seedData';
 
 export interface ConfigState {
   selected_instance: Instance | null;
-  live_instance_config: InstanceConfig | null;
+  live_instance_config: EditableInstanceConfig | null;
 }
 
 export const empty_state: ConfigState = {
@@ -21,6 +21,7 @@ export const CONFIG_MUTATIONS = {
   SET_SELECTED_INSTANCE: 'SET_SELECTED_INSTANCE',
   RESET_SELECTED_INSTANCE: 'RESET_SELECTED_INSTANCE',
   SET_SELECTED_CONFIG: 'SET_SELECTED_CONFIG',
+  UPDATE_CONFIG_WITH_UNSAVED: 'UPDATE_CONFIG_WITH_UNSAVED',
   RESET_SELECTED_CONFIG: 'RESET_SELECTED_CONFIG',
 };
 
@@ -30,6 +31,11 @@ const mutations: MutationTree<ConfigState> = {
   },
   [CONFIG_MUTATIONS.RESET_SELECTED_INSTANCE](state) { state.selected_instance = null; },
   [CONFIG_MUTATIONS.SET_SELECTED_CONFIG](state, instance_config: InstanceConfig) {
+    if (instance_config) { (instance_config as EditableInstanceConfig).unsaved_changes = false; }
+    state.live_instance_config = instance_config as EditableInstanceConfig;
+  },
+  [CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED](state, instance_config: EditableInstanceConfig) {
+    if (instance_config) { instance_config.unsaved_changes = true; }
     state.live_instance_config = instance_config;
   },
   [CONFIG_MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
@@ -74,6 +80,11 @@ const actions: ActionTree<ConfigState, RootState> = {
   },
   async [CONFIG_ACTIONS.SELECT_INSTANCE](context, instance) {
     context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, instance);
+    context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, sample_config);
+    context.commit(USERS_MUTATIONS.SET_USERS, sample_users);
+    context.commit(USERS_MUTATIONS.SET_PERMISSIONS, sample_permissions);
+    return
+
     await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG, {instance_id: instance._id});
     await context.dispatch(USERS_ACTIONS.FETCH_USERS, {instance_id: instance._id});
     await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS, {instance_id: instance._id});
