@@ -51,7 +51,7 @@ export const GEODATA_GETTERS = {
 
 const getters: GetterTree<GeodataState, RootState> = {};
 
-export const config_module: Module<GeodataState, RootState> = {
+export const geodata_module: Module<GeodataState, RootState> = {
   namespaced: false,
   state: empty_state,
   getters,
