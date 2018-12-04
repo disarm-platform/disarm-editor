@@ -1,5 +1,5 @@
 <template>
-  <span v-if="user" style="float:right">
+  <span v-if="user" style="float:right; margin-top: 10px;">
     {{user.username}} |
     <router-link :to="{name: 'logout'}">Logout</router-link>
   </span>

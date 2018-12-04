@@ -1,6 +1,6 @@
 <template>
   <div v-if="live_instance_config">
-    <el-button @click='upload_changes' size="mini">Upload changes</el-button>
+    <el-button @click='upload_changes' type="primary" size="mini">Upload changes</el-button>
 
     <el-table
         ref="multipleTable"

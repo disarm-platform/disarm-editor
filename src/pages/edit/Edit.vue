@@ -1,17 +1,26 @@
 <template>
   <div>
 
-    <el-button-group>
-      <el-button :type='current_view === "users" ? "primary" : ""' plain size="mini" @click="$router.push({name: 'users'})">Users</el-button>
-      <el-button :type='current_view === "permissions" ? "primary" : ""' plain size="mini" @click="$router.push({name: 'permissions'})">Permissions</el-button>
-      <el-button :type='current_view === "json" ? "primary" : ""' plain size="mini" @click="$router.push({name: 'json'})">Config</el-button>
-      <el-button :type='current_view === "geodata" ? "primary" : ""' plain size="mini" @click="$router.push({name: 'geodata'})">Geodata</el-button>
-    </el-button-group>
+    <div>
+      <el-button-group>
+        <el-button :type='current_view === "users" ? "info" : ""' plain size="mini"
+                   @click="$router.push({name: 'users'})">Users
+        </el-button>
+        <el-button :type='current_view === "permissions" ? "info" : ""' plain size="mini"
+                   @click="$router.push({name: 'permissions'})">Permissions
+        </el-button>
+        <el-button :type='current_view === "json" ? "info" : ""' plain size="mini"
+                   @click="$router.push({name: 'json'})">Config
+        </el-button>
+        <el-button :type='current_view === "geodata" ? "info" : ""' plain size="mini"
+                   @click="$router.push({name: 'geodata'})">Geodata
+        </el-button>
+      </el-button-group>
 
-    <span style="margin-left: 10px;">Editing: {{selected_instance.name}} @ version {{config_version}}
+      <span style="margin-left: 10px;">Editing: {{selected_instance.name}} @ version {{config_version}}
       <el-button type='text' @click="reset_selected_config">Change instance</el-button>
     </span>
-
+    </div>
     <router-view
     ></router-view>
 

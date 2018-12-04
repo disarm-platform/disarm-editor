@@ -4,7 +4,7 @@
     <el-input rows="20" type="textarea" v-model="config_string"></el-input>
 
     <div style="margin: 0.5em 0;">
-      <el-button @click="save" type="primary">Save</el-button>
+      <el-button @click="upload_changes" type="primary">Save</el-button>
       <el-button @click="clear" type="warning">Clear</el-button>
     </div>
 
@@ -40,12 +40,12 @@
       this.config_string = JSON.stringify(this.config, undefined, 2);
     },
     methods: {
-      save() {
+      upload_changes() {
         this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, this.local_config);
       },
       clear() {
         this.config_string = '';
-        this.save();
+        this.upload_changes();
       },
     },
   });

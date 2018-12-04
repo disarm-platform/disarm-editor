@@ -1,7 +1,6 @@
 <template>
   <div>
-    <el-button @click="reload" size="mini">Reload</el-button>
-    <el-button @click='save' size="mini">Save</el-button>
+    <el-button @click='upload_changes' type="primary" size="mini">Upload changes</el-button>
 
     <el-table
         ref="users_table"
@@ -62,9 +61,6 @@
         const updated_user = {};
         console.log('update_user', updated_user);
       },
-      reload() {
-        console.log('reload', 'users');
-      },
       reset_password(scope: any) {
         const updated_user = {};
         console.log('update_user', updated_user);
@@ -72,8 +68,8 @@
       delete_user(scope: any) {
         console.log('delete_user');
       },
-      save() {
-        console.log('[SAVE]', this.users);
+      upload_changes() {
+        console.log('[UPLOAD]', this.users);
       },
     },
   });

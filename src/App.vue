@@ -1,10 +1,8 @@
 <template>
   <el-container>
     <el-header>
-      <h2 style="float:left">DiSARM registry-client</h2>
-
+      <h2 style="float:left">DiSARM Configuration Editor</h2>
       <logged-in-status></logged-in-status>
-
     </el-header>
 
     <el-main>
@@ -27,5 +25,6 @@
 <style>
   html, body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0px;
   }
 </style>

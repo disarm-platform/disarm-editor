@@ -1,11 +1,11 @@
 <template>
   <div>
 
-    <div style="margin-bottom: 20px;">
-      <el-button @click="check_if_valid" size="mini">Check if valid</el-button>
-      <el-button @click="view_geodata_summary" size="mini">Show geodata summary</el-button>
-      <el-button @click="update_remote" size="mini">Publish</el-button>
-    </div>
+    <el-button-group style="margin-bottom: 20px;">
+      <el-button :disabled="!unsaved_changes" @click="update_remote" type="primary" size="mini">Upload changes</el-button>
+      <el-button @click="check_if_valid" type="warning" size="mini">Check if valid</el-button>
+      <el-button @click="view_geodata_summary" type="success" size="mini">Show geodata summary</el-button>
+    </el-button-group>
 
     <el-row>
       <el-col :span="12">
@@ -62,6 +62,9 @@
       live_instance_config(): InstanceConfig {
         return this.$store.state.config_module.live_instance_config;
       },
+      unsaved_changes() {
+        return this.live_instance_config.unsaved_changes;
+      },
     },
     methods: {
       update_remote(instance_config: EditableInstanceConfig) {
@@ -88,6 +91,9 @@
         } else {
           return 'yellow';
         }
+      },
+      view_geodata_summary() {
+        console.log('[VIEW GEODATA SUMMARY]: in here?')
       },
     },
   });
