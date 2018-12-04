@@ -20,12 +20,12 @@
   export default Vue.extend({
     props: {
       priority_messages: Array as () => ValidationMessage[],
-      filtered_for_node: [String, undefined],
+      filtered_for_node: Object as () => string | null,
     },
     computed: {
       filtered_messages(): ValidationMessage[] {
         if (this.filtered_for_node) {
-          return this.priority_messages.filter((msg) => {
+          return this.priority_messages.filter((msg: ValidationMessage) => {
             return msg.source_node === this.filtered_for_node;
           });
         } else {

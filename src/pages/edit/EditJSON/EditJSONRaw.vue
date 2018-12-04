@@ -14,7 +14,7 @@
 
 
       <el-col :span="12" style="padding-left: 10px;">
-        <ValidationMessages :priority_messages="priority_messages"></ValidationMessages>
+        <ValidationMessagesList :priority_messages="priority_messages"></ValidationMessagesList>
       </el-col>
     </el-row>
   </div>
@@ -22,26 +22,26 @@
 <script lang="ts">
   import Vue from 'vue';
 
-  import {EditableInstanceConfig} from '@/types';
+  import {EditableInstanceConfig, ValidationMessage} from '@/types';
   import {CONFIG_MUTATIONS} from '@/store/config';
-  import ValidationMessages from '@/pages/edit/EditJSON/components/ValidationMessages.vue'
+  import ValidationMessagesList from '@/pages/edit/EditJSON/components/ValidationMessagesList.vue'
 
   export default Vue.extend({
-    components: {ValidationMessages},
+    components: {ValidationMessagesList},
     props: {
-      config: [Object, Array],
-      priority_messages: Array,
+      config: Object as () => any,
+      priority_messages: Array as () => ValidationMessage[],
     },
     data() {
       return {
-        config_string: '' as string,
+        config_string: '',
         json_error: false,
       };
     },
     computed: {
-      local_config(): EditableInstanceConfig {
+      local_config(): any {
         try {
-          return JSON.parse(this.config_string);
+          return JSON.parse(this.config_string as string);
         } catch (e) {
           return null;
         }

@@ -21,10 +21,10 @@
     </el-col>
 
     <el-col :span="12" style="padding-left: 10px;">
-      <ValidationMessages
+      <ValidationMessagesList
           :priority_messages="priority_messages"
           :filtered_for_node="node_name"
-      ></ValidationMessages>
+      ></ValidationMessagesList>
     </el-col>
   </el-row>
 
@@ -37,10 +37,10 @@
   import {component_list} from './EditNodeDefinitions';
   import {InstanceConfig, ValidationMessage} from '@/types';
   import {blank_for_path} from '@/lib/sample_node';
-  import ValidationMessages from '@/pages/edit/EditJSON/components/ValidationMessages.vue'
+  import ValidationMessagesList from '@/pages/edit/EditJSON/components/ValidationMessagesList.vue'
 
   export default Vue.extend({
-    components: {...component_list, ValidationMessages},
+    components: {...component_list, ValidationMessagesList},
     props: {
       instance_config: Object as () => InstanceConfig,
       component_name: String,

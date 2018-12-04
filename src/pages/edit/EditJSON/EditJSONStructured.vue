@@ -2,7 +2,7 @@
   <el-tabs tab-position="left" style="height: 800px; overflow: scroll;">
     <el-tab-pane
         v-if="live_instance_config"
-        v-for="{display_name, component_name, node_name, path_name, show_include} in edit_nodes"
+        v-for="{display_name, component_name, node_name, path_name} in edit_nodes"
         :key="component_name"
     >
 
@@ -35,7 +35,7 @@
 
   export default Vue.extend({
     props: {
-      live_instance_config: Object as () => InstanceConfig,
+      live_instance_config: Object as () => EditableInstanceConfig,
       priority_messages: Array as () => ValidationMessage[],
     },
     components: {NodeWrapper},
@@ -50,7 +50,7 @@
         set(copy, path_name, node_config);
         this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, copy);
       },
-      style_errors_in_node(node_name): string {
+      style_errors_in_node(node_name: string): string {
         const count = this.priority_messages.filter((msg) => {
           return msg.source_node === node_name
         }).length;

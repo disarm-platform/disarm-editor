@@ -49,10 +49,10 @@
       };
     },
     computed: {
-      live_instance_config(): InstanceConfig {
+      live_instance_config(): EditableInstanceConfig {
         return this.$store.state.config_module.live_instance_config;
       },
-      unsaved_changes() {
+      unsaved_changes(): boolean {
         return this.live_instance_config.unsaved_changes;
       },
     },

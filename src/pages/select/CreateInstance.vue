@@ -27,7 +27,7 @@
       };
     },
     computed: {
-      valid() {
+      valid(): boolean {
         return this.instance_form.name !== '';
       },
     },
