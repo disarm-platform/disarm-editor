@@ -14,37 +14,37 @@
 </template>
 
 <script lang='ts'>
-  import Vue from 'vue';
-  import {ValidationMessage} from '@/types'
+import Vue from 'vue';
+import {ValidationMessage} from '@/types';
 
-  export default Vue.extend({
-    props: {
-      priority_messages: Array as () => ValidationMessage[],
-      filtered_for_node: Object as () => string | null,
+export default Vue.extend({
+  props: {
+    priority_messages: Array as () => ValidationMessage[],
+    filtered_for_node: Object as () => string | null,
+  },
+  computed: {
+    filtered_messages(): ValidationMessage[] {
+      if (this.filtered_for_node) {
+        return this.priority_messages.filter((msg: ValidationMessage) => {
+          return msg.source_node === this.filtered_for_node;
+        });
+      } else {
+        return this.priority_messages;
+      }
     },
-    computed: {
-      filtered_messages(): ValidationMessage[] {
-        if (this.filtered_for_node) {
-          return this.priority_messages.filter((msg: ValidationMessage) => {
-            return msg.source_node === this.filtered_for_node;
-          });
-        } else {
-          return this.priority_messages;
-        }
-      },
+  },
+  methods: {
+    colour_me(text: string): string {
+      // take a string that has a color in it, return the color
+      const matched = text.match(/(\bred\b|\bblue\b|\bgreen\b)/i);
+      if (matched) {
+        return matched[0].toLocaleLowerCase();
+      } else {
+        return 'yellow';
+      }
     },
-    methods: {
-      colour_me(text: string): string {
-        // take a string that has a color in it, return the color
-        const matched = text.match(/(\bred\b|\bblue\b|\bgreen\b)/i);
-        if (matched) {
-          return matched[0].toLocaleLowerCase();
-        } else {
-          return 'yellow';
-        }
-      },
-    }
-  });
+  },
+});
 </script>
 
 <style lang='scss' scoped>

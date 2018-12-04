@@ -53,31 +53,31 @@
 </template>
 
 <script lang='ts'>
-import Vue from "vue";
-import {get} from 'lodash'
-import VueUploadComponent from "vue-upload-component";
-import { LoggedInUser } from "@/store";
+import Vue from 'vue';
+import {get} from 'lodash';
+import VueUploadComponent from 'vue-upload-component';
+import { LoggedInUser } from '@/store';
 
 
 export default Vue.extend({
   components: { FileUpload: VueUploadComponent },
   props: {
-    logged_in_user: Object as () => null | LoggedInUser
+    logged_in_user: Object as () => null | LoggedInUser,
   },
   data() {
     return {
-      files: [] as VUFile[]
+      files: [] as VUFile[],
     };
   },
   computed: {
-    headers():any {
-      return {'API-Key':get(this.$store,'state.logged_in_user.api_key')}
+    headers(): any {
+      return {'API-Key': get(this.$store, 'state.logged_in_user.api_key')};
     },
     instance_id(): string {
-        return get(this.$store,'state.config_module.selected_instance._id')
+        return get(this.$store, 'state.config_module.selected_instance._id');
     },
     server_url(): string {
-      return this.$store.state.api_url + "/uploadgeodata/"+this.instance_id;
+      return this.$store.state.api_url + '/uploadgeodata/' + this.instance_id;
     },
     progress(): number {
       if (this.files.length === 0) {
@@ -87,30 +87,30 @@ export default Vue.extend({
     },
     status(): string {
       if (this.files.length === 0) {
-        return "exception";
+        return 'exception';
       }
-      return this.files.every(file => file.success) ? "success" : "text";
+      return this.files.every((file) => file.success) ? 'success' : 'text';
     },
     all_uploaded(): boolean {
       if (this.files.length === 0) {
         return false;
       }
       return (
-        this.files.filter(file => file.success).length === this.files.length
+        this.files.filter((file) => file.success).length === this.files.length
       );
     },
     all_file_names(): string {
       if (this.files.length === 0) {
-        return "";
+        return '';
       }
-      return this.files.map(file => file.name).join(",");
-    }
+      return this.files.map((file) => file.name).join(',');
+    },
   },
   methods: {
     reset_upload() {
       this.$router.go(0);
-    }
-  }
+    },
+  },
 });
 </script>
 

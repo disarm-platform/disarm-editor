@@ -13,34 +13,34 @@
 </template>
 
 <script lang='ts'>
-  import Vue from 'vue';
+import Vue from 'vue';
 
-  export default Vue.extend({
-    mounted() {
-    },
-    data() {
-      return {
-        ui_visible: false,
-        instance_form: {
-          name: '',
-        },
-      };
-    },
-    computed: {
-      valid(): boolean {
-        return this.instance_form.name !== '';
+export default Vue.extend({
+  mounted() {
+  },
+  data() {
+    return {
+      ui_visible: false,
+      instance_form: {
+        name: '',
       },
+    };
+  },
+  computed: {
+    valid(): boolean {
+      return this.instance_form.name !== '';
     },
-    methods: {
-      reset_form() {
-        this.instance_form.name = '';
-      },
-      save_instance() {
-        this.$emit('create_new', this.instance_form);
-        this.reset_form()
-      },
-    }
-  });
+  },
+  methods: {
+    reset_form() {
+      this.instance_form.name = '';
+    },
+    save_instance() {
+      this.$emit('create_new', this.instance_form);
+      this.reset_form();
+    },
+  },
+});
 </script>
 
 <style lang='scss' scoped>

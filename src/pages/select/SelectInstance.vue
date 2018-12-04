@@ -42,13 +42,13 @@ export default Vue.extend({
   computed: {
     selected_instance(): Instance {
       return this.$store.state.selected_instance;
-    }
+    },
   },
   mounted() {
     // Highlight row if selected_instance
     if (this.selected_instance) {
       const selected_row = this.instance_list.find(
-        i => i._id === this.selected_instance._id
+        (i) => i._id === this.selected_instance._id,
       );
       // @ts-ignore
       this.$refs.instance_table.setCurrentRow(selected_row);

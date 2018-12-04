@@ -20,46 +20,46 @@
   </div>
 </template>
 <script lang="ts">
-  import Vue from 'vue';
+import Vue from 'vue';
 
-  import {EditableInstanceConfig, ValidationMessage} from '@/types';
-  import {CONFIG_MUTATIONS} from '@/store/config';
-  import ValidationMessagesList from '@/pages/edit/EditJSON/components/ValidationMessagesList.vue'
+import {EditableInstanceConfig, ValidationMessage} from '@/types';
+import {CONFIG_MUTATIONS} from '@/store/config';
+import ValidationMessagesList from '@/pages/edit/EditJSON/components/ValidationMessagesList.vue';
 
-  export default Vue.extend({
-    components: {ValidationMessagesList},
-    props: {
-      config: Object as () => any,
-      priority_messages: Array as () => ValidationMessage[],
+export default Vue.extend({
+  components: {ValidationMessagesList},
+  props: {
+    config: Object as () => any,
+    priority_messages: Array as () => ValidationMessage[],
+  },
+  data() {
+    return {
+      config_string: '',
+      json_error: false,
+    };
+  },
+  computed: {
+    local_config(): any {
+      try {
+        return JSON.parse(this.config_string as string);
+      } catch (e) {
+        return null;
+      }
     },
-    data() {
-      return {
-        config_string: '',
-        json_error: false,
-      };
+  },
+  created() {
+    this.config_string = JSON.stringify(this.config, undefined, 2);
+  },
+  methods: {
+    upload_changes() {
+      this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, this.local_config);
     },
-    computed: {
-      local_config(): any {
-        try {
-          return JSON.parse(this.config_string as string);
-        } catch (e) {
-          return null;
-        }
-      },
+    clear() {
+      this.config_string = '';
+      this.upload_changes();
     },
-    created() {
-      this.config_string = JSON.stringify(this.config, undefined, 2);
-    },
-    methods: {
-      upload_changes() {
-        this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, this.local_config);
-      },
-      clear() {
-        this.config_string = '';
-        this.upload_changes();
-      },
-    },
-  });
+  },
+});
 </script>
 
 <style scoped>

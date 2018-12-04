@@ -83,7 +83,7 @@ const actions: ActionTree<ConfigState, RootState> = {
     context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, sample_config);
     context.commit(USERS_MUTATIONS.SET_USERS, sample_users);
     context.commit(USERS_MUTATIONS.SET_PERMISSIONS, sample_permissions);
-    return
+    return;
 
     await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG, {instance_id: instance._id});
     await context.dispatch(USERS_ACTIONS.FETCH_USERS, {instance_id: instance._id});
