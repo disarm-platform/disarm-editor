@@ -1,7 +1,6 @@
 <template>
   <div v-if="live_instance_config">
-    <el-button @click="reload">Reload</el-button>
-    <el-button @click='save'>Upload</el-button>
+    <el-button @click='upload_changes'>Upload changes</el-button>
 
     <el-table
         ref="multipleTable"
@@ -85,14 +84,19 @@ import {
   toggle_permission,
   users_and_permissions_for_table,
 } from '@/lib/users_with_permissions';
+import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
 
 export default Vue.extend({
-  props: {
-    live_instance_config: Object as () => InstanceConfig,
-    users: Array as () => DevBasicUser[],
-    permissions: Array as () => Permission[],
-  },
   computed: {
+    live_instance_config(): InstanceConfig {
+      return this.$store.state.config_module.live_instance_config;
+    },
+    users(): DevBasicUser[] {
+      return this.$store.state.users_module.users;
+    },
+    permissions(): Permission[] {
+      return this.$store.state.users_module.permissions;
+    },
     permission_options(): string[] {
       const output: string[] = [];
 
@@ -125,7 +129,7 @@ export default Vue.extend({
         permission,
         this.live_instance_config,
       );
-      this.$emit('update_permissions', updated_permissions);
+      this.update_permissions(updated_permissions);
     },
     set_all_for_user(scope: any) {
       const user_id = scope.row._id;
@@ -136,7 +140,7 @@ export default Vue.extend({
         this.permission_options,
         this.live_instance_config,
       );
-      this.$emit('update_permissions', updated_permissions);
+      this.update_permissions(updated_permissions);
     },
     set_none_for_user(scope: any) {
       const user_id = scope.row._id;
@@ -147,7 +151,7 @@ export default Vue.extend({
         this.permission_options,
         this.live_instance_config,
       );
-      this.$emit('update_permissions', updated_permissions);
+      this.update_permissions(updated_permissions);
     },
     set_all_for_permission(scope: any) {
       const permission_string = scope.column.property;
@@ -159,7 +163,7 @@ export default Vue.extend({
         value,
         this.live_instance_config,
       );
-      this.$emit('update_permissions', updated_permissions);
+      this.update_permissions(updated_permissions);
     },
     set_none_for_permission(scope: any) {
       const permission_string = scope.column.property;
@@ -171,13 +175,16 @@ export default Vue.extend({
         value,
         this.live_instance_config,
       );
-      this.$emit('update_permissions', updated_permissions);
+      this.update_permissions(updated_permissions);
     },
     reload() {
       this.$emit('reload', 'permissions');
     },
-    save() {
-      console.log(this.permissions);
+    update_permissions(permissions: Permission[]) {
+      this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
+    },
+    async upload_changes() {
+      await this.$store.dispatch(USERS_ACTIONS.UPDATE_PERMISSIONS, this.permissions);
     },
   },
 });

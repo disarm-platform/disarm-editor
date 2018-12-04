@@ -12,11 +12,7 @@
     </el-button-group>
 
     <router-view
-        :users="users"
-        :permissions="permissions"
-
-        @update_permissions="update_permissions"
-        @reload="reload"
+      @reload="reload"
     ></router-view>
 
   </div>
@@ -41,12 +37,6 @@
       selected_instance(): Instance {
         return this.$store.state.config_module.selected_instance;
       },
-      users(): DevBasicUser[] {
-        return this.$store.state.users_module.users;
-      },
-      permissions(): Permission[] {
-        return this.$store.state.users_module.permissions;
-      },
       current_view(): string | undefined {
         return this.$route.name;
       },
@@ -60,16 +50,13 @@
         this.$store.commit(CONFIG_MUTATIONS.RESET_SELECTED_CONFIG);
         this.$router.push('/');
       },
-      update_permissions(permissions: Permission[]) {
-        this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
-      },
       reload(view: string) {
         switch (view) {
           case 'permissions':
-            this.$store.dispatch(USERS_ACTIONS.REFETCH_PERMISSIONS);
+            this.$store.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
             break;
           case 'users':
-            this.$store.dispatch(USERS_ACTIONS.REFETCH_USERS);
+            this.$store.dispatch(USERS_ACTIONS.FETCH_USERS);
             break;
         }
       },
