@@ -59,7 +59,7 @@ const store_options: StoreOptions<RootState> = {
     async [ROOT_ACTIONS.LOGIN](context, {username, password}) {
       try {
         const result = await login(username, password);
-        return context.commit(ROOT_MUTATIONS.SET_USER, {username: result.username, api_key: result.api_key});
+        return context.commit(ROOT_MUTATIONS.SET_USER, {username: result.username, api_key: result.key});
       } catch (e) {
         throw e;
       }

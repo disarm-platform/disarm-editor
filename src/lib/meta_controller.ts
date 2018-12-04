@@ -1,7 +1,14 @@
 import { standard_handler } from '@/lib/handler';
 import { LoggedInUser } from '@/store';
 
-export async function login(username: string, password: string): Promise<LoggedInUser> {
+interface UserFromServer {
+  deployment_admin: boolean;
+  key: string;
+  username: string;
+  _id: string;
+}
+
+export async function login(username: string, password: string): Promise<UserFromServer> {
   const options = {
     url: `/login`,
     method: 'post',
