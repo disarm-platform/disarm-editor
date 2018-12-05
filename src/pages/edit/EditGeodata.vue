@@ -22,7 +22,7 @@
 
       <el-button
           :disabled="!(files.length > 0 && level_name && !all_uploaded && (!$refs.upload || !$refs.upload.active))"
-          @click.prevent="$refs.upload.active = true" type="primary" size="mini">
+          @click.prevent="start_upload" type="primary" size="mini">
         Start upload</el-button>
 
       <el-button
@@ -31,7 +31,10 @@
         Stop upload</el-button>
     </el-button-group>
 
-    <el-input v-if="ui_level_name_visible" type="text" v-model="level_name" placeholder="Enter level name"></el-input>
+    <el-input
+        v-if="ui_level_name_visible"
+        ref="level_name"
+        type="text" v-model="level_name" placeholder="Enter level name"></el-input>
 
     <div v-if="files.length > 0 && level_name" v-html="intended_upload_summary"></div>
 
@@ -78,6 +81,7 @@ export default Vue.extend({
       files: [] as VUFile[],
       level_name: '',
       ui_level_name_visible: false,
+      server_url: '',
     };
   },
   computed: {
@@ -86,10 +90,6 @@ export default Vue.extend({
     },
     instance_id(): string {
         return get(this.$store, 'state.config_module.selected_instance._id');
-    },
-    server_url(): string {
-      return this.$store.state.api_url + `/geodata_level/upload` +
-        `?instance_id=${this.instance_id}&level_name=${this.level_name}`;
     },
     progress(): number {
       if (this.files.length === 0) {
@@ -127,6 +127,14 @@ export default Vue.extend({
   methods: {
     reset_upload() {
       this.$router.go(0);
+    },
+    start_upload() {
+      // this.$refs.level_name.blur();
+
+      this.server_url = this.$store.state.api_url + `/geodata_level/upload` +
+          `?instance_id=${this.instance_id}&level_name=${this.level_name}`;
+
+      this.$refs.upload.active = true;
     },
   },
 });
