@@ -11,12 +11,22 @@ declare var process: {
   };
 };
 
-export const standard_handler = async (incoming_options: {url: string, method: string, data: any, params: string}) => {
+interface IncomingOptions {
+  url: string;
+  method: string;
+  data: any;
+  params: string;
+}
+
+export const standard_handler = async (incoming_options: IncomingOptions) => {
   const default_options = {
     headers: {
       'API-Key': get(store, 'state.logged_in_user.api_key', ''),
     },
     baseURL: get(store, 'state.api_url', COMMON.api.url),
+    params: {
+      instance_id: get(store, 'state.config_module.selected_instance._id', null),
+    },
   };
   const merged = {
     ...default_options,

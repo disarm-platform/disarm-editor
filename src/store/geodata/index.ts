@@ -27,13 +27,10 @@ export const GEODATA_ACTIONS = {
 };
 
 const actions: ActionTree<GeodataState, RootState> = {
-  async [GEODATA_ACTIONS.FETCH_GEODATA_SUMMARIES](context, {instance_id}) {
+  async [GEODATA_ACTIONS.FETCH_GEODATA_SUMMARIES](context) {
     const options = {
       method: 'get',
       url: '/geodata_summary',
-      params: {
-        instance_id,
-      },
     } as any;
     try {
       const result: AxiosResponse = await standard_handler(options);
