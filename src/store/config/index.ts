@@ -85,17 +85,14 @@ const actions: ActionTree<ConfigState, RootState> = {
     context.commit(USERS_MUTATIONS.SET_PERMISSIONS, sample_permissions);
     return;
 
-    await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG, {instance_id: instance._id});
-    await context.dispatch(USERS_ACTIONS.FETCH_USERS, {instance_id: instance._id});
-    await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS, {instance_id: instance._id});
+    await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG);
+    await context.dispatch(USERS_ACTIONS.FETCH_USERS);
+    await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
   },
-  async [CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG](context, {instance_id}) {
+  async [CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG](context) {
     const options = {
       method: 'get',
       url: '/config/latest',
-      params: {
-        instance_id,
-      },
     } as any;
     try {
       const result: AxiosResponse = await standard_handler(options);
@@ -104,14 +101,11 @@ const actions: ActionTree<ConfigState, RootState> = {
       throw e;
     }
   },
-  async [CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG](context, {instance_id, instance_config}) {
+  async [CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG](context, {instance_config}) {
     const options = {
       method: 'put',
       url: '/config/update',
       data: instance_config,
-      params: {
-        instance_id,
-      },
     } as any;
     try {
       const result: AxiosResponse = await standard_handler(options);
