@@ -33,6 +33,7 @@ const mutations: MutationTree<UsersState> = {
 };
 
 export const USERS_ACTIONS = {
+  CREATE_USER: 'CREATE_USER',
   FETCH_USERS: 'FETCH_USERS',
   UPDATE_USER: 'UPDATE_USER',
   FETCH_PERMISSIONS: 'FETCH_PERMISSIONS',
@@ -40,6 +41,19 @@ export const USERS_ACTIONS = {
 };
 
 const actions: ActionTree<UsersState, RootState> = {
+  async [USERS_ACTIONS.CREATE_USER](context, user: DevBasicUser) {
+    const options = {
+      method: 'post',
+      url: '/user,',
+      data: user,
+    } as any;
+    try {
+      const result = await standard_handler(options);
+      await context.dispatch(USERS_ACTIONS.FETCH_USERS);
+    } catch (e) {
+      throw e;
+    }
+  },
   async [USERS_ACTIONS.FETCH_USERS](context, {instance_id}) {
     const options = {
       method: 'get',

@@ -40,6 +40,8 @@
 <script lang='ts'>
 import Vue from 'vue';
 import {generate_password} from "@/lib/generate_password"
+import {DevBasicUser} from "@/types"
+import {USERS_ACTIONS} from "@/store/users"
 
 export default Vue.extend({
   computed: {
@@ -48,15 +50,15 @@ export default Vue.extend({
   methods: {
     add_user() {
       const new_password = generate_password();
-      console.log('password', new_password);
-      // // TODO: @refac to separate file, don't create models in here
-      // const new_user = {
-      //   name: 'No-one',
-      //   username: 'No name',
-      //   _id: null,
-      // } as DevBasicUser;
 
-      // this.$store.commit(USERS_MUTATIONS.ADD_USER, new_user);
+      const new_user = {
+        name: 'No-one',
+        username: 'No name',
+        password: new_password,
+        _id: null,
+      } as DevBasicUser;
+
+      this.$store.commit(USERS_ACTIONS.CREATE_USER, new_user);
     },
     edit_name(scope: any) {
       const updated_user = {};
