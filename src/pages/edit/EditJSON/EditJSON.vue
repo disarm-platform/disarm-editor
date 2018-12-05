@@ -38,6 +38,7 @@
   import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
+  import {GEODATA_ACTIONS} from '@/store/geodata'
 
   export default Vue.extend({
     components: {EditJSONStructured, EditJSONRaw},
@@ -54,6 +55,9 @@
       },
       unsaved_changes(): boolean {
         return this.live_instance_config.unsaved_changes;
+      },
+      geodata_summaries(): any {
+        return this.$store.state.geodata_module.geodata_summaries;
       },
     },
     methods: {
@@ -73,8 +77,9 @@
       prioritise_messages(validation_output: TUnifiedResponse): ValidationMessage[] {
         return do_prioritise_messages(validation_output);
       },
-      view_geodata_summary() {
-        console.log('[VIEW GEODATA SUMMARY]: in here?');
+      async view_geodata_summary() {
+        const response = await this.$store.dispatch(GEODATA_ACTIONS.FETCH_GEODATA_SUMMARIES);
+        console.log('this.geodata_summaries', this.geodata_summaries);
       },
     },
   });

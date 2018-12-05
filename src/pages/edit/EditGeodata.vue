@@ -9,6 +9,7 @@
             :post-action="server_url"
             :multiple="false"
             :headers="headers"
+            :data="{instance_id: instance_id}"
         >
           Select file
         </file-upload>
@@ -77,7 +78,7 @@ export default Vue.extend({
         return get(this.$store, 'state.config_module.selected_instance._id');
     },
     server_url(): string {
-      return this.$store.state.api_url + '/uploadgeodata/' + this.instance_id;
+      return this.$store.state.api_url + `/geodata_level/upload`;
     },
     progress(): number {
       if (this.files.length === 0) {

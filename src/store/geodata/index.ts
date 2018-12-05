@@ -30,11 +30,11 @@ const actions: ActionTree<GeodataState, RootState> = {
   async [GEODATA_ACTIONS.FETCH_GEODATA_SUMMARIES](context) {
     const options = {
       method: 'get',
-      url: '/geodata_summary',
+      url: '/geodata/summary',
     } as any;
     try {
       const result: AxiosResponse = await standard_handler(options);
-      context.commit('');
+      context.commit(GEODATA_MUTATIONS.SET_GEODATA_SUMMARIES, result.data);
     } catch (e) {
       throw e;
     }
