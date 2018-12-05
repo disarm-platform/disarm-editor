@@ -17,32 +17,25 @@
       </el-table-column>
 
       <el-table-column
-          property="name"
-          fixed
-          label="Name"
-          width="100">
-      </el-table-column>
-
-      <el-table-column
-          label="All | None">
+          label="Bulk">
         <template slot-scope="scope">
-          <el-button type="text" @click="set_all_for_user(scope)">All</el-button>
+          <el-button type="text" @click="set_all_for_user(scope)" style="margin: 0px;">All</el-button>
           |
-          <el-button type="text" @click="set_none_for_user(scope)">None</el-button>
+          <el-button type="text" @click="set_none_for_user(scope)" style="margin: 0px;">None</el-button>
         </template>
       </el-table-column>
 
       <el-table-column
-          v-for="(permission) in permission_options"
-          v-bind:key="permission"
-          :property="permission"
-          :label="permission"
+          v-for="permission in permission_options"
+          :key="permission.text"
+          :property="permission.text"
+          :label="permission.text"
           with="500"
       >
         <!--PERMISSION COL HEADER -->
         <template slot="header" slot-scope="scope">
-          <div>{{scope.column.property}}</div>
-          <div>
+          <div><em>{{permission.type}}</em>:{{permission.subtype}}</div>
+          <div class="actions">
             <el-button type="text" @click="set_all_for_permission(scope)">All</el-button>
             |
             <el-button type="text" @click="set_none_for_permission(scope)">None</el-button>
@@ -69,125 +62,144 @@
 </template>
 
 <script lang='ts'>
-import Vue from 'vue';
-import {
-  DevBasicUser,
-  InstanceConfig,
-  Permission,
-  DevUserWithPermissions,
-} from '@/types';
+  import Vue from 'vue';
+  import {without} from 'lodash';
+
+  import {
+    DevBasicUser,
+    InstanceConfig,
+    Permission,
+    DevUserWithPermissions,
+  } from '@/types';
 
 
-import {
-  bulk_set_permission_for_all_users,
-  bulk_set_all_permissions_for_user,
-  toggle_permission,
-  users_and_permissions_for_table,
-} from '@/lib/users_with_permissions';
-import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
+  import {
+    bulk_set_permission_for_all_users,
+    bulk_set_all_permissions_for_user,
+    toggle_permission,
+    users_and_permissions_for_table,
+  } from '@/lib/users_with_permissions';
+  import {USERS_ACTIONS, USERS_MUTATIONS} from '@/store/users';
 
-export default Vue.extend({
-  computed: {
-    live_instance_config(): InstanceConfig {
-      return this.$store.state.config_module.live_instance_config;
-    },
-    users(): DevBasicUser[] {
-      return this.$store.state.users_module.users;
-    },
-    permissions(): Permission[] {
-      return this.$store.state.users_module.permissions;
-    },
-    permission_options(): string[] {
-      const output: string[] = [];
+  interface PermissionOption {
+    text: string;
+    type: string;
+    subtype: string;
+  }
 
-      const types = ['write', 'read'];
-      const applet_names: string[] = Object.keys(this.live_instance_config.applets);
+  export default Vue.extend({
+    computed: {
+      live_instance_config(): InstanceConfig {
+        return this.$store.state.config_module.live_instance_config;
+      },
+      users(): DevBasicUser[] {
+        return this.$store.state.users_module.users;
+      },
+      permissions(): Permission[] {
+        return this.$store.state.users_module.permissions;
+      },
+      permission_options(): PermissionOption[] {
+        const output: PermissionOption[] = [];
 
-      applet_names.forEach((applet) => {
-        types.forEach((type) => {
-          output.push(`${type}:${applet}`);
+        const types = ['write', 'read'];
+        const applet_names: string[] = Object.keys(this.live_instance_config.applets);
+        const applet_names_without_meta = without(applet_names, 'meta');
+
+        applet_names_without_meta.forEach((applet) => {
+          types.forEach((type) => {
+            const new_option: PermissionOption = {
+              text: `${type}:${applet}`,
+              type,
+              subtype: applet,
+            };
+            output.push(new_option);
+          });
         });
-      });
-      return output;
+        return output;
+      },
+      permission_options_strings(): string[] {
+        return this.permission_options.map((permission_option: PermissionOption) => {
+          return permission_option.text;
+        });
+      },
+      users_with_permissions(): DevUserWithPermissions[] {
+        return users_and_permissions_for_table(
+          this.users,
+          this.permissions,
+          this.permission_options_strings,
+        );
+      },
     },
-    users_with_permissions(): DevUserWithPermissions[] {
-      return users_and_permissions_for_table(
-        this.users,
-        this.permissions,
-        this.permission_options,
-      );
+    methods: {
+      toggle(scope: any) {
+        const user_id = scope.row._id;
+        const permission = scope.column.property;
+        const updated_permissions = toggle_permission(
+          scope,
+          this.permissions,
+          user_id,
+          permission,
+          this.live_instance_config,
+        );
+        this.update_permissions(updated_permissions);
+      },
+      set_all_for_user(scope: any) {
+        const user_id = scope.row._id;
+        const updated_permissions = bulk_set_all_permissions_for_user(
+          this.permissions,
+          user_id,
+          true,
+          this.permission_options_strings,
+          this.live_instance_config,
+        );
+        this.update_permissions(updated_permissions);
+      },
+      set_none_for_user(scope: any) {
+        const user_id = scope.row._id;
+        const updated_permissions = bulk_set_all_permissions_for_user(
+          this.permissions,
+          user_id,
+          false,
+          this.permission_options_strings,
+          this.live_instance_config,
+        );
+        this.update_permissions(updated_permissions);
+      },
+      set_all_for_permission(scope: any) {
+        const permission_string = scope.column.property;
+        const value = true;
+        const updated_permissions = bulk_set_permission_for_all_users(
+          this.permissions,
+          this.users,
+          permission_string,
+          value,
+          this.live_instance_config,
+        );
+        this.update_permissions(updated_permissions);
+      },
+      set_none_for_permission(scope: any) {
+        const permission_string = scope.column.property;
+        const value = false;
+        const updated_permissions = bulk_set_permission_for_all_users(
+          this.permissions,
+          this.users,
+          permission_string,
+          value,
+          this.live_instance_config,
+        );
+        this.update_permissions(updated_permissions);
+      },
+      reload() {
+        this.$emit('reload', 'permissions');
+      },
+      update_permissions(permissions: Permission[]) {
+        this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
+      },
+      async upload_changes() {
+        await this.$store.dispatch(USERS_ACTIONS.UPDATE_PERMISSIONS, this.permissions);
+      },
     },
-  },
-  methods: {
-    toggle(scope: any) {
-      const user_id = scope.row._id;
-      const permission = scope.column.property;
-      const updated_permissions = toggle_permission(
-        scope,
-        this.permissions,
-        user_id,
-        permission,
-        this.live_instance_config,
-      );
-      this.update_permissions(updated_permissions);
-    },
-    set_all_for_user(scope: any) {
-      const user_id = scope.row._id;
-      const updated_permissions = bulk_set_all_permissions_for_user(
-        this.permissions,
-        user_id,
-        true,
-        this.permission_options,
-        this.live_instance_config,
-      );
-      this.update_permissions(updated_permissions);
-    },
-    set_none_for_user(scope: any) {
-      const user_id = scope.row._id;
-      const updated_permissions = bulk_set_all_permissions_for_user(
-        this.permissions,
-        user_id,
-        false,
-        this.permission_options,
-        this.live_instance_config,
-      );
-      this.update_permissions(updated_permissions);
-    },
-    set_all_for_permission(scope: any) {
-      const permission_string = scope.column.property;
-      const value = true;
-      const updated_permissions = bulk_set_permission_for_all_users(
-        this.permissions,
-        this.users,
-        permission_string,
-        value,
-        this.live_instance_config,
-      );
-      this.update_permissions(updated_permissions);
-    },
-    set_none_for_permission(scope: any) {
-      const permission_string = scope.column.property;
-      const value = false;
-      const updated_permissions = bulk_set_permission_for_all_users(
-        this.permissions,
-        this.users,
-        permission_string,
-        value,
-        this.live_instance_config,
-      );
-      this.update_permissions(updated_permissions);
-    },
-    reload() {
-      this.$emit('reload', 'permissions');
-    },
-    update_permissions(permissions: Permission[]) {
-      this.$store.commit(USERS_MUTATIONS.SET_PERMISSIONS, permissions);
-    },
-    async upload_changes() {
-      await this.$store.dispatch(USERS_ACTIONS.UPDATE_PERMISSIONS, this.permissions);
-    },
-  },
-});
+  });
 </script>
 
 <style lang='scss' scoped>
@@ -198,8 +210,15 @@ export default Vue.extend({
     .active {
       color: #2cd02c;
     }
+
     .inactive {
       color: darkgrey;
+    }
+  }
+
+  .actions {
+    button {
+      margin: 0px;
     }
   }
 </style>
