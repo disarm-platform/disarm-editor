@@ -1,9 +1,9 @@
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
+import { AxiosResponse } from 'axios';
 
-import { ROOT_ACTIONS, ROOT_MUTATIONS, RootState } from '@/store';
-import {DevBasicUser, EditableInstanceConfig, Instance, InstanceConfig, Permission} from '@/types';
+import { RootState } from '@/store';
+import {EditableInstanceConfig, Instance, InstanceConfig} from '@/types';
 import { standard_handler } from '@/lib/handler';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import {USERS_ACTIONS, USERS_MUTATIONS} from '../users';
 import {sample_config, sample_permissions, sample_users} from '@/pages/seedData';
 
@@ -127,8 +127,6 @@ const actions: ActionTree<ConfigState, RootState> = {
 
 export const CONFIG_GETTERS = {
 };
-
-
 
 const getters: GetterTree<ConfigState, RootState> = {};
 

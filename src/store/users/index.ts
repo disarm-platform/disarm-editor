@@ -1,9 +1,7 @@
-// profile/index.ts
 import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
 
-
 import {RootState} from '@/store';
-import {DevBasicUser, DoumaUser, Permission} from '@/types';
+import {DevBasicUser, Permission} from '@/types';
 import {standard_handler } from '@/lib/handler';
 
 export interface UsersState {
