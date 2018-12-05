@@ -43,7 +43,7 @@ const actions: ActionTree<UsersState, RootState> = {
   async [USERS_ACTIONS.CREATE_USER](context, user: DevBasicUser) {
     const options = {
       method: 'post',
-      url: '/user,',
+      url: '/user',
       data: user,
     } as any;
     try {
@@ -53,13 +53,13 @@ const actions: ActionTree<UsersState, RootState> = {
       throw e;
     }
   },
-  async [USERS_ACTIONS.FETCH_USERS](context, {instance_id}) {
+  async [USERS_ACTIONS.FETCH_USERS](context) {
     const options = {
       method: 'get',
       url: '/all_users',
-    };
+    } as any;
     try {
-      const result = await standard_handler(options as any);
+      const result = await standard_handler(options);
       context.commit(USERS_MUTATIONS.SET_USERS, result.data);
       return result;
     } catch (e) {

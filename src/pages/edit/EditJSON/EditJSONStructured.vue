@@ -1,13 +1,14 @@
 <template>
-  <el-tabs tab-position="left" style="height: 800px; overflow: scroll;">
+  <el-tabs tab-position="left" style="height: 800px; overflow: scroll;" @tab-click="tab_click">
     <el-tab-pane
         v-if="live_instance_config"
         v-for="{display_name, component_name, node_name, path_name} in edit_nodes"
         :key="component_name"
+        @tab-click="tab_click"
     >
 
       <span slot="label" :style="style_errors_in_node(node_name)">
-      {{display_name}}
+        {{display_name}}
       </span>
       <NodeWrapper
           :display_name="display_name"
@@ -59,6 +60,9 @@ export default Vue.extend({
       } else {
         return '';
       }
+    },
+    tab_click(a,b,c) {
+      console.log(a,b,c)
     },
   },
 });

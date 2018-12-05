@@ -40,7 +40,7 @@
       <el-button @click="reset_upload">Upload another</el-button>
     </div>
 
-    <h2>Upload geodata file</h2>
+    <h3>Upload geodata file</h3>
     <p>Geodata should be a JSON file containing a GeoJSON FeatureCollection.</p>
     <p>
       It's a good idea to make sure the file is already named with the type of

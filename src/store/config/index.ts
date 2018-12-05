@@ -1,23 +1,30 @@
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 import { AxiosResponse } from 'axios';
+import {get} from 'lodash';
 
 import { RootState } from '@/store';
-import {EditableInstanceConfig, Instance, InstanceConfig} from '@/types';
+import {Instance, InstanceConfig} from '@/types';
 import { standard_handler } from '@/lib/handler';
-import {USERS_ACTIONS, USERS_MUTATIONS} from '../users';
-import {sample_config, sample_permissions, sample_users} from '@/pages/seedData';
+import {USERS_ACTIONS} from '@/store/users';
 
 export interface ConfigState {
   selected_instance: Instance | null;
-  live_instance_config: EditableInstanceConfig | null;
+  live_instance_config: InstanceConfig | null;
+  instance_list: Instance[];
+  unsaved_config_changes: boolean;
+  unsaved_permission_changes: boolean;
 }
 
 export const empty_state: ConfigState = {
   selected_instance: null,
   live_instance_config: null,
+  instance_list: [],
+  unsaved_config_changes: false,
+  unsaved_permission_changes: false,
 };
 
 export const CONFIG_MUTATIONS = {
+  SET_INSTANCE_LIST: 'SET_INSTANCE_LIST',
   SET_SELECTED_INSTANCE: 'SET_SELECTED_INSTANCE',
   RESET_SELECTED_INSTANCE: 'RESET_SELECTED_INSTANCE',
   SET_SELECTED_CONFIG: 'SET_SELECTED_CONFIG',
@@ -26,19 +33,27 @@ export const CONFIG_MUTATIONS = {
 };
 
 const mutations: MutationTree<ConfigState> = {
+  [CONFIG_MUTATIONS.SET_INSTANCE_LIST](state, instance_list: Instance[]) {
+    state.instance_list = instance_list;
+  },
   [CONFIG_MUTATIONS.SET_SELECTED_INSTANCE](state, selected_instance: Instance) {
-    return state.selected_instance = selected_instance;
+    state.selected_instance = selected_instance;
   },
-  [CONFIG_MUTATIONS.RESET_SELECTED_INSTANCE](state) { state.selected_instance = null; },
+  [CONFIG_MUTATIONS.RESET_SELECTED_INSTANCE](state) {
+    state.selected_instance = null;
+  },
   [CONFIG_MUTATIONS.SET_SELECTED_CONFIG](state, instance_config: InstanceConfig) {
-    if (instance_config) { (instance_config as EditableInstanceConfig).unsaved_changes = false; }
-    state.live_instance_config = instance_config as EditableInstanceConfig;
-  },
-  [CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED](state, instance_config: EditableInstanceConfig) {
-    if (instance_config) { instance_config.unsaved_changes = true; }
     state.live_instance_config = instance_config;
+    state.unsaved_config_changes = false;
   },
-  [CONFIG_MUTATIONS.RESET_SELECTED_CONFIG](state) { state.live_instance_config = null; },
+  [CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED](state, instance_config: InstanceConfig) {
+    state.live_instance_config = instance_config;
+    state.unsaved_config_changes = true;
+  },
+  [CONFIG_MUTATIONS.RESET_SELECTED_CONFIG](state) {
+    state.live_instance_config = null;
+    state.unsaved_config_changes = false;
+  },
 };
 
 export const CONFIG_ACTIONS = {
@@ -73,18 +88,13 @@ const actions: ActionTree<ConfigState, RootState> = {
 
     try {
       const result: AxiosResponse = await standard_handler(options as any);
-      return result.data;
+      context.commit(CONFIG_MUTATIONS.SET_INSTANCE_LIST, result.data);
     } catch (e) {
       throw e;
     }
   },
   async [CONFIG_ACTIONS.SELECT_INSTANCE](context, instance) {
     context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, instance);
-    context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, sample_config);
-    context.commit(USERS_MUTATIONS.SET_USERS, sample_users);
-    context.commit(USERS_MUTATIONS.SET_PERMISSIONS, sample_permissions);
-    return;
-
     await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG);
     await context.dispatch(USERS_ACTIONS.FETCH_USERS);
     await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
@@ -96,7 +106,14 @@ const actions: ActionTree<ConfigState, RootState> = {
     } as any;
     try {
       const result: AxiosResponse = await standard_handler(options);
-      context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, result.data);
+      if (!result.data) {
+        // TODO: Do elsewhere in a support library?
+        context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, {
+          instance_id: get(context, 'state.selected_instance._id', null),
+        });
+      } else {
+        context.commit(CONFIG_MUTATIONS.SET_SELECTED_CONFIG, result.data);
+      }
     } catch (e) {
       throw e;
     }

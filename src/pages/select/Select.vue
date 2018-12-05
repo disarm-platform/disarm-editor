@@ -21,17 +21,16 @@ import {CONFIG_ACTIONS} from '@/store/config';
 
 export default Vue.extend({
   components: {SelectInstance, CreateInstance},
-  data() {
-    return {
-      instance_list: null as Instance[] | null,
-    };
-  },
   computed: {
     selected_instance(): Instance { return this.$store.state.config_module.selected_instance; },
     existing_config(): EditableInstanceConfig { return this.$store.state.config_module.live_instance_config; },
+    instance_list(): Instance[] { return this.$store.state.config_module.instance_list; },
+    unsaved_changes(): boolean {
+      return this.$store.state.config_module.unsaved_config_changes || this.$store.state.config_module.unsaved_permission_changes;
+    },
   },
   async mounted() {
-    if (this.existing_config && this.existing_config.unsaved_changes) {
+    if (this.existing_config && this.unsaved_changes) {
       this.confirm_clear_config();
     } else {
       this.load_instances();
@@ -39,11 +38,7 @@ export default Vue.extend({
   },
   methods: {
     async load_instances() {
-      try {
-        this.instance_list = await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
-      } catch (e) {
-        throw e;
-      }
+      await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
     },
     async select_instance(instance: Instance) {
       this.$store.dispatch(CONFIG_ACTIONS.SELECT_INSTANCE, instance);

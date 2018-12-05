@@ -33,19 +33,29 @@ export interface FlatPermissionsRow {
   [index: string]: boolean; // e.g. {'write:irs_plan': true}
 }
 
+export type InstanceConfig = Readonly<TConfig>;
 
-export type InstanceConfig = TConfig;
-
-export interface EditableInstanceConfig extends InstanceConfig {
-  unsaved_changes: boolean;
-}
+export interface EditableInstanceConfig extends InstanceConfig {}
 
 export type DoumaUser = DoumaUser;
-
 
 export interface ValidationMessage {
   message: string;
   status: 'Green' | 'Red' | 'Blue';
   source_node?: string;
   target_node?: string;
+}
+
+export interface FieldSummary {
+  exists_on_all: boolean;
+  field_name: string;
+  type: string;
+  unique: boolean;
+}
+
+export interface GeodataLevelSummary {
+  readonly _id: string;
+  readonly instance_id: string;
+  readonly level_name: string;
+  readonly summary: FieldSummary[];
 }

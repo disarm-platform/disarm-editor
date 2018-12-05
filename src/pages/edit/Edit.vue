@@ -15,6 +15,9 @@
         <el-button :type='current_view === "geodata" ? "info" : ""' plain size="mini"
                    @click="$router.push({name: 'geodata'})">Geodata
         </el-button>
+        <el-button :type='current_view === "geodata_summary" ? "info" : ""' plain size="mini"
+                   @click="$router.push({name: 'geodata_summary'})">Geodata summary
+        </el-button>
       </el-button-group>
 
       <span style="margin-left: 10px;">Editing: {{selected_instance.name}} @ version {{config_version}}

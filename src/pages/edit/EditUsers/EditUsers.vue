@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>All users found on server</h3>
     <el-table
         ref="users_table"
         :data="users"
@@ -51,8 +52,7 @@ export default Vue.extend({
   },
   methods: {
     async add_user(new_user: NewUserWithPassword) {
-
-      // await this.$store.dispatch(USERS_ACTIONS.CREATE_USER, new_user);
+      await this.$store.dispatch(USERS_ACTIONS.CREATE_USER, new_user);
       await this.alert_password_details(new_user);
     },
     edit_name(scope: any) {

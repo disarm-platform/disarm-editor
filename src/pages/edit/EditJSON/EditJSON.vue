@@ -6,7 +6,6 @@
         <el-button :disabled="!unsaved_changes" @click="update_remote" type="primary" size="mini">Upload changes
         </el-button>
         <el-button @click="check_if_valid" type="warning" size="mini">Check if valid</el-button>
-        <el-button @click="view_geodata_summary" type="success" size="mini">Show geodata summary</el-button>
       </el-button-group>
     </div>
 
@@ -38,7 +37,6 @@
   import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
-  import {GEODATA_ACTIONS} from '@/store/geodata'
 
   export default Vue.extend({
     components: {EditJSONStructured, EditJSONRaw},
@@ -54,11 +52,9 @@
         return this.$store.state.config_module.live_instance_config;
       },
       unsaved_changes(): boolean {
-        return this.live_instance_config.unsaved_changes;
+        return this.$store.state.config_module.unsaved_config_changes;
       },
-      geodata_summaries(): any {
-        return this.$store.state.geodata_module.geodata_summaries;
-      },
+
     },
     methods: {
       update_remote(instance_config: EditableInstanceConfig) {
@@ -77,10 +73,7 @@
       prioritise_messages(validation_output: TUnifiedResponse): ValidationMessage[] {
         return do_prioritise_messages(validation_output);
       },
-      async view_geodata_summary() {
-        const response = await this.$store.dispatch(GEODATA_ACTIONS.FETCH_GEODATA_SUMMARIES);
-        console.log('this.geodata_summaries', this.geodata_summaries);
-      },
+
     },
   });
 </script>

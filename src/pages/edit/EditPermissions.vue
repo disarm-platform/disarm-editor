@@ -63,7 +63,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
-  import {without} from 'lodash';
+  import {get, without} from 'lodash';
 
   import {
     DevBasicUser,
@@ -102,7 +102,7 @@
         const output: PermissionOption[] = [];
 
         const types = ['write', 'read'];
-        const applet_names: string[] = Object.keys(this.live_instance_config.applets);
+        const applet_names: string[] = Object.keys(get(this.live_instance_config, 'applets', {}));
         const applet_names_without_meta = without(applet_names, 'meta');
 
         applet_names_without_meta.forEach((applet) => {

@@ -43,6 +43,9 @@ export function users_and_permissions_for_table(
   permissions: Permission[],
   permission_options: string[],
 ): DevUserWithPermissions[] {
+  if (!users.length || !permissions.length) {
+    return [];
+  }
   return users.map((user: DevBasicUser): DevUserWithPermissions => {
       const user_with_perms: DevUserWithPermissions = {...user, permissions: {}};
       if (!user._id) {
