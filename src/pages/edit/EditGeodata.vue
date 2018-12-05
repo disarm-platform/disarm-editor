@@ -9,15 +9,19 @@
             :post-action="server_url"
             :multiple="false"
             :headers="headers"
-            :data="{instance_id: instance_id}"
         >
           Select file
         </file-upload>
         <span v-else>Select file</span>
       </el-button>
 
+      <el-button :disabled="!(!$refs.upload || !$refs.upload.active)" type='success' size="mini"
+                 @click="ui_level_name_visible = ! ui_level_name_visible">
+        Enter level name
+      </el-button>
+
       <el-button
-          :disabled="!(files.length > 0 && !all_uploaded && (!$refs.upload || !$refs.upload.active))"
+          :disabled="!(files.length > 0 && level_name && !all_uploaded && (!$refs.upload || !$refs.upload.active))"
           @click.prevent="$refs.upload.active = true" type="primary" size="mini">
         Start upload</el-button>
 
@@ -26,6 +30,10 @@
           @click.prevent="reset_upload" type="warning" size="mini">
         Stop upload</el-button>
     </el-button-group>
+
+    <el-input v-if="ui_level_name_visible" type="text" v-model="level_name" placeholder="Enter level name"></el-input>
+
+    <div v-if="files.length > 0 && level_name" v-html="intended_upload_summary"></div>
 
     <div style="margin-top: 20px;">
       <el-progress
@@ -68,6 +76,8 @@ export default Vue.extend({
   data() {
     return {
       files: [] as VUFile[],
+      level_name: '',
+      ui_level_name_visible: false,
     };
   },
   computed: {
@@ -78,7 +88,8 @@ export default Vue.extend({
         return get(this.$store, 'state.config_module.selected_instance._id');
     },
     server_url(): string {
-      return this.$store.state.api_url + `/geodata_level/upload`;
+      return this.$store.state.api_url + `/geodata_level/upload` +
+        `?instance_id=${this.instance_id}&level_name=${this.level_name}`;
     },
     progress(): number {
       if (this.files.length === 0) {
@@ -106,6 +117,12 @@ export default Vue.extend({
       }
       return this.files.map((file) => file.name).join(',');
     },
+    intended_upload_summary(): string {
+      if (!this.files.length || !this.level_name) {
+        return '';
+      }
+      return `Will upload <em>${this.files[0].name}</em> for level <em>${this.level_name}</em>`;
+    },
   },
   methods: {
     reset_upload() {
@@ -116,4 +133,7 @@ export default Vue.extend({
 </script>
 
 <style lang='scss' scoped>
+  .file-uploads {
+    overflow: inherit;
+  }
 </style>
