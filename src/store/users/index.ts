@@ -34,6 +34,7 @@ export const USERS_ACTIONS = {
   CREATE_USER: 'CREATE_USER',
   FETCH_USERS: 'FETCH_USERS',
   UPDATE_USER: 'UPDATE_USER',
+  DELETE_USER: 'DELETE_USER',
   FETCH_PERMISSIONS: 'FETCH_PERMISSIONS',
   UPDATE_PERMISSIONS: 'UPDATE_PERMISSIONS',
 };
@@ -65,7 +66,7 @@ const actions: ActionTree<UsersState, RootState> = {
       context.commit(USERS_MUTATIONS.SET_USERS, result.data);
       return result;
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   },
   async [USERS_ACTIONS.UPDATE_USER](context, user) {
@@ -78,7 +79,20 @@ const actions: ActionTree<UsersState, RootState> = {
       const result = await standard_handler(options as any);
       await context.dispatch(USERS_ACTIONS.FETCH_USERS);
     } catch (e) {
-      console.log(e);
+      throw e;
+    }
+  },
+  async [USERS_ACTIONS.DELETE_USER](context, user) {
+    const options = {
+      method: 'delete',
+      url: '/users',
+      data: user,
+    };
+    try {
+      const result = await standard_handler(options as any);
+      await context.dispatch(USERS_ACTIONS.FETCH_USERS);
+    } catch (e) {
+      throw e;
     }
   },
   async [USERS_ACTIONS.FETCH_PERMISSIONS](context, {instance_id}) {
@@ -93,7 +107,7 @@ const actions: ActionTree<UsersState, RootState> = {
       const result = await standard_handler(options as any);
       return  context.commit(USERS_MUTATIONS.SET_PERMISSIONS, result.data);
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   },
   async [USERS_ACTIONS.UPDATE_PERMISSIONS](context, {permissions, instance_id}) {
@@ -109,7 +123,7 @@ const actions: ActionTree<UsersState, RootState> = {
       const result = await standard_handler(options as any);
       await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   },
 };
