@@ -3,7 +3,7 @@ import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 import { ROOT_ACTIONS, ROOT_MUTATIONS, RootState } from '@/store';
 import {DevBasicUser, EditableInstanceConfig, Instance, InstanceConfig, Permission} from '@/types';
 import { standard_handler } from '@/lib/handler';
-import { AxiosRequestConfig, AxiosResponse } from '../../../node_modules/axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import {USERS_ACTIONS, USERS_MUTATIONS} from '../users';
 import {sample_config, sample_permissions, sample_users} from '@/pages/seedData';
 
