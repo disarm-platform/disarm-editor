@@ -6,7 +6,7 @@ import Login from '@/pages/Login.vue';
 import Select from '@/pages/select/Select.vue';
 import Logout from '@/pages/Logout.vue';
 import Edit from '@/pages/edit/Edit.vue';
-import EditUsers from '@/pages/edit/EditUsers.vue';
+import EditUsers from '@/pages/edit/EditUsers/EditUsers.vue';
 import EditJSON from '@/pages/edit/EditJSON/EditJSON.vue';
 import EditGeodata from '@/pages/edit/EditGeodata.vue';
 import EditPermissions from '@/pages/edit/EditPermissions.vue';

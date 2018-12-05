@@ -6,7 +6,7 @@
         <el-input v-model="instance_form.name" placeholder="Enter name (must be unique)"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="save_instance" :disabled="!valid">Save</el-button>
+        <el-button type="primary mini" @click="save_instance" :disabled="!valid">Save</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -35,6 +35,7 @@ export default Vue.extend({
     },
     save_instance() {
       this.$emit('create_new', this.instance_form);
+      this.ui_visible = false;
       this.reset_form();
     },
   },

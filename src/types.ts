@@ -21,6 +21,10 @@ export interface DevBasicUser {
   username: string;
 }
 
+export interface NewUserWithPassword extends DevBasicUser {
+  password: string;
+}
+
 export interface DevUserWithPermissions extends DevBasicUser {
   permissions: FlatPermissionsRow;
 }
