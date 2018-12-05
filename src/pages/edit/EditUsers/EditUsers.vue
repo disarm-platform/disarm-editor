@@ -82,6 +82,7 @@ export default Vue.extend({
           message: `Deleted ${user.name}`,
         });
       } catch (e) {
+        throw e;
       }
     },
     async alert_password_details(user: NewUserWithPassword) {
