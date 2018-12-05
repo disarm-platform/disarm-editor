@@ -57,9 +57,6 @@ const actions: ActionTree<UsersState, RootState> = {
     const options = {
       method: 'get',
       url: '/all_users',
-      params: {
-        instance_id,
-      },
     };
     try {
       const result = await standard_handler(options as any);
@@ -95,13 +92,10 @@ const actions: ActionTree<UsersState, RootState> = {
       throw e;
     }
   },
-  async [USERS_ACTIONS.FETCH_PERMISSIONS](context, {instance_id}) {
+  async [USERS_ACTIONS.FETCH_PERMISSIONS](context) {
     const options = {
       method: 'get',
       url: '/permission',
-      params: {
-        instance_id,
-      },
     };
     try {
       const result = await standard_handler(options as any);
@@ -110,14 +104,11 @@ const actions: ActionTree<UsersState, RootState> = {
       throw e;
     }
   },
-  async [USERS_ACTIONS.UPDATE_PERMISSIONS](context, {permissions, instance_id}) {
+  async [USERS_ACTIONS.UPDATE_PERMISSIONS](context, {permissions}) {
     const options = {
       method: 'put',
       url: '/permissions',
       data: permissions,
-      params: {
-        instance_id,
-      },
     };
     try {
       const result = await standard_handler(options as any);
