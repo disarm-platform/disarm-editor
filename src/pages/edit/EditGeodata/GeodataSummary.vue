@@ -1,9 +1,17 @@
 <template>
   <div v-loading="ui_loading">
+    <div>
+      <el-button @click="ui_upload_visible = !ui_upload_visible" size="mini" type="success">
+        {{!ui_upload_visible ? 'Upload geodata' : 'Hide form'}}
+      </el-button>
+    </div>
+    <UploadGeodata v-if="ui_upload_visible"></UploadGeodata>
+
+
     Geodata summary
     <ul v-if="geodata_summaries.length">
       <li v-for="level in geodata_summaries">
-        {{level.level_name}}
+        <span>{{level.level_name}} {{level.filename}} {{level.created_at}}</span>
         <template v-for="field in level.summary">
           <div>
             {{field.field_name}}
@@ -16,9 +24,6 @@
     </ul>
 
     <div v-else>No geodata found</div>
-
-
-    <UploadGeodata></UploadGeodata>
 
   </div>
 </template>
@@ -34,6 +39,7 @@
     data() {
       return {
         ui_loading: false,
+        ui_upload_visible: false,
       };
     },
     computed: {

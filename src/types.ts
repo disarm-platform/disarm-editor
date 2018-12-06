@@ -57,4 +57,5 @@ export interface GeodataLevelSummary {
   readonly instance_id: string;
   readonly level_name: string;
   readonly summary: FieldSummary[];
+  readonly created_at: string;
 }

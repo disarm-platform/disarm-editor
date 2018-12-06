@@ -3,9 +3,6 @@
 
     <!--UPLOAD-->
     <el-form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-      <h3>Upload new geodata file</h3>
-
-
       <el-form-item label="Level name (required)">
         <el-input type="text" v-model="level_name" placeholder="Enter level name"/>
       </el-form-item>
