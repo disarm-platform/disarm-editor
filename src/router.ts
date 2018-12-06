@@ -62,7 +62,7 @@ const router = new Router({
           path: 'geodata_summary',
           name: 'geodata_summary',
           component: GeodataSummary,
-        }
+        },
       ],
     },
     {

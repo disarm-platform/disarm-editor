@@ -26,7 +26,8 @@ export default Vue.extend({
     existing_config(): EditableInstanceConfig { return this.$store.state.config_module.live_instance_config; },
     instance_list(): Instance[] { return this.$store.state.config_module.instance_list; },
     unsaved_changes(): boolean {
-      return this.$store.state.config_module.unsaved_config_changes || this.$store.state.config_module.unsaved_permission_changes;
+      return this.$store.state.config_module.unsaved_config_changes
+        || this.$store.state.config_module.unsaved_permission_changes;
     },
   },
   async mounted() {

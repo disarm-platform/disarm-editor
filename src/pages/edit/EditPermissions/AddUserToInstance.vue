@@ -13,25 +13,25 @@
 </template>
 
 <script lang='ts'>
-  import Vue from 'vue';
-  import {DevBasicUser} from '@/types'
+import Vue from 'vue';
+import {DevBasicUser} from '@/types';
 
-  export default Vue.extend({
-    props: {
-      users: Array as () => DevBasicUser[],
+export default Vue.extend({
+  props: {
+    users: Array as () => DevBasicUser[],
+  },
+  data() {
+    return {
+      selected: null as DevBasicUser | null,
+    };
+  },
+  methods: {
+    add_user() {
+      this.$emit('add_user', this.selected);
+      this.selected = null;
     },
-    data() {
-      return {
-        selected: null as DevBasicUser | null,
-      };
-    },
-    methods: {
-      add_user() {
-        this.$emit('add_user', this.selected);
-        this.selected = null;
-      },
-    }
-  });
+  },
+});
 </script>
 
 <style lang='scss' scoped>

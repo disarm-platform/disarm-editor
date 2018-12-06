@@ -1,45 +1,44 @@
 <template>
   <el-tabs tab-position="left" style="height: 800px; overflow: scroll;" @tab-click="tab_click">
     <el-tab-pane
-        v-if="live_instance_config"
-        v-for="{display_name, component_name, node_name, path_name} in edit_nodes"
-        :key="component_name"
-        @tab-click="tab_click"
+      v-if="live_instance_config"
+      v-for="{display_name, component_name, node_name, path_name} in edit_nodes"
+      :key="component_name"
+      @tab-click="tab_click"
     >
-
-      <span slot="label" :style="style_errors_in_node(node_name)">
-        {{display_name}}
-      </span>
+      <span slot="label" :style="style_errors_in_node(node_name)">{{display_name}}</span>
       <NodeWrapper
-          :display_name="display_name"
-          :node_name="node_name"
-          :path_name="path_name"
-          :component_name="component_name"
-          :instance_config="live_instance_config"
-          :priority_messages="priority_messages"
-          @change="update_local_from_node"
-      >
-      </NodeWrapper>
-
+        :display_name="display_name"
+        :node_name="node_name"
+        :path_name="path_name"
+        :component_name="component_name"
+        :instance_config="live_instance_config"
+        :priority_messages="priority_messages"
+        @change="update_local_from_node"
+      ></NodeWrapper>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script lang='ts'>
 import Vue from 'vue';
-import {cloneDeep, set} from 'lodash';
+import { cloneDeep, set } from 'lodash';
 
 import NodeWrapper from './nodes/NodeWrapper.vue';
-import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
-import {edit_nodes} from './nodes/EditNodeDefinitions';
-import {CONFIG_MUTATIONS} from '@/store/config';
+import {
+  EditableInstanceConfig,
+  InstanceConfig,
+  ValidationMessage,
+} from '@/types';
+import { edit_nodes } from './nodes/EditNodeDefinitions';
+import { CONFIG_MUTATIONS } from '@/store/config';
 
 export default Vue.extend({
   props: {
     live_instance_config: Object as () => EditableInstanceConfig,
     priority_messages: Array as () => ValidationMessage[],
   },
-  components: {NodeWrapper},
+  components: { NodeWrapper },
   data() {
     return {
       edit_nodes,
@@ -61,15 +60,15 @@ export default Vue.extend({
         return '';
       }
     },
-    tab_click(a,b,c) {
-      console.log(a,b,c)
+    tab_click(a: any, b: any, c: any) {
+      console.log(a, b, c);
     },
   },
 });
 </script>
 
 <style lang='scss' scoped>
-  .red {
-    color: red;
-  }
+.red {
+  color: red;
+}
 </style>

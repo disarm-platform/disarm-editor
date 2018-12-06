@@ -27,7 +27,7 @@
         <a href="javascript:void(0)" @click="reset()">Upload again</a>
       </p>
       <ul class="list-unstyled">
-        <li v-for="item in uploadedFiles">
+        <li v-for="(item, index) in uploadedFiles" :key="index">
           <img :src="item.url" class="img-responsive img-thumbnail" :alt="item.originalName">
         </li>
       </ul>
@@ -46,86 +46,89 @@
 
 
 <script lang='ts'>
-  import Vue from 'vue';
-  import {standard_handler} from '../../../lib/handler'
-  import {AxiosPromise} from 'axios';
+import Vue from 'vue';
+import {standard_handler} from '../../../lib/handler';
+import {AxiosPromise, AxiosResponse} from 'axios';
 
-  const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
+const STATUS_INITIAL = 0;
+const STATUS_SAVING = 1;
+const STATUS_SUCCESS = 2;
+const STATUS_FAILED = 3;
 
 
-  export default Vue.extend({
-    data() {
-      return {
-        uploadedFiles: [],
-        uploadError: null,
-        currentStatus: null,
-        uploadFieldName: 'file',
-        level_name: '',
-      };
+export default Vue.extend({
+  data() {
+    return {
+      uploadedFiles: [],
+      uploadError: null,
+      currentStatus: STATUS_INITIAL,
+      uploadFieldName: 'file',
+      level_name: '',
+    };
+  },
+  computed: {
+    isInitial(): boolean {
+      return this.currentStatus === STATUS_INITIAL;
     },
-    computed: {
-      isInitial() {
-        return this.currentStatus === STATUS_INITIAL;
-      },
-      isSaving() {
-        return this.currentStatus === STATUS_SAVING;
-      },
-      isSuccess() {
-        return this.currentStatus === STATUS_SUCCESS;
-      },
-      isFailed() {
-        return this.currentStatus === STATUS_FAILED;
+    isSaving(): boolean {
+      return this.currentStatus === STATUS_SAVING;
+    },
+    isSuccess(): boolean {
+      return this.currentStatus === STATUS_SUCCESS;
+    },
+    isFailed(): boolean {
+      return this.currentStatus === STATUS_FAILED;
+    },
+  },
+  mounted() {
+    this.reset();
+  },
+  methods: {
+    reset() {
+      // reset form to initial state
+      this.currentStatus = STATUS_INITIAL;
+      this.uploadedFiles = [];
+      this.uploadError = null;
+    },
+    async save(formData: FormData) {
+      // upload data to the server
+      this.currentStatus = STATUS_SAVING;
+
+      try {
+        const options = {
+          method: 'post',
+          url: '/geodata_level/upload',
+          data: formData,
+        } as any;
+        const res: AxiosResponse = await standard_handler(options);
+        this.uploadedFiles = [].concat(res.data);
+        this.currentStatus = STATUS_SUCCESS;
+      } catch (err) {
+        this.uploadError = err.response;
+        this.currentStatus = STATUS_FAILED;
+
       }
     },
-    mounted() {
-      this.reset();
+    filesChange(fieldName: string, fileList: FileList) {
+      // handle file changes
+      const formData = new FormData();
+
+      if (!fileList.length) { return; }
+
+      // append the files to FormData
+      Array
+        .from(Array(fileList.length).keys())
+        .map((x) => {
+          formData.append(fieldName, fileList[x], fileList[x].name);
+        });
+
+      formData.append('level_name', this.level_name);
+
+      // save it
+      this.save(formData);
     },
-    methods: {
-      reset() {
-        // reset form to initial state
-        this.currentStatus = STATUS_INITIAL;
-        this.uploadedFiles = [];
-        this.uploadError = null;
-      },
-      async save(formData) {
-        // upload data to the server
-        this.currentStatus = STATUS_SAVING;
-
-        try {
-          const options = {
-            method: 'post',
-            url: '/geodata_level/upload',
-            data: formData,
-          } as any;
-          const res: AxiosPromise = await standard_handler(options);
-          this.uploadedFiles = [].concat(res.data);
-          this.currentStatus = STATUS_SUCCESS;
-        } catch (err) {
-          this.uploadError = err.response;
-          this.currentStatus = STATUS_FAILED;
-
-        }
-      },
-      filesChange(fieldName, fileList) {
-        // handle file changes
-        const formData = new FormData();
-
-        if (!fileList.length) return;
-
-        // append the files to FormData
-        Array
-          .from(Array(fileList.length).keys())
-          .map(x => {
-            formData.append(fieldName, fileList[x], fileList[x].name);
-          });
-
-        formData.append('level_name', this.level_name);
-
-        // save it
-        this.save(formData);
-      }
-    },
-  });
+  },
+});
 </script>
 
 <style lang="scss">
