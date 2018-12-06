@@ -1,5 +1,8 @@
 <template>
   <div>
+
+    <el-button size="mini" type="warning" @click="refresh">Refresh</el-button>
+
     <el-table
         ref="users_table"
         :data="users"
@@ -99,6 +102,9 @@ export default Vue.extend({
       } catch (e) {
         console.log('cancelled');
       }
+    },
+    refresh() {
+      this.$store.dispatch(USERS_ACTIONS.FETCH_USERS);
     },
   },
 });
