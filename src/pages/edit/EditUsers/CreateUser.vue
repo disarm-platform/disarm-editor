@@ -3,9 +3,9 @@
     <el-button type='mini' @click="ui_visible = !ui_visible">{{ui_visible ? 'Hide form' : 'Add new'}}</el-button>
     <el-form v-if="ui_visible">
       <el-form-item label="Name">
-        <el-input v-model="form.name" placeholder="Enter name"></el-input>
+        <el-input v-model="form.name" placeholder="Enter name" @blur="suggest_username"></el-input>
       </el-form-item>
-      <el-form-item label="Username (for login)">
+      <el-form-item label="Login username (must be unique)">
         <el-input v-model="form.username" placeholder="Enter username (must be unique)"></el-input>
       </el-form-item>
       <el-form-item label="A secure password will be generated and displayed.">
@@ -56,6 +56,10 @@ export default Vue.extend({
       this.$emit('create_new', new_user);
       this.ui_visible = false;
       this.reset_form();
+    },
+    suggest_username() {
+      if (this.form.username !== '') {return;}
+      this.form.username = this.form.name.toLocaleLowerCase().replace(/\s/g,'.');
     },
   },
 });

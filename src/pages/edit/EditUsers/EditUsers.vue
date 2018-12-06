@@ -87,10 +87,11 @@ export default Vue.extend({
     },
     async alert_password_details(user: NewUserWithPassword) {
       const message = `Please copy and send these details to the user: </br></br>` +
+        `&nbsp;&nbsp;name: ${user.name}</br>` +
         `&nbsp;&nbsp;username: ${user.username}</br>` +
         `&nbsp;&nbsp;password: ${user.password}</br>` +
         `&nbsp;&nbsp;url: ${location.origin}</br></br>` +
-        `THIS IS THE LAST THE PASSWORD WILL BE DISPLAYED.`;
+        `THIS IS THE LAST TIME THE PASSWORD WILL BE VISIBLE.`;
       try {
         await this.$alert(message, 'Login details', {
           dangerouslyUseHTMLString: true,
