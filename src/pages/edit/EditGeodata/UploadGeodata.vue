@@ -3,14 +3,17 @@
 
     <!--UPLOAD-->
     <el-form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
-      <h1>Upload geodata</h1>
+      <h3>Upload new geodata file</h3>
 
-      <input type="text" v-model="level_name" placeholder="Enter level name"/>
+
+      <el-form-item label="Level name (required)">
+        <el-input type="text" v-model="level_name" placeholder="Enter level name"/>
+      </el-form-item>
 
       <div class="dropbox">
-        <input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
+        <el-input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
                @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-               class="input-file">
+                  class="input-file"/>
         <p v-if="isInitial">
           Drag your file(s) here to begin<br> or click to browse
         </p>

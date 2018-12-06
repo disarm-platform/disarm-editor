@@ -10,7 +10,7 @@ import EditUsers from '@/pages/edit/EditUsers/EditUsers.vue';
 import EditPermissions from '@/pages/edit/EditPermissions/EditPermissions.vue';
 import EditJSON from '@/pages/edit/EditJSON/EditJSON.vue';
 import EditGeodata from '@/pages/edit/EditGeodata/UploadGeodata.vue';
-import GeodataSummary from '@/pages/edit/EditJSON/GeodataSummary.vue';
+import GeodataSummary from '@/pages/edit/EditGeodata/GeodataSummary.vue';
 
 Vue.use(Router);
 
@@ -56,11 +56,6 @@ const router = new Router({
         {
           path: 'geodata',
           name: 'geodata',
-          component: EditGeodata,
-        },
-        {
-          path: 'geodata_summary',
-          name: 'geodata_summary',
           component: GeodataSummary,
         },
       ],

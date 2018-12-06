@@ -17,7 +17,8 @@
 
     <div v-else>No geodata found</div>
 
-    <el-button @click="check" type="mini">Check</el-button>
+    <UploadGeodata></UploadGeodata>
+
   </div>
 </template>
 
@@ -25,8 +26,10 @@
   import Vue from 'vue';
   import {GEODATA_ACTIONS} from '@/store/geodata';
   import {GeodataLevelSummary} from '@/types';
+  import UploadGeodata from '@/pages/edit/EditGeodata/UploadGeodata.vue';
 
   export default Vue.extend({
+    components: {UploadGeodata},
     data() {
       return {
         ui_loading: false,
