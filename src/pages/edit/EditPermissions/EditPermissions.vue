@@ -41,7 +41,7 @@
       </el-table-column>
     </el-table>
 
-    <AddUserToInstance @add_user="add_user_to_instance" :users="users"></AddUserToInstance>
+    <AddUserToInstance @add_user="add_user_to_instance" :users="addable_users"></AddUserToInstance>
   </div>
 
   <div v-else>Config is either invalid or empty. Try filling it up.</div>
@@ -51,23 +51,23 @@
 import Vue from "vue";
 import { get, without } from "lodash";
 
-import AddUserToInstance from ''
-import COMMON from "@/lib/common";
+import AddUserToInstance from './AddUserToInstance.vue';
+import COMMON from '@/lib/common';
 
 import {
   DevBasicUser,
   InstanceConfig,
   Permission,
   DevUserWithPermissions
-} from "@/types";
+} from '@/types';
 
 import {
   bulk_set_permission_for_all_users,
   bulk_set_all_permissions_for_user,
   toggle_permission,
   users_and_permissions_for_table
-} from "@/lib/users_with_permissions";
-import { USERS_ACTIONS, USERS_MUTATIONS } from "@/store/users";
+} from '@/lib/users_with_permissions';
+import { USERS_ACTIONS, USERS_MUTATIONS } from "../../../store/users";
 
 interface PermissionOption {
   text: string;
@@ -76,6 +76,7 @@ interface PermissionOption {
 }
 
 export default Vue.extend({
+  components: {AddUserToInstance},
   computed: {
     live_instance_config(): InstanceConfig {
       return this.$store.state.config_module.live_instance_config;

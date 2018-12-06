@@ -7,9 +7,9 @@ import Select from '@/pages/select/Select.vue';
 import Logout from '@/pages/Logout.vue';
 import Edit from '@/pages/edit/Edit.vue';
 import EditUsers from '@/pages/edit/EditUsers/EditUsers.vue';
-import EditPermissions from '@/pages/edit/EditPermissions.vue';
+import EditPermissions from '@/pages/edit/EditPermissions/EditPermissions.vue';
 import EditJSON from '@/pages/edit/EditJSON/EditJSON.vue';
-import EditGeodata from '@/pages/edit/UploadGeodata.vue';
+import EditGeodata from '@/pages/edit/EditGeodata/UploadGeodata.vue';
 import GeodataSummary from '@/pages/edit/EditJSON/GeodataSummary.vue';
 
 Vue.use(Router);

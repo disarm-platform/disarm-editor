@@ -65,7 +65,7 @@
 import Vue from 'vue';
 import {get} from 'lodash';
 import VueUploadComponent from 'vue-upload-component';
-import { LoggedInUser } from '@/store';
+import { LoggedInUser } from '../../../store';
 
 
 export default Vue.extend({
