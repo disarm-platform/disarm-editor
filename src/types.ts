@@ -19,6 +19,7 @@ export interface DevBasicUser {
   _id: string | null;
   name: string;
   username: string;
+  deployment_admin?: boolean;
 }
 
 export interface NewUserWithPassword extends DevBasicUser {

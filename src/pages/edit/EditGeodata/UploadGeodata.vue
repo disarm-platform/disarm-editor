@@ -11,8 +11,8 @@
       </el-form-item>
 
       <div class="dropbox">
-        <input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
-               @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+        <input type="file" multiple name="file" :disabled="isSaving"
+               @change="filesChange($event.target.files)"
                 class="input-file"/>
         <p v-if="isInitial">
           Drag your file(s) here to begin<br> or click to browse
@@ -55,7 +55,9 @@
 
 <script lang='ts'>
 import Vue from 'vue';
-import {standard_handler} from '../../../lib/handler';
+import {get} from 'lodash';
+
+import {standard_handler} from '@/lib/handler';
 import {AxiosPromise, AxiosResponse} from 'axios';
 
 const STATUS_INITIAL = 0;
@@ -67,12 +69,11 @@ const STATUS_FAILED = 3;
 export default Vue.extend({
   data() {
     return {
+      currentStatus: STATUS_INITIAL,
       uploadedFiles: [],
       uploadError: null,
-      currentStatus: STATUS_INITIAL,
-      uploadFieldName: 'file',
       level_name: '',
-      formData: null,
+      formData: new FormData(),
     };
   },
   computed: {
@@ -89,7 +90,7 @@ export default Vue.extend({
       return this.currentStatus === STATUS_FAILED;
     },
     hasFile(): boolean {
-      return this.formData && this.formData.files.length > 0;
+      return get(this.formData, 'files', []).length > 0;
     },
   },
   mounted() {
@@ -101,10 +102,13 @@ export default Vue.extend({
       this.currentStatus = STATUS_INITIAL;
       this.uploadedFiles = [];
       this.uploadError = null;
-      this.formData = null;
+      this.level_name = '';
+      this.formData = new FormData();
     },
     async save() {
       if (!this.formData) { return; }
+
+      this.formData.append('level_name', this.level_name);
 
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
@@ -124,22 +128,11 @@ export default Vue.extend({
 
       }
     },
-    filesChange(fieldName: string, fileList: FileList) {
-      // handle file changes
-      const formData = new FormData();
-
+    filesChange(fileList: FileList) {
       if (!fileList.length) { return; }
 
       // append the files to FormData
-      Array
-        .from(Array(fileList.length).keys())
-        .map((x) => {
-          formData.append(fieldName, fileList[x], fileList[x].name);
-        });
-
-      formData.append('level_name', this.level_name);
-
-      this.formData = formData;
+      this.formData.append('file', fileList[0], fileList[0].name);
     },
   },
 });

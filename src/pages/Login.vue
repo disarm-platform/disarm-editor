@@ -47,7 +47,7 @@
     data() {
       return {
         error: '',
-        username: 'a_user',
+        username: '',
         password: '',
         updated_api_url: '',
         ui_edit_api_url: false,

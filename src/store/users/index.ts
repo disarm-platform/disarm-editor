@@ -61,7 +61,13 @@ const actions: ActionTree<UsersState, RootState> = {
     } as any;
     try {
       const result = await standard_handler(options);
-      context.commit(USERS_MUTATIONS.SET_USERS, result.data);
+
+      // Incoming list of users contains deployment admin users, which we don't
+      // want to edit, so filter them out.
+
+      const users_without_admins = result.data.filter((u: DevBasicUser) => !u.deployment_admin)
+
+      context.commit(USERS_MUTATIONS.SET_USERS, users_without_admins);
       return result;
     } catch (e) {
       throw e;

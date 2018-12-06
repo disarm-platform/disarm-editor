@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>All users found on server</h3>
     <el-table
         ref="users_table"
         :data="users"
