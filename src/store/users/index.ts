@@ -3,6 +3,7 @@ import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
 import {RootState} from '@/store';
 import {DevBasicUser, Permission} from '@/types';
 import {standard_handler } from '@/lib/handler';
+import COMMON from '@/lib/common';
 
 export interface UsersState {
   users: DevBasicUser[];
@@ -104,11 +105,17 @@ const actions: ActionTree<UsersState, RootState> = {
       throw e;
     }
   },
-  async [USERS_ACTIONS.UPDATE_PERMISSIONS](context, {permissions}) {
+  async [USERS_ACTIONS.UPDATE_PERMISSIONS](context) {
+    // To make the permissions table render with no permissions for a user,
+    // we have to add an initial permission with a value of "dummy".
+    // Do not want to send these to server, so filter them out here.
+    const no_dummies: Permission[] = context.state.permissions.filter((p) =>
+      p.value !== COMMON.permissions.dummy_record_value);
+
     const options = {
       method: 'put',
       url: '/permissions',
-      data: permissions,
+      data: no_dummies,
     };
     try {
       const result = await standard_handler(options as any);

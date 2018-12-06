@@ -41,7 +41,7 @@
       </el-table-column>
     </el-table>
 
-    <el-button @click="add_random_unadded_user">Add random user</el-button>
+    <AddUserToInstance @add_user="add_user_to_instance" :users="users"></AddUserToInstance>
   </div>
 
   <div v-else>Config is either invalid or empty. Try filling it up.</div>
@@ -51,7 +51,8 @@
 import Vue from "vue";
 import { get, without } from "lodash";
 
-import { create_all_permissions_for_user } from "@/lib/users_with_permissions";
+import AddUserToInstance from ''
+import COMMON from "@/lib/common";
 
 import {
   DevBasicUser,
@@ -202,8 +203,7 @@ export default Vue.extend({
     },
     async upload_changes() {
       await this.$store.dispatch(
-        USERS_ACTIONS.UPDATE_PERMISSIONS,
-        this.permissions
+        USERS_ACTIONS.UPDATE_PERMISSIONS
       );
     },
     add_user_with_empty_permissions(user: DevBasicUser) {
@@ -212,7 +212,7 @@ export default Vue.extend({
           {
             user_id: user._id,
             instance_id: this.live_instance_config.instance_id,
-            value: "dummy"
+            value: COMMON.permissions.dummy_record_value
           }
         ];
         const joined_permissions = this.permissions.concat(
@@ -221,8 +221,8 @@ export default Vue.extend({
         this.update_permissions(joined_permissions);
       }
     },
-    add_random_unadded_user() {
-      this.add_user_with_empty_permissions(this.addable_users[0]);
+    add_user_to_instance(user: DevBasicUser) {
+      this.add_user_with_empty_permissions(user);
     }
   }
 });

@@ -1,6 +1,6 @@
-import {without} from 'lodash';
+import { without } from 'lodash';
 
-import {DevBasicUser, DevUserWithPermissions, FlatPermissionsRow, InstanceConfig, Permission} from '@/types';
+import { DevBasicUser, DevUserWithPermissions, FlatPermissionsRow, InstanceConfig, Permission } from '@/types';
 
 //
 // CREATE
@@ -34,10 +34,6 @@ function permission_exists_for_user_id(
   });
 }
 
-function get_permission_for_user(permissions: Permission[], user_id: string, permission_string: string) {
-  return permissions.filter((p) => p.user_id === user_id && p.value === permission_string);
-}
-
 export function users_and_permissions_for_table(
   users: DevBasicUser[],
   permissions: Permission[],
@@ -46,15 +42,25 @@ export function users_and_permissions_for_table(
   if (!users.length || !permissions.length) {
     return [];
   }
-  return users.map((user: DevBasicUser): DevUserWithPermissions => {
-      const user_with_perms: DevUserWithPermissions = {...user, permissions: {}};
+  // filter only Users with permissions.
+  // Add permissions to Users
+
+  const user_ids_with_p = permissions.map((p: Permission) => p.user_id);
+
+  return users
+    .filter((u) => {
+      if (!u._id) { return false; }
+      return user_ids_with_p.includes(u._id);
+    })
+    .map((user: DevBasicUser): DevUserWithPermissions => {
+      const user_with_perms: DevUserWithPermissions = { ...user, permissions: {} };
       if (!user._id) {
         throw new Error(`no _id for user ${user}`);
       }
       user_with_perms.permissions = create_all_permissions_for_user(permission_options, permissions, user._id);
       return user_with_perms;
-    },
-  );
+    })
+    .filter((i) => i);
 }
 
 
