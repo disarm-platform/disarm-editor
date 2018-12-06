@@ -68,6 +68,7 @@ export default Vue.extend({
         ...user,
         password: new_password,
       };
+      await this.$store.dispatch(USERS_ACTIONS.UPDATE_USER, updated_user);
       await this.alert_password_details(updated_user);
     },
     async delete_user(scope: any) {
