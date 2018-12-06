@@ -11,16 +11,21 @@
       </el-form-item>
 
       <div class="dropbox">
-        <el-input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
+        <input type="file" multiple :name="uploadFieldName" :disabled="isSaving"
                @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-                  class="input-file"/>
+                class="input-file"/>
         <p v-if="isInitial">
           Drag your file(s) here to begin<br> or click to browse
         </p>
-        <p v-if="isSaving">
-          Uploading {{ fileCount }} files...
+        <p v-if="hasFile">
+          Ready to upload file.
         </p>
       </div>
+
+      <el-form-item>
+        <el-button type="primary" @click="save" :disabled="!level_name || !formData">Upload</el-button>
+        <el-button @click="reset">Reset</el-button>
+      </el-form-item>
     </el-form>
 
     <!--SUCCESS-->
@@ -67,6 +72,7 @@ export default Vue.extend({
       currentStatus: STATUS_INITIAL,
       uploadFieldName: 'file',
       level_name: '',
+      formData: null,
     };
   },
   computed: {
@@ -82,6 +88,9 @@ export default Vue.extend({
     isFailed(): boolean {
       return this.currentStatus === STATUS_FAILED;
     },
+    hasFile(): boolean {
+      return this.formData && this.formData.files.length > 0;
+    },
   },
   mounted() {
     this.reset();
@@ -92,8 +101,11 @@ export default Vue.extend({
       this.currentStatus = STATUS_INITIAL;
       this.uploadedFiles = [];
       this.uploadError = null;
+      this.formData = null;
     },
-    async save(formData: FormData) {
+    async save() {
+      if (!this.formData) { return; }
+
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
 
@@ -101,7 +113,7 @@ export default Vue.extend({
         const options = {
           method: 'post',
           url: '/geodata_level/upload',
-          data: formData,
+          data: this.formData,
         } as any;
         const res: AxiosResponse = await standard_handler(options);
         this.uploadedFiles = [].concat(res.data);
@@ -127,8 +139,7 @@ export default Vue.extend({
 
       formData.append('level_name', this.level_name);
 
-      // save it
-      this.save(formData);
+      this.formData = formData;
     },
   },
 });
