@@ -38,6 +38,8 @@
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
 
+  import {CONFIG_ACTIONS} from '@/store/config'
+
   export default Vue.extend({
     components: {EditJSONStructured, EditJSONRaw},
     data() {
@@ -57,8 +59,8 @@
 
     },
     methods: {
-      update_remote(instance_config: InstanceConfig) {
-        console.log('[UPDATE REMOTE]');
+      async update_remote(instance_config: InstanceConfig) {
+        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG,instance_config)
       },
       check_if_valid() {
         if (!this.live_instance_config) {
