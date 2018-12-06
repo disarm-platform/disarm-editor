@@ -34,7 +34,7 @@
   import EditJSONStructured from './EditJSONStructured.vue';
   import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
 
-  import {EditableInstanceConfig, InstanceConfig, ValidationMessage} from '@/types';
+  import {InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
 
@@ -48,7 +48,7 @@
       };
     },
     computed: {
-      live_instance_config(): EditableInstanceConfig {
+      live_instance_config(): InstanceConfig {
         return this.$store.state.config_module.live_instance_config;
       },
       unsaved_changes(): boolean {
@@ -57,7 +57,7 @@
 
     },
     methods: {
-      update_remote(instance_config: EditableInstanceConfig) {
+      update_remote(instance_config: InstanceConfig) {
         console.log('[UPDATE REMOTE]');
       },
       check_if_valid() {

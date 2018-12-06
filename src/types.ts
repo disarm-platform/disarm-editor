@@ -35,8 +35,6 @@ export interface FlatPermissionsRow {
 
 export type InstanceConfig = Readonly<TConfig>;
 
-export interface EditableInstanceConfig extends InstanceConfig {}
-
 export type DoumaUser = DoumaUser;
 
 export interface ValidationMessage {

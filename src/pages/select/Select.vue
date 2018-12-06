@@ -16,14 +16,14 @@ import Vue from 'vue';
 
 import SelectInstance from '@/pages/select/SelectInstance.vue';
 import CreateInstance from '@/pages/select/CreateInstance.vue';
-import {Instance, InstanceConfig, EditableInstanceConfig} from '@/types';
+import {Instance, InstanceConfig} from '@/types';
 import {CONFIG_ACTIONS} from '@/store/config';
 
 export default Vue.extend({
   components: {SelectInstance, CreateInstance},
   computed: {
     selected_instance(): Instance { return this.$store.state.config_module.selected_instance; },
-    existing_config(): EditableInstanceConfig { return this.$store.state.config_module.live_instance_config; },
+    existing_config(): InstanceConfig { return this.$store.state.config_module.live_instance_config; },
     instance_list(): Instance[] { return this.$store.state.config_module.instance_list; },
     unsaved_changes(): boolean {
       return this.$store.state.config_module.unsaved_config_changes

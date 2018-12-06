@@ -22,7 +22,7 @@
 <script lang="ts">
 import Vue from 'vue';
 
-import {EditableInstanceConfig, ValidationMessage} from '@/types';
+import {ValidationMessage} from '@/types';
 import {CONFIG_MUTATIONS} from '@/store/config';
 import ValidationMessagesList from '@/pages/edit/EditJSON/components/ValidationMessagesList.vue';
 

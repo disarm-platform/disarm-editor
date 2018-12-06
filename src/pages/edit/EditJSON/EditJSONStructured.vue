@@ -26,7 +26,6 @@ import { cloneDeep, set } from 'lodash';
 
 import NodeWrapper from './nodes/NodeWrapper.vue';
 import {
-  EditableInstanceConfig,
   InstanceConfig,
   ValidationMessage,
 } from '@/types';
@@ -35,7 +34,7 @@ import { CONFIG_MUTATIONS } from '@/store/config';
 
 export default Vue.extend({
   props: {
-    live_instance_config: Object as () => EditableInstanceConfig,
+    live_instance_config: Object as () => InstanceConfig,
     priority_messages: Array as () => ValidationMessage[],
   },
   components: { NodeWrapper },
@@ -46,7 +45,7 @@ export default Vue.extend({
   },
   methods: {
     update_local_from_node(node_config: any, path_name: string) {
-      const copy: EditableInstanceConfig = cloneDeep(this.live_instance_config);
+      const copy: InstanceConfig = cloneDeep(this.live_instance_config);
       set(copy, path_name, node_config);
       this.$store.commit(CONFIG_MUTATIONS.UPDATE_CONFIG_WITH_UNSAVED, copy);
     },
