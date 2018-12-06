@@ -95,9 +95,13 @@ const actions: ActionTree<ConfigState, RootState> = {
   },
   async [CONFIG_ACTIONS.SELECT_INSTANCE](context, instance) {
     context.commit(CONFIG_MUTATIONS.SET_SELECTED_INSTANCE, instance);
-    await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG);
-    await context.dispatch(USERS_ACTIONS.FETCH_USERS);
-    await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
+    try {
+      await context.dispatch(CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG);
+      await context.dispatch(USERS_ACTIONS.FETCH_USERS);
+      await context.dispatch(USERS_ACTIONS.FETCH_PERMISSIONS);
+    } catch (e) {
+      throw e;
+    }
   },
   async [CONFIG_ACTIONS.FETCH_LATEST_INSTANCE_CONFIG](context) {
     const options = {

@@ -42,7 +42,7 @@ export default Vue.extend({
       await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
     },
     async select_instance(instance: Instance) {
-      this.$store.dispatch(CONFIG_ACTIONS.SELECT_INSTANCE, instance);
+      await this.$store.dispatch(CONFIG_ACTIONS.SELECT_INSTANCE, instance);
       this.$router.push({name: 'edit'});
     },
     async create_instance(instance: Instance) {
