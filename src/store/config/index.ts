@@ -124,8 +124,8 @@ const actions: ActionTree<ConfigState, RootState> = {
   },
   async [CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG](context, {instance_config}) {
     const options = {
-      method: 'put',
-      url: '/config/update',
+      method: 'post',
+      url: '/config',
       data: instance_config,
     } as any;
     try {
