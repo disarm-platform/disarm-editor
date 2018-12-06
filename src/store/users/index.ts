@@ -57,7 +57,7 @@ const actions: ActionTree<UsersState, RootState> = {
   async [USERS_ACTIONS.FETCH_USERS](context) {
     const options = {
       method: 'get',
-      url: '/all_users',
+      url: '/user/all',
     } as any;
     try {
       const result = await standard_handler(options);
@@ -82,6 +82,7 @@ const actions: ActionTree<UsersState, RootState> = {
     try {
       const result = await standard_handler(options as any);
       await context.dispatch(USERS_ACTIONS.FETCH_USERS);
+      return result
     } catch (e) {
       throw e;
     }
@@ -89,7 +90,7 @@ const actions: ActionTree<UsersState, RootState> = {
   async [USERS_ACTIONS.DELETE_USER](context, user) {
     const options = {
       method: 'delete',
-      url: '/users',
+      url: '/user',
       data: user,
     };
     try {
@@ -119,8 +120,8 @@ const actions: ActionTree<UsersState, RootState> = {
       p.value !== COMMON.permissions.dummy_record_value);
 
     const options = {
-      method: 'put',
-      url: '/permissions',
+      method: 'post',
+      url: '/permission/bulk',
       data: no_dummies,
     };
     try {
