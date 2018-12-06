@@ -27,21 +27,16 @@
 
     <!--SUCCESS-->
     <div v-if="isSuccess">
-      <h2>Uploaded {{ uploadedFiles.length }} file(s) successfully.</h2>
+      <h2>Upload successful.</h2>
       <p>
-        <a href="javascript:void(0)" @click="reset()">Upload again</a>
+        <el-button type="text" @click="reset()">Upload again</el-button>
       </p>
-      <ul class="list-unstyled">
-        <li v-for="(item, index) in uploadedFiles" :key="index">
-          <img :src="item.url" class="img-responsive img-thumbnail" :alt="item.originalName">
-        </li>
-      </ul>
     </div>
     <!--FAILED-->
     <div v-if="isFailed">
       <h2>Uploaded failed.</h2>
       <p>
-        <a href="javascript:void(0)" @click="reset()">Try again</a>
+        <el-button type="text"@click="reset()">Try again</el-button>
       </p>
       <pre>{{ uploadError }}</pre>
     </div>
@@ -55,7 +50,8 @@ import Vue from 'vue';
 import {get} from 'lodash';
 
 import {standard_handler} from '@/lib/handler';
-import {AxiosPromise, AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
+import {GEODATA_ACTIONS} from '@/store/geodata';
 
 const STATUS_INITIAL = 0;
 const STATUS_SAVING = 1;
@@ -117,12 +113,11 @@ export default Vue.extend({
           data: this.formData,
         } as any;
         const res: AxiosResponse = await standard_handler(options);
-        this.uploadedFiles = [].concat(res.data);
         this.currentStatus = STATUS_SUCCESS;
+        await this.$store.dispatch(GEODATA_ACTIONS.FETCH_GEODATA_SUMMARIES);
       } catch (err) {
         this.uploadError = err.response;
         this.currentStatus = STATUS_FAILED;
-
       }
     },
     filesChange(fileList: FileList) {
