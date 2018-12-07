@@ -39,6 +39,7 @@ export const USERS_ACTIONS = {
   DELETE_USER: 'DELETE_USER',
   FETCH_PERMISSIONS: 'FETCH_PERMISSIONS',
   UPDATE_PERMISSIONS: 'UPDATE_PERMISSIONS',
+  RESET_USERS_AND_PERMISSIONS: 'RESET_USERS_AND_PERMISSIONS',
 };
 
 const actions: ActionTree<UsersState, RootState> = {
@@ -83,7 +84,7 @@ const actions: ActionTree<UsersState, RootState> = {
     try {
       const result = await standard_handler(options as any);
       await context.dispatch(USERS_ACTIONS.FETCH_USERS);
-      return result
+      return result;
     } catch (e) {
       throw e;
     }
@@ -131,6 +132,10 @@ const actions: ActionTree<UsersState, RootState> = {
     } catch (e) {
       throw e;
     }
+  },
+  async [USERS_ACTIONS.RESET_USERS_AND_PERMISSIONS](context) {
+    context.commit(USERS_MUTATIONS.RESET_PERMISSIONS);
+    context.commit(USERS_MUTATIONS.RESET_USERS);
   },
 };
 

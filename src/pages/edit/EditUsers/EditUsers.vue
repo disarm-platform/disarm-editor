@@ -52,6 +52,9 @@ export default Vue.extend({
       return this.$store.state.users_module.users;
     },
   },
+  mounted() {
+    this.refresh();
+  },
   methods: {
     async add_user(new_user: NewUserWithPassword) {
       await this.$store.dispatch(USERS_ACTIONS.CREATE_USER, new_user);

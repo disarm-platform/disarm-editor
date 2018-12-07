@@ -1,3 +1,4 @@
+import { USERS_ACTIONS } from './users/index';
 import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
@@ -70,6 +71,7 @@ const store_options: StoreOptions<RootState> = {
     },
     async [ROOT_ACTIONS.LOGOUT](context) {
       context.commit(ROOT_MUTATIONS.RESET_USER);
+      await context.dispatch(USERS_ACTIONS.RESET_USERS_AND_PERMISSIONS);
       await context.dispatch(CONFIG_ACTIONS.RESET_SELECTED_INSTANCE_AND_CONFIG);
     },
   },
