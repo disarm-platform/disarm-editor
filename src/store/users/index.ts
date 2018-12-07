@@ -1,4 +1,5 @@
 import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
+import { get } from 'lodash';
 
 import {RootState} from '@/store';
 import {DevBasicUser, Permission} from '@/types';
@@ -65,7 +66,7 @@ const actions: ActionTree<UsersState, RootState> = {
       // Incoming list of users contains deployment admin users, which we don't
       // want to edit, so filter them out.
 
-      const users_without_admins = result.data.filter((u: DevBasicUser) => !u.deployment_admin);
+      const users_without_admins = result.data.filter((u: DevBasicUser) => !get(u, 'deployment_admin', false));
 
       context.commit(USERS_MUTATIONS.SET_USERS, users_without_admins);
       return result;
