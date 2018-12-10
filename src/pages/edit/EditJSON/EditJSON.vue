@@ -29,6 +29,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
+  import {cloneDeep} from 'lodash'
   import {validate} from '@disarm/config-validation';
 
   import EditJSONStructured from './EditJSONStructured.vue';
@@ -56,11 +57,13 @@
       unsaved_changes(): boolean {
         return this.$store.state.config_module.unsaved_config_changes;
       },
-
+      geodata_summary(){
+        return this.$store.state.geodata_module.geodata_summaries;
+      }
     },
     methods: {
       async update_remote(instance_config: InstanceConfig) {
-        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG,instance_config)
+        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG,{instance_config:this.live_instance_config})
       },
       check_if_valid() {
         if (!this.live_instance_config) {
@@ -68,6 +71,8 @@
             {message: 'Not JSON, cannot validate', status: 'Red'},
           ]);
         }
+        let instance_config_clone = cloneDeep(this.live_instance_config)
+
         this.unified_response = validate(this.live_instance_config);
         this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
         this.$emit('update_config', this.live_instance_config);

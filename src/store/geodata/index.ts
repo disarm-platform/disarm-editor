@@ -1,11 +1,13 @@
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 
+
 import { RootState } from '@/store';
 import { standard_handler } from '@/lib/handler';
 import { AxiosResponse } from 'axios';
+import { GeodataLevelSummary } from '@/types';
 
 export interface GeodataState {
-  geodata_summaries: any[];
+  geodata_summaries: GeodataLevelSummary[];
 }
 
 export const empty_state: GeodataState = {
