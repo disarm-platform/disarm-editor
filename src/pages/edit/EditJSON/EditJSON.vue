@@ -28,72 +28,72 @@
 </template>
 
 <script lang='ts'>
-  import Vue from 'vue';
-  import {cloneDeep,get,set} from 'lodash'
-  import {validate} from '@disarm/config-validation';
+import Vue from 'vue';
+import {cloneDeep, get, set} from 'lodash';
+import {validate} from '@disarm/config-validation';
 
-  import EditJSONStructured from './EditJSONStructured.vue';
+import EditJSONStructured from './EditJSONStructured.vue';
 
-  import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
+import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
 
-  import {InstanceConfig, ValidationMessage, RemoteGeodataLevelSummary, GeodataSummary, Level} from '@/types';
-  import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
-  import {do_prioritise_messages} from '@/lib/priortise_messages';
+import {InstanceConfig, ValidationMessage, RemoteGeodataLevelSummary, GeodataSummary, Level} from '@/types';
+import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
+import {do_prioritise_messages} from '@/lib/priortise_messages';
 
-  import {CONFIG_ACTIONS} from '@/store/config'
+import {CONFIG_ACTIONS} from '@/store/config';
 
-  export default Vue.extend({
-    components: {EditJSONStructured, EditJSONRaw},
-    data() {
-      return {
-        priority_messages: [] as ValidationMessage[],
-        unified_response: {},
-        ui_show_raw: false,
-      };
+export default Vue.extend({
+  components: {EditJSONStructured, EditJSONRaw},
+  data() {
+    return {
+      priority_messages: [] as ValidationMessage[],
+      unified_response: {},
+      ui_show_raw: false,
+    };
+  },
+  computed: {
+    live_instance_config(): InstanceConfig {
+      return this.$store.state.config_module.live_instance_config;
     },
-    computed: {
-      live_instance_config(): InstanceConfig {
-        return this.$store.state.config_module.live_instance_config;
-      },
-      unsaved_changes(): boolean {
-        return this.$store.state.config_module.unsaved_config_changes;
-      },
-      geodata_summary(): RemoteGeodataLevelSummary[]{
-        return this.$store.state.geodata_module.geodata_summaries;
+    unsaved_changes(): boolean {
+      return this.$store.state.config_module.unsaved_config_changes;
+    },
+    geodata_summary(): RemoteGeodataLevelSummary[] {
+      return this.$store.state.geodata_module.geodata_summaries;
+    },
+  },
+  methods: {
+    async update_remote(instance_config: InstanceConfig) {
+      await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG, {instance_config: this.live_instance_config});
+    },
+    check_if_valid() {
+      if (!this.live_instance_config) {
+        return (this.priority_messages = [
+          {message: 'Not JSON, cannot validate', status: 'Red'},
+        ]);
       }
+
+      const instance_config_clone = cloneDeep(this.live_instance_config);
+      const summary: GeodataSummary = {};
+      const level_ids = get(instance_config_clone, 'spatial_hierarchy.levels', []).map((level: Level) => level.level_id);
+      const incoming = this.geodata_summary.filter((s) => level_ids.includes(s._id));
+
+      const result = incoming.reduce((acc: GeodataSummary, value: RemoteGeodataLevelSummary) => {
+        acc[value.level_name] = value.summary;
+        return acc;
+      }, {} as GeodataSummary);
+
+      set(instance_config_clone, 'spatial_hierarchy.geodata_summary', result);
+      this.unified_response = validate(instance_config_clone);
+      this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
+      this.$emit('update_config', this.live_instance_config);
     },
-    methods: {
-      async update_remote(instance_config: InstanceConfig) {
-        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG,{instance_config:this.live_instance_config})
-      },
-      check_if_valid() {
-        if (!this.live_instance_config) {
-          return (this.priority_messages = [
-            {message: 'Not JSON, cannot validate', status: 'Red'},
-          ]);
-        }
-
-        let instance_config_clone = cloneDeep(this.live_instance_config)
-        let summary:GeodataSummary = {};
-        let level_ids = get(instance_config_clone,'spatial_hierarchy.levels',[]).map((level:Level)=> level.level_id)
-        let incoming = this.geodata_summary.filter(s => level_ids.includes(s._id))
-
-        let result = incoming.reduce((acc:GeodataSummary,value:RemoteGeodataLevelSummary)=>{
-          acc[value.level_name] = value.summary;
-          return acc
-        },{} as GeodataSummary)
-
-        set(instance_config_clone,'spatial_hierarchy.geodata_summary',result)
-        this.unified_response = validate(instance_config_clone);
-        this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
-        this.$emit('update_config', this.live_instance_config);
-      },
-      prioritise_messages(validation_output: TUnifiedResponse): ValidationMessage[] {
-        return do_prioritise_messages(validation_output);
-      },
-
+    prioritise_messages(validation_output: TUnifiedResponse): ValidationMessage[] {
+      return do_prioritise_messages(validation_output);
     },
-  });
+
+  },
+});
 </script>
 
 <style lang='scss' scoped>

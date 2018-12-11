@@ -4,7 +4,7 @@ import { TApplets } from '@disarm/config-validation/build/module/lib/config_type
 import {
   TFieldSummary,
   TGeodataSummary,
-  TLevel
+  TLevel,
 } from '../node_modules/@disarm/config-validation/build/module/lib/config_types/TSpatialHierarchy';
 
 
