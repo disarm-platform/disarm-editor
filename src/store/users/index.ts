@@ -1,4 +1,5 @@
 import {ActionTree, GetterTree, Module, MutationTree} from 'vuex';
+import { get } from 'lodash';
 
 import {RootState} from '@/store';
 import {DevBasicUser, Permission} from '@/types';
@@ -38,6 +39,7 @@ export const USERS_ACTIONS = {
   DELETE_USER: 'DELETE_USER',
   FETCH_PERMISSIONS: 'FETCH_PERMISSIONS',
   UPDATE_PERMISSIONS: 'UPDATE_PERMISSIONS',
+  RESET_USERS_AND_PERMISSIONS: 'RESET_USERS_AND_PERMISSIONS',
 };
 
 const actions: ActionTree<UsersState, RootState> = {
@@ -65,7 +67,7 @@ const actions: ActionTree<UsersState, RootState> = {
       // Incoming list of users contains deployment admin users, which we don't
       // want to edit, so filter them out.
 
-      const users_without_admins = result.data.filter((u: DevBasicUser) => !u.deployment_admin);
+      const users_without_admins = result.data.filter((u: DevBasicUser) => !get(u, 'deployment_admin', false));
 
       context.commit(USERS_MUTATIONS.SET_USERS, users_without_admins);
       return result;
@@ -130,6 +132,10 @@ const actions: ActionTree<UsersState, RootState> = {
     } catch (e) {
       throw e;
     }
+  },
+  async [USERS_ACTIONS.RESET_USERS_AND_PERMISSIONS](context) {
+    context.commit(USERS_MUTATIONS.RESET_PERMISSIONS);
+    context.commit(USERS_MUTATIONS.RESET_USERS);
   },
 };
 

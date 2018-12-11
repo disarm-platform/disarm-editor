@@ -59,8 +59,8 @@
 
     },
     methods: {
-      async update_remote(instance_config: InstanceConfig) {
-        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG,instance_config)
+      async update_remote() {
+        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG, this.live_instance_config)
       },
       check_if_valid() {
         if (!this.live_instance_config) {
