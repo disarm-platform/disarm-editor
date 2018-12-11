@@ -31,14 +31,13 @@
   import Vue from 'vue';
   import {validate} from '@disarm/config-validation';
 
-  import EditJSONStructured from './EditJSONStructured.vue';
+  import EditJSONStructured from '@/pages/edit/EditJSON/EditJSONStructured.vue';
   import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
+  import {CONFIG_ACTIONS} from '@/store/config';
 
   import {InstanceConfig, ValidationMessage} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
-
-  import {CONFIG_ACTIONS} from '@/store/config'
 
   export default Vue.extend({
     components: {EditJSONStructured, EditJSONRaw},
@@ -60,7 +59,7 @@
     },
     methods: {
       async update_remote() {
-        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG, this.live_instance_config)
+        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG, this.live_instance_config);
       },
       check_if_valid() {
         if (!this.live_instance_config) {
