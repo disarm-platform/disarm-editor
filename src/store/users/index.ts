@@ -82,7 +82,7 @@ const actions: ActionTree<UsersState, RootState> = {
     try {
       const result = await standard_handler(options as any);
       await context.dispatch(USERS_ACTIONS.FETCH_USERS);
-      return result
+      return result;
     } catch (e) {
       throw e;
     }
