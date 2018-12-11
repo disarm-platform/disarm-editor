@@ -29,6 +29,7 @@
 
 <script lang='ts'>
   import Vue from 'vue';
+  import {cloneDeep,get,set} from 'lodash'
   import {validate} from '@disarm/config-validation';
 
   import EditJSONStructured from './EditJSONStructured.vue';
@@ -56,11 +57,13 @@
       unsaved_changes(): boolean {
         return this.$store.state.config_module.unsaved_config_changes;
       },
-
+      geodata_summary(){
+        return this.$store.state.geodata_module.geodata_summaries;
+      }
     },
     methods: {
-      async update_remote() {
-        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG, this.live_instance_config)
+      async update_remote(instance_config: InstanceConfig) {
+        await this.$store.dispatch(CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG,{instance_config:this.live_instance_config})
       },
       check_if_valid() {
         if (!this.live_instance_config) {
@@ -68,7 +71,17 @@
             {message: 'Not JSON, cannot validate', status: 'Red'},
           ]);
         }
-        this.unified_response = validate(this.live_instance_config);
+
+        let instance_config_clone = cloneDeep(this.live_instance_config)
+        let summary:GeodataSummary = {};
+        let level_ids = get(instance_config_clone,'spatial_hierarchy.levels',[]).map(level => level.level_id)
+        let incoming = this.geodata_summary.filter(s => level_ids.includes(s._id))
+        let result = incoming.reduce((acc,value)=>{
+          acc[value.level_name] = value.summary;
+          return acc
+        },{})
+        set(instance_config_clone,'spatial_hierarchy.geodata_summary',result)
+        this.unified_response = validate(instance_config_clone);
         this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
         this.$emit('update_config', this.live_instance_config);
       },
