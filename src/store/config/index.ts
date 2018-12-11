@@ -122,7 +122,7 @@ const actions: ActionTree<ConfigState, RootState> = {
       throw e;
     }
   },
-  async [CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG](context, {instance_config}) {
+  async [CONFIG_ACTIONS.UPDATE_INSTANCE_CONFIG](context, instance_config) {
     const options = {
       method: 'post',
       url: '/config',
