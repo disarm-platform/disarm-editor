@@ -44,7 +44,7 @@
   import ago from 's-ago';
 
   import {GEODATA_ACTIONS} from '@/store/geodata';
-  import {GeodataLevelSummary} from '@/types';
+  import {RemoteGeodataLevelSummary} from '@/types';
   import UploadGeodata from '@/pages/edit/EditGeodata/UploadGeodata.vue';
 
   export default Vue.extend({
@@ -57,9 +57,9 @@
       };
     },
     computed: {
-      geodata_summaries(): GeodataLevelSummary[] {
+      geodata_summaries(): RemoteGeodataLevelSummary[] {
         return this.$store.state.geodata_module.geodata_summaries
-          .sort((a: GeodataLevelSummary, b: GeodataLevelSummary) => {
+          .sort((a: RemoteGeodataLevelSummary, b: RemoteGeodataLevelSummary) => {
             return (new Date(b.created_at) as any) - (new Date(a.created_at) as any);
           });
       },

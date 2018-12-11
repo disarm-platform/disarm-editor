@@ -33,9 +33,10 @@
   import {validate} from '@disarm/config-validation';
 
   import EditJSONStructured from './EditJSONStructured.vue';
+
   import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
 
-  import {InstanceConfig, ValidationMessage} from '@/types';
+  import {InstanceConfig, ValidationMessage, RemoteGeodataLevelSummary, GeodataSummary, Level} from '@/types';
   import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
   import {do_prioritise_messages} from '@/lib/priortise_messages';
 
@@ -57,7 +58,7 @@
       unsaved_changes(): boolean {
         return this.$store.state.config_module.unsaved_config_changes;
       },
-      geodata_summary(){
+      geodata_summary(): RemoteGeodataLevelSummary[]{
         return this.$store.state.geodata_module.geodata_summaries;
       }
     },
@@ -74,12 +75,14 @@
 
         let instance_config_clone = cloneDeep(this.live_instance_config)
         let summary:GeodataSummary = {};
-        let level_ids = get(instance_config_clone,'spatial_hierarchy.levels',[]).map(level => level.level_id)
+        let level_ids = get(instance_config_clone,'spatial_hierarchy.levels',[]).map((level:Level)=> level.level_id)
         let incoming = this.geodata_summary.filter(s => level_ids.includes(s._id))
-        let result = incoming.reduce((acc,value)=>{
+
+        let result = incoming.reduce((acc:GeodataSummary,value:RemoteGeodataLevelSummary)=>{
           acc[value.level_name] = value.summary;
           return acc
-        },{})
+        },{} as GeodataSummary)
+
         set(instance_config_clone,'spatial_hierarchy.geodata_summary',result)
         this.unified_response = validate(instance_config_clone);
         this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);

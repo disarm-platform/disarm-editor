@@ -4,10 +4,10 @@ import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 import { RootState } from '@/store';
 import { standard_handler } from '@/lib/handler';
 import { AxiosResponse } from 'axios';
-import { GeodataLevelSummary } from '@/types';
+import { RemoteGeodataLevelSummary } from '@/types';
 
 export interface GeodataState {
-  geodata_summaries: GeodataLevelSummary[];
+  geodata_summaries: RemoteGeodataLevelSummary[];
 }
 
 export const empty_state: GeodataState = {
