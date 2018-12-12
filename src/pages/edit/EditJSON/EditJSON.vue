@@ -70,8 +70,6 @@ export default Vue.extend({
       geodata_summary(): RemoteGeodataLevelSummary[] {
         return this.$store.state.geodata_module.geodata_summaries;
       },
-
-
     },
     methods: {
       async update_remote() {
@@ -84,7 +82,7 @@ export default Vue.extend({
         }
 
         // Decorate the instance_config with a 'geodata_summary', constructed from the geodata_summary
-        const decorated_clone = add_geodata_summary_to_instance_config(this.live_instance_config, this.geodata_summary)
+        const decorated_clone = add_geodata_summary_to_instance_config(this.live_instance_config, this.geodata_summary);
 
         // Validate
         this.unified_response = validate(decorated_clone);
