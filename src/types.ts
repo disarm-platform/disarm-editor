@@ -1,6 +1,12 @@
 import { TConfig } from '@disarm/config-validation/build/module/lib/config_types/TConfig';
-import { DoumaUser} from '@locational/douma-types';
-import {TApplets} from '@disarm/config-validation/build/module/lib/config_types/TApplets';
+import { DoumaUser } from '@locational/douma-types';
+import { TApplets } from '@disarm/config-validation/build/module/lib/config_types/TApplets';
+import {
+  TFieldSummary,
+  TGeodataSummary,
+  TLevel,
+} from '../node_modules/@disarm/config-validation/build/module/lib/config_types/TSpatialHierarchy';
+
 
 export interface Instance {
   _id: string;
@@ -8,10 +14,10 @@ export interface Instance {
 }
 
 export interface Permission {
-    _id?: string;
-    user_id: string;
-    instance_id: string;
-    value: string;
+  _id?: string;
+  user_id: string;
+  instance_id: string;
+  value: string;
 }
 
 export interface DevBasicUser {
@@ -44,15 +50,11 @@ export interface ValidationMessage {
   source_node?: string;
   target_node?: string;
 }
+export type FieldSummary = TFieldSummary;
 
-export interface FieldSummary {
-  exists_on_all: boolean;
-  field_name: string;
-  type: string;
-  unique: boolean;
-}
-
-export interface GeodataLevelSummary {
+export type GeodataSummary = TGeodataSummary;
+export type Level = TLevel;
+export interface RemoteGeodataLevelSummary {
   readonly _id: string;
   readonly instance_id: string;
   readonly level_name: string;

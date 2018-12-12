@@ -3,11 +3,6 @@
     <el-alert v-if="error.length" :title="error"></el-alert>
 
     <el-form label-width="120px" @submit="do_login">
-      <el-form-item label="API URL" v-if="ui_edit_api_url">
-        <el-input type="text" v-model="updated_api_url">
-          <el-button slot="append" @click="reset_api_url">Reset</el-button>
-        </el-input>
-      </el-form-item>
 
       <el-form-item label="Username">
         <el-input v-model="username"></el-input>
@@ -17,13 +12,17 @@
         <el-input type="password" v-model="password"></el-input>
       </el-form-item>
 
-      <el-button type="text" @click="ui_edit_api_url = !ui_edit_api_url">
-        <span v-if="!ui_edit_api_url">Edit API URL</span>
-        <span v-if="ui_edit_api_url">Hide API URL</span>
-      </el-button>
+      <el-form-item label="API URL" v-if="ui_edit_api_url" @click="ui_edit_api_url = !ui_edit_api_url">
+        <el-input type="text" v-model="updated_api_url">
+          <el-button slot="append" @click="reset_api_url">Reset</el-button>
+        </el-input>
+      </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="do_login" @keyup.enter="do_login">Login</el-button>
+        <el-button type="primary" @click="do_login" @keyup.enter="do_login" :disabled="username === '' || password === ''">Login</el-button>
+        <el-button type="text" @click="ui_edit_api_url = !ui_edit_api_url" v-if="!ui_edit_api_url">
+          Edit API URL
+        </el-button>
       </el-form-item>
 
     </el-form>

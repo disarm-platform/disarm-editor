@@ -9,8 +9,8 @@ import Edit from '@/pages/edit/Edit.vue';
 import EditUsers from '@/pages/edit/EditUsers/EditUsers.vue';
 import EditPermissions from '@/pages/edit/EditPermissions/EditPermissions.vue';
 import EditJSON from '@/pages/edit/EditJSON/EditJSON.vue';
-import EditGeodata from '@/pages/edit/EditGeodata/UploadGeodata.vue';
 import GeodataSummary from '@/pages/edit/EditGeodata/GeodataSummary.vue';
+import { store_api_url_if_found_as_query_param } from '@/lib/utils';
 
 Vue.use(Router);
 
@@ -78,6 +78,8 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  // Check if api-url is passed as a query param
+  store_api_url_if_found_as_query_param(store);
   // check for logged-in user
   if (!store.state.logged_in_user && (to.name !== 'login')) {
     return next({name: 'login'});
