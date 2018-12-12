@@ -22,8 +22,8 @@
         <!--PERMISSION COL HEADER -->
         <template slot="header" slot-scope="scope">
           <div>
+            {{permission.subtype}}
             <em>{{permission.type}}</em>
-            :{{permission.subtype}}
           </div>
           <div class="actions">
             <el-button type="text" @click="set_all_for_permission(scope)">All</el-button>|
