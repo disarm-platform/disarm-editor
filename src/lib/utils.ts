@@ -22,7 +22,6 @@ export const store_api_url_if_found_as_query_param = (store: Store<RootState>): 
 
   if (found) {
     store.commit(ROOT_MUTATIONS.SET_API_URL, found);
-    console.log('Set API URL from query parameter', found);
     return true;
   } else {
     return false;
