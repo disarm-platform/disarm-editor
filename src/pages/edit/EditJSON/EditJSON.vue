@@ -1,34 +1,42 @@
 <template>
   <div>
-
     <div>
       <el-button-group style="margin-bottom: 20px;">
-        <el-button :disabled="!unsaved_changes" @click="update_remote" type="primary" size="mini">Upload changes
-        </el-button>
+        <el-button
+          :disabled="!unsaved_changes"
+          @click="update_remote"
+          type="primary"
+          size="mini"
+        >Upload changes</el-button>
         <el-button @click="check_if_valid" type="warning" size="mini">Check if valid</el-button>
       </el-button-group>
     </div>
 
-
     <div style="margin-bottom: 20px;">
       <el-switch
-          v-model="ui_show_raw"
-          active-text="Raw"
-          inactive-text="Structured"
-          active-color="#a1d1ff"
-          inactive-color="#4ea8ff">
-      </el-switch>
+        v-model="ui_show_raw"
+        active-text="Raw"
+        inactive-text="Structured"
+        active-color="#a1d1ff"
+        inactive-color="#4ea8ff"
+      ></el-switch>
     </div>
 
-    <EditJSONRaw v-if="ui_show_raw" :config="live_instance_config" :priority_messages="priority_messages"></EditJSONRaw>
-    <EditJSONStructured v-else :live_instance_config="live_instance_config"
-                        :priority_messages="priority_messages"></EditJSONStructured>
-
+    <EditJSONRaw
+      v-if="ui_show_raw"
+      :config="live_instance_config"
+      :priority_messages="priority_messages"
+    ></EditJSONRaw>
+    <EditJSONStructured
+      v-else
+      :live_instance_config="live_instance_config"
+      :priority_messages="priority_messages"
+    ></EditJSONStructured>
   </div>
 </template>
 
 <script lang='ts'>
-  import Vue from 'vue';
+import Vue from 'vue';
 import {cloneDeep, get, set} from 'lodash';
 import {validate} from '@disarm/config-validation';
 
@@ -43,7 +51,7 @@ import {do_prioritise_messages} from '@/lib/priortise_messages';
 import {CONFIG_ACTIONS} from '@/store/config';
 
 
-  export default Vue.extend({
+export default Vue.extend({
     components: {EditJSONStructured, EditJSONRaw},
     data() {
       return {
@@ -72,22 +80,27 @@ import {CONFIG_ACTIONS} from '@/store/config';
       },
       check_if_valid() {
         if (!this.live_instance_config) {
-          return (this.priority_messages = [
-            {message: 'Not JSON, cannot validate', status: 'Red'},
-          ]);
+          this.priority_messages = [ {message: 'Not JSON, cannot validate', status: 'Red'} ];
+          return;
         }
-      
-         const instance_config_clone = cloneDeep(this.live_instance_config);
-      const summary: GeodataSummary = {};
-      const level_ids = get(instance_config_clone, 'spatial_hierarchy.levels', []).map((level: Level) => level.level_id);
-      const incoming = this.geodata_summary.filter((s) => level_ids.includes(s._id));
-      const result = incoming.reduce((acc: GeodataSummary, value: RemoteGeodataLevelSummary) => {
-        acc[value.level_name] = value.summary;
-        return acc;
-      }, {} as GeodataSummary);
 
-      set(instance_config_clone, 'spatial_hierarchy.geodata_summary', result);
-      this.unified_response = validate(instance_config_clone)
+        // Decorate the instance_config with a 'geodata_summary', constructed from the geodata_summary
+        const instance_config_clone = cloneDeep(this.live_instance_config);
+        const summary: GeodataSummary = {};
+        const level_ids = get(instance_config_clone, 'spatial_hierarchy.levels', [])
+          .map((level: Level) => level.level_id);
+
+        const incoming = this.geodata_summary.filter((s) => level_ids.includes(s._id));
+
+        const result = incoming.reduce((acc: GeodataSummary, value: RemoteGeodataLevelSummary) => {
+            acc[value.level_name] = value.summary;
+            return acc;
+          }, {} as GeodataSummary);
+
+        set(instance_config_clone, 'spatial_hierarchy.geodata_summary', result);
+
+        // Validate
+        this.unified_response = validate(instance_config_clone);
         this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
         this.$emit('update_config', this.live_instance_config);
       },
@@ -100,19 +113,19 @@ import {CONFIG_ACTIONS} from '@/store/config';
 </script>
 
 <style lang='scss' scoped>
-  .red {
-    color: red;
-  }
+.red {
+  color: red;
+}
 
-  .green {
-    color: green;
-  }
+.green {
+  color: green;
+}
 
-  .blue {
-    color: blue;
-  }
+.blue {
+  color: blue;
+}
 
-  .yellow {
-    color: yellow;
-  }
+.yellow {
+  color: yellow;
+}
 </style>
