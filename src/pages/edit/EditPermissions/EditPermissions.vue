@@ -90,15 +90,18 @@ export default Vue.extend({
     permission_options(): PermissionOption[] {
       const output: PermissionOption[] = [];
 
+      // Iterate over these types, to create both kinds of permission
       const types = ['write', 'read'];
+
+      // Get an initial list of applets from the live_instance_config
       const applet_names: string[] = Object.keys(
         get(this.live_instance_config, 'applets', {}),
       );
 
-      // Remove 'meta' - every user has access already in the app.
+      // Remove 'meta' applet - every user has access already in the app.
       const applet_names_wo_meta = without(applet_names, 'meta');
 
-      // Add debug - has no 'config', so won't appear here
+      // Add 'debug' applet - it has no 'config', so won't appear in the applet_names list
       [...applet_names_wo_meta, 'debug'].forEach((applet) => {
         types.forEach((type) => {
           const new_option: PermissionOption = {
