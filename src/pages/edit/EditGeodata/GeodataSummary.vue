@@ -9,14 +9,15 @@
     </div>
     <UploadGeodata v-if="ui_upload_visible"></UploadGeodata>
 
-
-
     <!--LIST SUMMARY -->
     <el-collapse v-if="geodata_summaries.length" v-model="ui_active_levels" style="margin-top: 20px;">
       <el-collapse-item v-for="level in geodata_summaries" :key="level._id"
-                        :title="`${level.level_name} uploaded ${ago(new Date(level.created_at))}`">
+                        :title="`${level.level_name} ${level._id} (uploaded ${ago(new Date(level.created_at))})`">
+        <p>
+          <strong>Geodata ID</strong> {{level._id}}
+        </p>
         <strong>Field summary</strong>
-        <div v-for="field in level.summary">
+        <div v-for="field in level.summary" :key='field.level_id'>
 
           <div style="display: inline;" class='usefulness' :class="{unique: field.unique, exists_on_all: field.exists_on_all}">
             <span v-if="field.unique">Unique</span>
