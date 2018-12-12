@@ -49,7 +49,7 @@
 
 <script lang='ts'>
 import Vue from 'vue';
-import { get, without } from 'lodash';
+import { get, without, uniq } from 'lodash';
 
 import AddUserToInstance from './AddUserToInstance.vue';
 import COMMON from '@/lib/common';
@@ -102,7 +102,8 @@ export default Vue.extend({
       const applet_names_wo_meta = without(applet_names, 'meta');
 
       // Add 'debug' applet - it has no 'config', so won't appear in the applet_names list
-      [...applet_names_wo_meta, 'debug'].forEach((applet) => {
+      // Uniq ensures it's not added twice (e.g. if a user already has a permission for it)
+      uniq([...applet_names_wo_meta, 'debug']).forEach((applet) => {
         types.forEach((type) => {
           const new_option: PermissionOption = {
             text: `${type}:${applet}`,
