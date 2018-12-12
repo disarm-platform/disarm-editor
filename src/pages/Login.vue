@@ -9,10 +9,10 @@
       </el-form-item>
 
       <el-form-item label="Password">
-        <el-input type="password" v-model="password"></el-input>
+        <el-input type="password" v-model="password" @keyup.enter="submit"/>
       </el-form-item>
 
-      <el-form-item label="API URL" v-if="ui_edit_api_url" @click="ui_edit_api_url = !ui_edit_api_url">
+      <el-form-item label="API URL" v-if="ui_edit_api_url">
         <el-input type="text" v-model="updated_api_url">
           <el-button slot="append" @click="reset_api_url">Reset</el-button>
         </el-input>

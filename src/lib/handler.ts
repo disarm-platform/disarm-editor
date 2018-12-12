@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {get} from 'lodash';
+import {get, merge} from 'lodash';
 
 import COMMON from '@/lib/common';
 import store from '@/store';
@@ -28,10 +28,7 @@ export const standard_handler = async (incoming_options: IncomingOptions) => {
       instance_id: get(store, 'state.config_module.selected_instance._id', null),
     },
   };
-  const merged = {
-    ...default_options,
-    ...incoming_options,
-  };
+  const merged = merge(default_options, incoming_options);
 
   return axios(merged);
 };

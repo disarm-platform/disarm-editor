@@ -7,8 +7,12 @@ Vue.use(ElementUI, {locale});
 import App from './App.vue';
 import router from '@/router';
 import store from '@/store';
+import { store_api_url_if_found_as_query_param } from './lib/utils';
 
 Vue.config.productionTip = false;
+
+// Check if api-url is passed as a query param
+store_api_url_if_found_as_query_param(store);
 
 new Vue({
   router,

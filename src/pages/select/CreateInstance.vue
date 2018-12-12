@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-button type='mini' @click="ui_visible = !ui_visible">{{ui_visible ? 'Hide form' : 'Add new'}}</el-button>
-    <el-form v-if="ui_visible">
+    <el-form v-if="ui_visible" @submit.native.prevent>
       <el-form-item label="New Instance">
-        <el-input v-model="instance_form.name" placeholder="Enter name (must be unique)"></el-input>
+        <el-input v-model="instance_form.name" placeholder="Enter name (must be unique)" @keyup.enter="submit"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary mini" @click="save_instance" :disabled="!valid">Save</el-button>
