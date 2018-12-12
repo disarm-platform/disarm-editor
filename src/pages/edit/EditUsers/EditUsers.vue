@@ -96,7 +96,6 @@ export default Vue.extend({
         `&nbsp;&nbsp;name: ${user.name}</br>` +
         `&nbsp;&nbsp;username: ${user.username}</br>` +
         `&nbsp;&nbsp;password: ${user.password}</br>` +
-        `&nbsp;&nbsp;url: ${location.origin}</br></br>` +
         `THIS IS THE LAST TIME THE PASSWORD WILL BE VISIBLE.`;
       try {
         await this.$alert(message, 'Login details', {
