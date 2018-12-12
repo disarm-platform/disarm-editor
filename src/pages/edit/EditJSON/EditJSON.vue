@@ -38,16 +38,15 @@
 <script lang='ts'>
 import Vue from 'vue';
 import {cloneDeep, get, set} from 'lodash';
-import {validate} from '@disarm/config-validation';
-
-import EditJSONStructured from './EditJSONStructured.vue';
-
-import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
 
 import {InstanceConfig, ValidationMessage, RemoteGeodataLevelSummary, GeodataSummary, Level} from '@/types';
+
+import {validate} from '@disarm/config-validation';
+import EditJSONStructured from './EditJSONStructured.vue';
+import EditJSONRaw from '@/pages/edit/EditJSON/EditJSONRaw.vue';
 import {TUnifiedResponse} from '@disarm/config-validation/build/module/lib/TUnifiedResponse';
 import {do_prioritise_messages} from '@/lib/priortise_messages';
-
+import {add_geodata_summary_to_instance_config} from '@/lib/add_geodata_summary_to_instance_config';
 import {CONFIG_ACTIONS} from '@/store/config';
 
 
@@ -85,22 +84,12 @@ export default Vue.extend({
         }
 
         // Decorate the instance_config with a 'geodata_summary', constructed from the geodata_summary
-        const instance_config_clone = cloneDeep(this.live_instance_config);
-        const summary: GeodataSummary = {};
-        const level_ids = get(instance_config_clone, 'spatial_hierarchy.levels', [])
-          .map((level: Level) => level.level_id);
-
-        const incoming = this.geodata_summary.filter((s) => level_ids.includes(s._id));
-
-        const result = incoming.reduce((acc: GeodataSummary, value: RemoteGeodataLevelSummary) => {
-            acc[value.level_name] = value.summary;
-            return acc;
-          }, {} as GeodataSummary);
-
-        set(instance_config_clone, 'spatial_hierarchy.geodata_summary', result);
+        const decorated_clone = add_geodata_summary_to_instance_config(this.live_instance_config, this.geodata_summary)
 
         // Validate
-        this.unified_response = validate(instance_config_clone);
+        this.unified_response = validate(decorated_clone);
+
+        // Prioritise validation messages for display
         this.priority_messages = this.prioritise_messages(this.unified_response as TUnifiedResponse);
         this.$emit('update_config', this.live_instance_config);
       },

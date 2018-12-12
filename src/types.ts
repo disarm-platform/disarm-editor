@@ -53,6 +53,7 @@ export interface ValidationMessage {
 export type FieldSummary = TFieldSummary;
 
 export type GeodataSummary = TGeodataSummary;
+
 export type Level = TLevel;
 export interface RemoteGeodataLevelSummary {
   readonly _id: string;
