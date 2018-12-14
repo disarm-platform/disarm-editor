@@ -26,8 +26,8 @@
       <el-table-column
           label="Actions">
         <template slot-scope="scope">
-          <el-button type="danger" size="mini" @click="delete_user(scope)">Delete</el-button>
-          <el-button type="text" @click="reset_password(scope)">Reset password</el-button>
+          <el-button :disabled='is_test_user(scope)' type="danger" size="mini" @click="delete_user(scope)">Delete</el-button>
+          <el-button :disabled='is_test_user(scope)' type="text" @click="reset_password(scope)">Reset password</el-button>
         </template>
       </el-table-column>
 
@@ -56,13 +56,13 @@ export default Vue.extend({
     this.refresh();
   },
   methods: {
+    is_test_user(scope: any): boolean {
+      const user = scope.row as DevBasicUser;
+      return user.username === 'test';
+    },
     async add_user(new_user: NewUserWithPassword) {
       await this.$store.dispatch(USERS_ACTIONS.CREATE_USER, new_user);
       await this.alert_password_details(new_user);
-    },
-    edit_name(scope: any) {
-      const updated_user = {};
-      console.log('update_user', updated_user);
     },
     async reset_password(scope: any) {
       const user: DevBasicUser = scope.row;
@@ -103,7 +103,7 @@ export default Vue.extend({
           showClose: false,
         });
       } catch (e) {
-        console.log('cancelled');
+        throw e;
       }
     },
     refresh() {

@@ -83,8 +83,8 @@
         const instance_id = this.$store.state.config_module.selected_instance._id;
         const api_url = this.$store.state.api_url;
 
-        return `${api_url}/geodata_level/download?instance_id=${instance_id}&level_id=${level_id}`
-      }
+        return `${api_url}/geodata_level/download?instance_id=${instance_id}&level_id=${level_id}`;
+      },
     },
   });
 </script>

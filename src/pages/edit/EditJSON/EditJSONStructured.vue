@@ -59,8 +59,8 @@ export default Vue.extend({
         return '';
       }
     },
-    tab_click(a: any, b: any, c: any) {
-      console.log(a, b, c);
+    tab_click() {
+      return false;
     },
   },
 });
