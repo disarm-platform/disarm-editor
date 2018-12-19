@@ -3,6 +3,7 @@
     <SelectInstance
       :instance_list="instance_list"
       @select="select_instance"
+      @delete="delete_instance"
       @create="create_instance"
     ></SelectInstance>
 
@@ -47,6 +48,14 @@ export default Vue.extend({
     },
     async create_instance(instance: Instance) {
       await this.$store.dispatch(CONFIG_ACTIONS.CREATE_INSTANCE, instance);
+    },
+    async delete_instance(val: Instance){
+      try{
+        await this.$store.dispatch(CONFIG_ACTIONS.DELETE_INSTANCE,val._id);
+        await this.$store.dispatch(CONFIG_ACTIONS.FETCH_INSTANCES);
+      }catch(e){
+        alert(e.message)
+      }
     },
     async confirm_clear_config() {
       try {

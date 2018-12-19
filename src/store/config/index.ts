@@ -63,6 +63,7 @@ export const CONFIG_ACTIONS = {
   FETCH_LATEST_INSTANCE_CONFIG: 'FETCH_LATEST_INSTANCE_CONFIG',
   UPDATE_INSTANCE_CONFIG: 'UPDATE_INSTANCE_CONFIG',
   RESET_SELECTED_INSTANCE_AND_CONFIG: 'RESET_SELECTED_CONFIG',
+  DELETE_INSTANCE:'DELETE_INSTANCE',
 };
 
 const actions: ActionTree<ConfigState, RootState> = {
@@ -79,6 +80,14 @@ const actions: ActionTree<ConfigState, RootState> = {
     } catch (e) {
       throw e;
     }
+  },
+  async [CONFIG_ACTIONS.DELETE_INSTANCE](context,instance_id:string){
+    const options = {
+      url:`/instance/${instance_id}`,
+      method:'delete',
+      data:{}
+    };
+    return await standard_handler(options as any);
   },
   async [CONFIG_ACTIONS.FETCH_INSTANCES](context) {
     const options = {

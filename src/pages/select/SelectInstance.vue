@@ -6,14 +6,14 @@
       ref="instance_table"
       :data="instance_list"
       highlight-current-row
-      @current-change="handleCurrentChange"
       size="small"
       style="width: 100%"
     >
       <el-table-column label="Name" prop="name"></el-table-column>
       <el-table-column label="Actions">
         <template slot-scope="scope">
-          <el-button type="text" size="small">Select</el-button>
+          <el-button @click="handleCurrentChange(scope.row)" type="text" size="small">Select</el-button>
+          <el-button type="text" @click="delete_config(scope.row)" size="small">Delete</el-button>
         </template>
       </el-table-column>
       <el-table-column label="ID" prop="_id"></el-table-column>
@@ -55,6 +55,15 @@ export default Vue.extend({
     }
   },
   methods: {
+    delete_config(val: Instance){
+    
+        this.$confirm(`Are you sure you want to delete the instance ${val.name}`)
+          .then(_ => {
+          this.$emit('delete', val);
+          })
+          .catch(_ => {});
+      //
+    },
     handleCurrentChange(val: Instance) {
       this.currentRow = val;
       this.$emit('select', val);
